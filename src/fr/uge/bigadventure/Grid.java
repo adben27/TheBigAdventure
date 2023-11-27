@@ -6,7 +6,7 @@ public record Grid(int width, int height, HashMap<Element, Character> encodings,
 	
 	public Grid {
 		if(width == 0 || height == 0) {
-			throw new IllegalAccessException("La largeur et longueur ne doivent pas être égal à zéro");
+			throw new IllegalArgumentException("La largeur et longueur ne doivent pas être égal à zéro");
 		}
 		encodings = new HashMap<>();
 		grid = new char[height][width];	
