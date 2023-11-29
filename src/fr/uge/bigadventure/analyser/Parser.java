@@ -26,7 +26,7 @@ public class Parser {
 		while(iterator.hasNext()) {
 			var token = iterator.next().token();
 			switch(token) {
-				// A finir
+				
 				
 			}
 		}
