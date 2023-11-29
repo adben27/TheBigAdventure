@@ -3,6 +3,7 @@ package fr.uge.bigadventure.analyser;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -40,13 +41,16 @@ public class Lexer {
     throw new AssertionError();
   }
 
-  public static void main(String[] args) throws IOException {
-    var path = Path.of("big.map");
+  public static ArrayList<Result> toList(Path path) throws IOException {
     var text = Files.readString(path);
-    var lexer = new Lexer(text);
+  	var lexer = new Lexer(text);
     Result result;
+    var resultList = new ArrayList<Result>();
     while((result = lexer.nextResult()) != null) {
+    	resultList.add(result);
       System.out.println(result);
     }
+    return resultList;
   }
+ 
 }
