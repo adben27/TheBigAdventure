@@ -18,6 +18,11 @@ public class Demo {
   static int y = 0;
   
   public static void main(String[] args) throws IOException {
+		/*for(var list : grid) {
+			for(var elem : list) {
+				System.out.println();
+			}
+		}*/
   	String tileName = "pnj/baba";
   	BufferedImage image;
   	try(var input = Demo.class.getResourceAsStream("/img/" + tileName + ".png")) {

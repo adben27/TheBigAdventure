@@ -16,7 +16,7 @@ public class Parser {
 		this.tokenList = tokenList;
 	}
 
-	public GameMap parseMap() {
+	/*public GameMap parseMap() {
 		var iterator = tokenList.iterator();
 		parseMapSize(iterator);
 	}
@@ -36,6 +36,6 @@ public class Parser {
     var path = Path.of("maps/big.map");
     var parser = new Parser(Lexer.toList(path));
     System.out.println(parser.tokenList);
-	}
+	}*/
 	
 }
