@@ -1,0 +1,26 @@
+size: (22 x 22)
+encodings : WALL(W) PILLAR(P) FLAG(F)
+data: """
+WWWWWWWWWWWWWWWWWWWWWW
+W       P    P       W
+W P PPPPPPPP P P PPP W
+WPP P     P  P P P   W
+W     PPP P PP P P PPW
+WPPPP P P P P  P P   W
+W P   P P P   PP P P W
+W PPPPP P PPPPP  P PPW
+W       P       PP  PW
+W PPPPP PPPPPPPPPPP  W
+W P   P P  P      PP W
+W P P     PPPP PP P  W
+WPP PPP P       P P PW
+W     P PPPPPPP PP  PW
+W PPPPP P     P    PPW
+W P     P P P PPPPPPFW
+W P PP PP P P P    P W
+W PPPP P  P P  P P P W
+W  P   P PP PP   P   W
+W PPPPPP P   PPPPPPP W
+W        P P    P    W
+WWWWWWWWWWWWWWWWWWWWWW
+"""
