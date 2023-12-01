@@ -1,6 +1,7 @@
-size: (22 x 22)
-encodings : WALL(W) PILLAR(P) FLAG(F)
-data: """
+[grid]
+    size: (22 x 22)
+    encodings : WALL(W) PILLAR(P)
+    data: """
 WWWWWWWWWWWWWWWWWWWWWW
 W       P    P       W
 W P PPPPPPPP P P PPP W

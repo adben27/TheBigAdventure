@@ -29,7 +29,7 @@ public class Demo {
   	Obstacle[][] grid = new Obstacle[20][20];
   	for (int i = 0; i < grid.length; i++) {
   		for (int j = 0; j < grid[i].length; j++) {
-  	    if (i == 0 || j == 0 || i == grid.length-1 || j == grid[i].length-1) {
+  			if (i == 0 || j == 0 || i == grid.length-1 || j == grid[i].length-1) {
   	      grid[i][j] = new Obstacle("obstacle/wall", new Point(i,j));
   	    } else if (i == 7 && j < 16) {
   	      grid[i][j] = new Obstacle("obstacle/pillar", new Point(i,j));
@@ -43,60 +43,49 @@ public class Demo {
 
     Application.run(Color.BLACK, context -> {
       
-      var TBA = new Graphic(context.getScreenInfo());
+      var TBA = new Graphic(context.getScreenInfo(), grid.length, grid[0].length);
+      System.out.println(Graphic.nbCasesX);
+      System.out.println(Graphic.nbCasesY);
       context.renderFrame(map -> {
       	try {
 					TBA.printMap(grid, map);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-      	map.drawImage(image,x*24, y*24, null);
+				} catch (IOException e) {e.printStackTrace();}
+      	map.drawImage(image, Graphic.graphShiftX(x), Graphic.graphShiftY(y), null);
       });
       for(;;) {
         Event event = context.pollOrWaitEvent(10);
-        if (event == null) {  // no event
-          continue;
-        }
+        if (event == null) {continue;}
         Action action = event.getAction();
         if (action == Action.POINTER_DOWN || action == Action.POINTER_UP) {
-          System.out.println("abort abort !");
           context.exit(0);
           return;
         }
-        System.out.println(event);
-        int oldx = x;
-        int oldy = y;
+        
         if (action == Action.KEY_PRESSED) {
-          KeyboardKey key = event.getKey();
-          switch (key) {
-  					case UP: {
-  						if (y > 0 && grid[x][y-1].skin().equals("")) {y-=1;}
-  						break;
-  					}
-  					case DOWN: {
-  						if (y < Graphic.getHeight()-1 && grid[x][y+1].skin().equals("")) {y+=1;}
-  						break;
-  					}
-  					case LEFT: {
-  						if (x > 0 && grid[x-1][y].skin().equals("")) {x-=1;}
-  						break;
-  					}
-  					case RIGHT: {
-  						if (x < Graphic.getWidth()-1 && grid[x+1][y].skin().equals("")) {x+=1;}
-  						break;
-  					}
-  					default:
-  						break;
-  				}
+          context.renderFrame(move -> {
+          	KeyboardKey key = event.getKey();
+            switch (key) {
+    					case UP: {
+    						if (y > 0 && grid[x][y-1].skin().equals("")) {y-=1;}
+    						break;
+    					}
+    					case DOWN: {
+    						if (y < Graphic.height-1 && grid[x][y+1].skin().equals("")) {y+=1;}
+    						break;
+    					}
+    					case LEFT: {
+    						if (x > 0 && grid[x-1][y].skin().equals("")) {x-=1;}
+    						break;
+    					}
+    					case RIGHT: {
+    						if (x < Graphic.width-1 && grid[x+1][y].skin().equals("")) {x+=1;}
+    						break;
+    					}
+    					default:
+    						break;
+    				}
+          });
         }
-        context.renderFrame(graphics -> {
-          // hide the previous rectangle
-          graphics.setColor(Color.BLACK);
-          graphics.fill(new Rectangle2D.Float(oldx*24, oldy*24, 24, 24));
-          graphics.drawImage(image,x*24, y*24, null);
-        });
-
       }
     });
   }
