@@ -46,7 +46,7 @@ public class Graphic {
 		Objects.requireNonNull(tile);
 		Objects.requireNonNull(map);
 		BufferedImage image;
-		try(var input = Demo.class.getResourceAsStream("img/" + tile.skin() + ".png")) {
+		try(var input = Main.class.getResourceAsStream("img/" + tile.skin() + ".png")) {
   		image = ImageIO.read(input);
   	}
     map.drawImage(image, graphShiftX(tile.position().x), graphShiftY(tile.position().y), null);
@@ -72,13 +72,13 @@ public class Graphic {
 		Objects.requireNonNull(moveX);
 		Objects.requireNonNull(moveY);
 		BufferedImage image;
-		try(var input = Demo.class.getResourceAsStream("img/" + "pnj/baba" + ".png")) {
+		try(var input = Main.class.getResourceAsStream("img/" + "pnj/baba" + ".png")) {
   		image = ImageIO.read(input);
   	}
     move.setColor(Color.BLACK);
-    /*move.fill(new Rectangle2D.Float(Graphic.graphShiftX(baba.x), Graphic.graphShiftY(baba.y), Graphic.imgSize, Graphic.imgSize));
-    baba.x += moveX;
-    baba.y += movey;
-    move.drawImage(image, Graphic.graphShiftX(baba.x), Graphic.graphShiftY(baba.y), null);*/
+    move.fill(new Rectangle2D.Float(Graphic.graphShiftX(baba.position.x), Graphic.graphShiftY(baba.position.y), Graphic.imgSize, Graphic.imgSize));
+    baba.position.x += moveX;
+    baba.position.y += moveY;
+    move.drawImage(image, Graphic.graphShiftX(baba.position.x), Graphic.graphShiftY(baba.position.y), null);
 	}
 }
