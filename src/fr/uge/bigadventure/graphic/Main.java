@@ -2,10 +2,7 @@ package fr.uge.bigadventure.graphic;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import fr.uge.bigadventure.element.Obstacle;
 import fr.uge.bigadventure.element.Player;
@@ -15,20 +12,12 @@ import fr.umlv.zen5.Event.Action;
 import fr.umlv.zen5.KeyboardKey;
 
 public class Main {
-  static int x = 1;
-  static int y = 1;
   
   public static void main(String[] args) throws IOException {
   	
-  	String skin = "pnj/baba";
-  	var pts = new Point(1, 1);
-  	var baba = new Player("baba", skin, 20, pts);
-  	BufferedImage image;
-  	try(var input = Main.class.getResourceAsStream("img/" + skin + ".png")) {
-  		image = ImageIO.read(input);
-  	}
+  	var baba = new Player("baba", "pnj/baba", 20, new Point(1, 1));
   	
-  	Obstacle[][] grid = new Obstacle[20][20];
+  	var grid = new Obstacle[20][20];
   	for (int i = 0; i < grid.length; i++) {
   		for (int j = 0; j < grid[i].length; j++) {
   			if (i == 0 || j == 0 || i == grid.length-1 || j == grid[i].length-1) {
@@ -46,14 +35,13 @@ public class Main {
     Application.run(Color.BLACK, context -> {
       
       var TBA = new Graphic(context.getScreenInfo(), grid.length, grid[0].length);
-      System.out.println(Graphic.nbCasesX);
-      System.out.println(Graphic.nbCasesY);
-      context.renderFrame(map -> {
-      	try {
-					TBA.printMap(grid, map);
-				} catch (IOException e) {e.printStackTrace();}
-      	map.drawImage(image, Graphic.graphShiftX(x), Graphic.graphShiftY(y), null);
+      
+      context.renderFrame(map -> { // mise en place de l'écran de depart
+      	try {	TBA.printMap(map, grid);	} 				catch (IOException e) {e.printStackTrace();}
+      	try {	TBA.playerMove(map, baba, 0, 0);	} catch (IOException e) {e.printStackTrace();}
+      	
       });
+      
       for(;;) {
         Event event = context.pollOrWaitEvent(10);
         if (event == null) {continue;}
@@ -65,8 +53,8 @@ public class Main {
         
         if (action == Action.KEY_PRESSED) {
           context.renderFrame(move -> {
-          	KeyboardKey key = event.getKey();
-            switch (key) {
+          	// ICI mettre tout ça dans une fonction
+            switch (event.getKey()) {
     					case UP: {
     						if (grid[baba.position.x][baba.position.y-1].skin().equals("")) {
     							try {

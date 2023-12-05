@@ -53,7 +53,7 @@ public class Graphic {
 	}
 	
 	
-	public void printMap(Obstacle[][] grid, Graphics2D map) throws IOException{
+	public void printMap(Graphics2D map, Obstacle[][] grid) throws IOException{
 		Objects.requireNonNull(grid);
 		Objects.requireNonNull(map);
 		map.setColor(Color.BLACK);
