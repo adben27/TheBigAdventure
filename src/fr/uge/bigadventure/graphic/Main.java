@@ -26,20 +26,25 @@ public class Main {
   	      grid[i][j] = new Obstacle("obstacle/pillar", new Point(i,j));
   	    } else if (i == 14 && j > 4) {
   	    	grid[i][j] = new Obstacle("obstacle/pillar", new Point(i,j));
-	      } else {
-  	      grid[i][j] = new Obstacle("", new Point(i,j));
-  	    }
+	      } else if (i == 4 && j == 4) {
+	      	grid[i][j] = new Obstacle("scenery/flower", new Point(i,j));
+	      } else if (i == 12 && j == 7) {
+	      	grid[i][j] = new Obstacle("scenery/foliage", new Point(i,j));
+	      } else if (i == 6 && j == 14) {
+	      	grid[i][j] = new Obstacle("scenery/grass", new Point(i,j));
+	      }
   	  }
   	}
 
     Application.run(Color.BLACK, context -> {
       
-      var TBA = new Graphic(context.getScreenInfo(), grid.length, grid[0].length);
+      new Graphic(context.getScreenInfo(), grid);
       
       context.renderFrame(map -> { // mise en place de l'écran de depart
-      	try {	TBA.printMap(map, grid);	} 				catch (IOException e) {e.printStackTrace();}
-      	try {	TBA.playerMove(map, baba, 0, 0);	} catch (IOException e) {e.printStackTrace();}
-      	
+      	try {	
+      	Graphic.printMap(map, grid);
+      	Graphic.playerMove(map, grid, baba, 0, 0);
+      	} catch (IOException e) {e.printStackTrace();}
       });
       
       for(;;) {
@@ -53,43 +58,9 @@ public class Main {
         
         if (action == Action.KEY_PRESSED) {
           context.renderFrame(move -> {
-          	// ICI mettre tout ça dans une fonction
-            switch (event.getKey()) {
-    					case UP: {
-    						if (grid[baba.position.x][baba.position.y-1].skin().equals("")) {
-    							try {
-										TBA.playerMove(move, baba, 0, -1);
-									} catch (IOException e) {e.printStackTrace();}
-    						}
-    						break;
-    					}
-    					case DOWN: {
-    						if (grid[baba.position.x][baba.position.y+1].skin().equals("")) {
-    							try {
-										TBA.playerMove(move, baba, 0, 1);
-									} catch (IOException e) {e.printStackTrace();}
-    						}
-    						break;
-    					}
-    					case LEFT: {
-    						if (grid[baba.position.x-1][baba.position.y].skin().equals("")) {
-    							try {
-										TBA.playerMove(move, baba, -1, 0);
-									} catch (IOException e) {e.printStackTrace();}
-    						}
-    						break;
-    					}
-    					case RIGHT: {
-    						if (grid[baba.position.x+1][baba.position.y].skin().equals("")) {
-    							try {
-										TBA.playerMove(move, baba, 1, 0);
-									} catch (IOException e) {e.printStackTrace();}
-    						}
-    						break;
-    					}
-    					default:
-    						break;
-    				}
+          	try {
+							Graphic.keySwitch(move, event.getKey(), grid, baba);
+						} catch (IOException e) {e.printStackTrace();}
           });
         }
       }
