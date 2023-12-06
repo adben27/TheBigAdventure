@@ -4,7 +4,15 @@ import java.awt.Point;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+<<<<<<< HEAD
+=======
+import java.util.HashMap;
+>>>>>>> stash
 import java.util.ListIterator;
+<<<<<<< HEAD
+=======
+import java.util.Locale;
+>>>>>>> stash
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -30,21 +38,28 @@ public class Parser {
 
 	private void parseIdentifier(ListIterator<Result> iterator) {
 		Objects.requireNonNull(iterator);
+//		Point size; HashMap<String,String> encodings;
 		switch(iterator.previous().content()) {
 			case "size" -> System.out.println(parseMapSize(iterator));
 			case "encodings" -> parseMapEncodings(iterator);
-			case "data" -> parseMapData(iterator);
+//			case "data" -> parseMapData(iterator, size, encodings);
 		}
 	}
 
 	public String iteratorToString(ListIterator<Result> iterator) {	
-		var sizeBuilder = new StringBuilder();
+		Pattern breakingPattern = Pattern.compile(".*\\)(\\[|[a-z])+"); // any character then ) then [ or a lowercase character
 		var tmp = iterator.next();
-		while(tmp.token() != Token.RIGHT_PARENS) {
-			sizeBuilder.append(tmp.content());
+		var sizeBuilder = new StringBuilder(tmp.content());
+		var tmp_l = 0;
+		var m = breakingPattern.matcher(sizeBuilder);
+		while(!m.matches()) {
 			tmp = iterator.next();
+			sizeBuilder.append(tmp.content());
+			tmp_l = tmp.content().length();
+			m = breakingPattern.matcher(sizeBuilder);
 		}
-		sizeBuilder.append(")");
+		tmp = iterator.previous();
+		sizeBuilder.delete(sizeBuilder.length() - tmp_l, sizeBuilder.length()); // Supprime le dernier lexeme qu'on voulait identifier mais qu'on veut pas dans le String 
 		return sizeBuilder.toString();
 	}
 	
@@ -65,43 +80,38 @@ public class Parser {
 	 * @param iterator L'itérateur du Lexer du fichier .map
 	 * @return Un dictionnaire associant une image d'Obstacle à un symbole
 	 */
-	/*private Map<String,String> parseMapEncodings(ListIterator<Result> iterator) {
-		Objects.requireNonNull(iterator);
-		String encoding = "([A-Z]+)\\(([A-Z])\\)";
-//		Pattern encodingPattern = Pattern.compile("encodings:" + encoding + "+");
-//		var encodingString = iterator.next().content() + iterator.next().content(); // "encodings:"
-		String encodingString = "";
-		var i = 0;
-		while(i < 3) {
-			encodingString += iteratorToString(iterator); // ajouter WALL(W), BRICK(B), etc.
-			i++;
+	private HashMap<Character, String> parseMapEncodings(ListIterator<Result> iterator) {	
+		var encodingsMap = new HashMap<Character, String>();
+		Objects.requireNonNull(iterator);		
+		var encodingString = iterator.next().content() + iterator.next().content(); // "encodings:"
+		if(!encodingString.equals("encodings:")) {
+				throw new IllegalArgumentException("Encoding string does not match with regex");
 		}
-		System.out.println(encodingString);
+		var encodingPattern = Pattern.compile("([A-Z]+)\\(([A-Z])\\)");
+		encodingString += iteratorToString(iterator); // ajoute WALL(W), BRICK(B), etc.
 		var m = encodingPattern.matcher(encodingString);
-		if(!m.matches()) {
-			throw new IllegalArgumentException("Encoding string does not match with regex");
-		}
 		while(m.find()) {
-			System.out.println(m.group(1));
-			System.out.println(m.group(2));
+			if(encodingsMap.putIfAbsent(m.group(2).charAt(0), "obstacle/" + m.group(1).toLowerCase(Locale.ROOT)) != null) {
+				throw new IllegalStateException("This symbol is already defined as " + m.group(1));
+			}
 		}
-		
-		
-	}*/
+		System.out.println(encodingsMap);
+		return encodingsMap;	
+	}
 	
 	/** Parse la section data du fichier .map
 	 * 
 	 * @param iterator L'itérateur du Lexer du fichier .map
 	 * @return Un double tableau d'obstacles
 	 */
-	/*private Obstacle[][] parseMapData(ListIterator<Result> iterator) {
+	private Obstacle[][] parseMapData(ListIterator<Result> iterator, Point size, HashMap<String, String> encodings) {
 		Objects.requireNonNull(iterator);
 		
 		
-	}*/
+	}
 	
 	public static void main(String[] args) throws IOException {
-    var path = Path.of("maps/big.map");
+    var path = Path.of("maps/badGridDataEncodingDefinedTwice.map");
     var parser = new Parser(Lexer.toList(path));
     parser.parseMap();
 	}
