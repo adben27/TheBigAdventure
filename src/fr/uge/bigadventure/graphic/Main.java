@@ -9,7 +9,6 @@ import fr.uge.bigadventure.element.Player;
 import fr.umlv.zen5.Application;
 import fr.umlv.zen5.Event;
 import fr.umlv.zen5.Event.Action;
-import fr.umlv.zen5.KeyboardKey;
 
 public class Main {
   
@@ -31,7 +30,7 @@ public class Main {
 	      } else if (i == 12 && j == 7) {
 	      	grid[i][j] = new Obstacle("scenery/foliage", new Point(i,j));
 	      } else if (i == 6 && j == 14) {
-	      	grid[i][j] = new Obstacle("scenery/grass", new Point(i,j));
+	      	grid[i][j] = new Obstacle("scenery/vine", new Point(i,j));
 	      }
   	  }
   	}

@@ -4,13 +4,9 @@ import java.awt.Point;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.ListIterator;
-import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
-
-import fr.uge.bigadventure.element.Obstacle;
 
 public class Parser {
 	private final ArrayList<Result> tokenList;	

@@ -48,7 +48,7 @@ public class Graphic {
 	
 	public static boolean isWalkable(Obstacle tile) {
 		if (tile == null) {return true;}
-		return !tile.skin().startsWith("obstacle");
+		return !tile.skin().startsWith("obstacle/");
 	}
   
 	public static void printCase(Obstacle tile, Graphics2D map) throws IOException{ // Prend un obstacle et l'affiche à sa position
@@ -83,18 +83,29 @@ public class Graphic {
 		Objects.requireNonNull(moveY);
 		BufferedImage image;
     move.setColor(Color.BLACK);
-    move.fill(new Rectangle2D.Float(shiftX(baba.position.x), shiftY(baba.position.y), imgSize, imgSize));
+    move.fill(new Rectangle2D.Float(shiftX(baba.position.x), shiftY(baba.position.y)-4, imgSize, imgSize+4));
 		if (grid[baba.position.x][baba.position.y] != null) {
 			try(var input = Main.class.getResourceAsStream("img/" + grid[baba.position.x][baba.position.y].skin() + ".png")) {
 	  		image = ImageIO.read(input);
 	  	}
 	    move.drawImage(image, shiftX(baba.position.x), shiftY(baba.position.y), null);
 		}
+		if (grid[baba.position.x][baba.position.y-1] != null) {
+	    try(var input = Main.class.getResourceAsStream("img/" + grid[baba.position.x][baba.position.y-1].skin() + ".png")) {
+	  		image = ImageIO.read(input);
+	  	}
+	    move.drawImage(image, shiftX(baba.position.x), shiftY(baba.position.y-1), null);
+		}
     baba.position.x += moveX;
     baba.position.y += moveY;
+    if (grid[baba.position.x][baba.position.y] != null && grid[baba.position.x][baba.position.y].skin().endsWith("vine")) {
+    	baba.health-=1;
+    }
 		try(var input = Main.class.getResourceAsStream("img/" + "pnj/baba" + ".png")) {
   		image = ImageIO.read(input);
   	}
+		move.setColor(Color.RED);
+		move.fill(new Rectangle2D.Float(shiftX(baba.position.x)+2, shiftY(baba.position.y)-4, baba.health, 4));
     move.drawImage(image, shiftX(baba.position.x), shiftY(baba.position.y), null);
 	}
 	
