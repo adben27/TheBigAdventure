@@ -2,7 +2,9 @@ package fr.uge.bigadventure.graphic;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Random;
 
 import fr.uge.bigadventure.element.Enemy;
@@ -16,7 +18,10 @@ import fr.umlv.zen5.Event.Action;
 public class Main {
   
   public static void main(String[] args) throws IOException {
-  	
+  	var skinMap = new HashMap<String, BufferedImage>();
+  	//
+  	// CHARGER LES IMAGES EN DEBUT DE PROGRAMME
+  	//
   	var baba = new Player("baba", "pnj/baba", 20, new Point(1, 1));
   	var keke = new Enemy("keke", "pnj/keke", 20, new Point(18, 18), 5);
   	

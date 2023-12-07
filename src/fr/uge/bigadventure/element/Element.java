@@ -1,7 +1,5 @@
 package fr.uge.bigadventure.element;
 
-import java.awt.image.BufferedImage;
-
 public sealed interface Element permits GridElement, Entity, Weapon {
 
 	/* La méthode skinToBufferedImage renvoie un BufferedImage pour un skin donné
