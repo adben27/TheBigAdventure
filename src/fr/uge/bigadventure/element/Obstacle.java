@@ -1,4 +1,4 @@
-package fr.uge.bigadventure.element.gridelement;
+package fr.uge.bigadventure.element;
 
 import java.awt.Point;
 import java.util.Objects;

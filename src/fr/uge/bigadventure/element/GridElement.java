@@ -1,10 +1,8 @@
-package fr.uge.bigadventure.element.gridelement;
+package fr.uge.bigadventure.element;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.NoSuchElementException;
-
-import fr.uge.bigadventure.element.Element;
 
 public sealed interface GridElement extends Element permits Decoration, Obstacle {
 	boolean isWalkable();

@@ -5,9 +5,9 @@ import java.awt.Point;
 import java.io.IOException;
 import java.util.Random;
 
-import fr.uge.bigadventure.element.entity.Enemy;
-import fr.uge.bigadventure.element.entity.Player;
-import fr.uge.bigadventure.element.gridelement.Obstacle;
+import fr.uge.bigadventure.element.Enemy;
+import fr.uge.bigadventure.element.Obstacle;
+import fr.uge.bigadventure.element.Player;
 import fr.umlv.zen5.Application;
 import fr.umlv.zen5.Event;
 import fr.umlv.zen5.KeyboardKey;
