@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import fr.uge.bigadventure.element.Element;
-import fr.uge.bigadventure.element.Obstacle;
+import fr.uge.bigadventure.element.gridelement.Obstacle;
 
 public class GameMap {
 	private final Obstacle[][] grid;

@@ -1,10 +1,12 @@
-package fr.uge.bigadventure.element;
+package fr.uge.bigadventure.element.gridelement;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.NoSuchElementException;
 
-public sealed interface GridElement permits Decoration, Obstacle {
+import fr.uge.bigadventure.element.Element;
+
+public sealed interface GridElement extends Element permits Decoration, Obstacle {
 	boolean isWalkable();
 	
 	static String checkSkinFile(String skin) {

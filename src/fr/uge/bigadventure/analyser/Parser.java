@@ -10,7 +10,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-import fr.uge.bigadventure.element.GridElement;
+import fr.uge.bigadventure.element.gridelement.GridElement;
 
 public class Parser {
 	private final ArrayList<Result> tokenList;	

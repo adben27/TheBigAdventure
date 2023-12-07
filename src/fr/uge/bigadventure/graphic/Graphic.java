@@ -9,9 +9,9 @@ import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
-import fr.uge.bigadventure.element.Enemy;
-import fr.uge.bigadventure.element.Obstacle;
-import fr.uge.bigadventure.element.Player;
+import fr.uge.bigadventure.element.entity.Enemy;
+import fr.uge.bigadventure.element.entity.Player;
+import fr.uge.bigadventure.element.gridelement.Obstacle;
 import fr.umlv.zen5.KeyboardKey;
 import fr.umlv.zen5.ScreenInfo;
 
