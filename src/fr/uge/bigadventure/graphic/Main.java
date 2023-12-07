@@ -45,9 +45,9 @@ public class Main {
       
       context.renderFrame(map -> { // mise en place de l'écran de depart
       	try {	
-      	Graphic.printMap(map, grid);
-      	Graphic.playerMove(map, grid, baba, 0, 0);
-      	Graphic.EnemyMove(map, grid, keke, 0, 0);
+      		Graphic.printMap(map, grid);
+      		Graphic.playerMove(map, grid, baba, 0, 0);
+      		Graphic.EnemyMove(map, grid, keke, 0, 0);
       	} catch (IOException e) {e.printStackTrace();}
       });
       
