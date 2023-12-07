@@ -9,7 +9,7 @@ public class Enemy implements Element {
 	public int health;
 	public final Point position;
 	private final int damage;
-	// private final String behavior;
+	// private final String behavior; Pour l'instant on a un comportement stroll
 	
 	public Enemy(String name, String skin, int health, Point position, int damage) {
 		Objects.requireNonNull(name);
@@ -24,5 +24,28 @@ public class Enemy implements Element {
 		this.position = position;
 		this.damage = damage;
 	}
+	
+	public String name() {
+		return name;
+	}
+	
+	public String skin() {
+		return skin;
+	}
+	
+	public int health() {
+		return health;
+	}
+
+	public Point position() {
+		return position;
+	}
+	
+	public int damage() {
+		return damage;
+	}
+	
+
+	
 	
 }

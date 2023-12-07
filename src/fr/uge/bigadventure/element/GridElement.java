@@ -8,12 +8,13 @@ public sealed interface GridElement permits Decoration, Obstacle {
 	boolean isWalkable();
 	
 	static String checkSkinFile(String skin) {
-		if(!Files.exists(Path.of("src/fr/uge/bigadventure/graphic/img/obstacle/" + skin	))) {
-			if(!Files.exists(Path.of("src/fr/uge/bigadventure/graphic/img/scenery/" + skin	))) {
+		String root = "src/fr/uge/bigadventure/graphic/img/";
+		if(!Files.exists(Path.of(root + "obstacle/" + skin	))) {
+			if(!Files.exists(Path.of(root + "scenery/" + skin	))) {
 				throw new NoSuchElementException(skin + " is not an Obstacle neither a Decoration");
 			}
-			return "src/fr/uge/bigadventure/graphic/img/scenery/" + skin;
+			return root + "scenery/" + skin;
 		}
-		return "src/fr/uge/bigadventure/graphic/img/obstacle/" + skin;
+		return root + "obstacle/" + skin;
 	}
 }

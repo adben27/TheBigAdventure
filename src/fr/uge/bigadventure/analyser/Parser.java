@@ -2,14 +2,11 @@ package fr.uge.bigadventure.analyser;
 
 import java.awt.Point;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ListIterator;
 import java.util.Locale;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -23,6 +20,11 @@ public class Parser {
 		this.tokenList = tokenList;
 	}
 
+	/** Returns a String for a single line of a .map file for it to be examined with a regex
+	 * 
+	 * @param iterator The iterator corresponding to the .map file
+	 * @return A String to be analysed by sub-methods of parseMap
+	 */
 	public String iteratorToString(ListIterator<Result> iterator) {	
 		Pattern breakingPattern = Pattern.compile(".*\\)(\\[|[a-z])+"); // any character then ) then [ or a lowercase character
 		var tmp = iterator.next();
@@ -40,6 +42,10 @@ public class Parser {
 		return sizeBuilder.toString();
 	}
 	
+	/** The general method to parse a .map file
+	 * It calls sub-methods depending of what the iterator on the file finds.
+	 * 
+	 */
 	public void parseMap() {
 		var tokenIterator = tokenList.listIterator();
 		while(tokenIterator.hasNext()) {
@@ -52,20 +58,26 @@ public class Parser {
 			
 		}
 	}
-
+	
+	/** Redirects the parsing to the dedicated parsing method depending of the identifier
+	 * 
+	 * @param iterator The iterator corresponding to the .map file
+	 */
 	private void parseIdentifier(ListIterator<Result> iterator) {
 		Objects.requireNonNull(iterator);
-		Point size = null; HashMap<String,String> encodings = null;
+		Point size = null; HashMap<Character,String> encodings = null;
 		switch(iterator.previous().content()) {
-			case "size" -> System.out.println(parseMapSize(iterator));
-			case "encodings" -> parseMapEncodings(iterator);
-			case "grid" -> {
-				parseBrackets(iterator);
-			}
-//			case "data" -> parseMapData(iterator, size, encodings);
+			case "size" -> size = parseMapSize(iterator);
+			case "encodings" -> encodings = parseMapEncodings(iterator);
+			case "grid" -> parseBrackets(iterator);
+			case "data" -> parseMapData(iterator, size, encodings);
 		}
 	}
 
+	/** Parses the [grid] or [element] line in a .map file
+	 * 
+	 * @param iterator The iterator corresponding to the .map file
+	 */
 	private void parseBrackets(ListIterator<Result> iterator) {
 		iterator.previous(); // to get again the left bracket
 		Objects.requireNonNull(iterator);
@@ -78,6 +90,11 @@ public class Parser {
 		}
 	}
 	
+	/** Parses the main section of a .map file
+	 * 
+	 * @param iterator The iterator corresponding to the .map file
+	 * @return A point with width of the grid as x and height of the grid as y
+	 */
 	private Point parseMapSize(ListIterator<Result> iterator) {
 		Objects.requireNonNull(iterator);
 		Pattern sizePattern = Pattern.compile("size:\\((\\d)x(\\d)\\)");
@@ -90,10 +107,10 @@ public class Parser {
 		return new Point(width, height);	
 	}
 	
-	/** Parse la section encodings du fichier .map
+	/** Parses the encodings section of a .map file
 	 * 
-	 * @param iterator L'itérateur du Lexer du fichier .map
-	 * @return Un dictionnaire associant une image d'Obstacle à un symbole
+	 * @param iterator The iterator corresponding to the .map file
+	 * @return A map associating a character with a skin
 	 */
 	private HashMap<Character, String> parseMapEncodings(ListIterator<Result> iterator) {	
 		var encodingsMap = new HashMap<Character, String>();
@@ -117,19 +134,22 @@ public class Parser {
 		return encodingsMap;	
 	}
 	
-	/** Parse la section data du fichier .map
+	/** Parses the data section of a .map file
 	 * 
-	 * @param iterator L'itérateur du Lexer du fichier .map
-	 * @return Un double tableau d'obstacles
+	 * @param iterator The iterator corresponding to the .map file
+	 * @return A 2D Array of Obstacle and Decoration
 	 */
-	/*private GridElement[][] parseMapData(ListIterator<Result> iterator, Point size, HashMap<String, String> encodings) {
+	private GridElement[][] parseMapData(ListIterator<Result> iterator, Point size, HashMap<Character, String> encodings) {
 		Objects.requireNonNull(iterator);
+		Objects.requireNonNull(size);
+		Objects.requireNonNull(encodings);
 		
-		
-	}*/
+		var grid = new GridElement[size.x][size.y];
+		return grid;
+	}
 	
 	public static void main(String[] args) throws IOException {
-    var path = Path.of("maps/badGridDataEncodingUnknownTile.map");
+    var path = Path.of("maps/big.map");
     var parser = new Parser(Lexer.toList(path));
     parser.parseMap();
 	}

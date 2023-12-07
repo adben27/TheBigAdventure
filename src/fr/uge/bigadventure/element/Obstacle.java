@@ -1,7 +1,6 @@
 package fr.uge.bigadventure.element;
 
 import java.awt.Point;
-import java.nio.file.Files;
 import java.util.Objects;
 
 public record Obstacle(String skin, Point position) implements GridElement {
