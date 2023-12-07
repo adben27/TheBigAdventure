@@ -3,7 +3,7 @@ package fr.uge.bigadventure.element;
 import java.awt.Point;
 import java.util.Objects;
 
-public class Enemy implements Element {
+public final class Enemy implements Element {
 	private final String name;
 	private final String skin;
 	public int health;

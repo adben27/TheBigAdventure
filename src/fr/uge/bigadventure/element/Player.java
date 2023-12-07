@@ -38,11 +38,13 @@ public class Player implements Element {
 		return position;
 	}
 	
-	public void reduceHealth(int damage) {
+	public boolean reduceHealth(int damage) {
 		if(damage > health) {
 			throw new IllegalArgumentException("Damage must be less than the remaining health of the player");
 		}
 		health -= damage;
+		if (health <= 0) {return true;}
+		return false;
 	}
 	
 }
