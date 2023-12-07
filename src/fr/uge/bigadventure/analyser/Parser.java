@@ -2,19 +2,18 @@ package fr.uge.bigadventure.analyser;
 
 import java.awt.Point;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-<<<<<<< HEAD
-=======
 import java.util.HashMap;
->>>>>>> stash
 import java.util.ListIterator;
-<<<<<<< HEAD
-=======
 import java.util.Locale;
->>>>>>> stash
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.regex.Pattern;
+
+import fr.uge.bigadventure.element.GridElement;
 
 public class Parser {
 	private final ArrayList<Result> tokenList;	
@@ -22,28 +21,6 @@ public class Parser {
 	public Parser(ArrayList<Result> tokenList) {
 		Objects.requireNonNull(tokenList);
 		this.tokenList = tokenList;
-	}
-
-	public void parseMap() {
-		var tokenIterator = tokenList.listIterator();
-		while(tokenIterator.hasNext()) {
-			var token = tokenIterator.next();
-			switch(token.token()) {
-				case IDENTIFIER -> parseIdentifier(tokenIterator);
-				default -> throw new IllegalArgumentException("Unexpected value: " + token.token());
-			}
-			
-		}
-	}
-
-	private void parseIdentifier(ListIterator<Result> iterator) {
-		Objects.requireNonNull(iterator);
-//		Point size; HashMap<String,String> encodings;
-		switch(iterator.previous().content()) {
-			case "size" -> System.out.println(parseMapSize(iterator));
-			case "encodings" -> parseMapEncodings(iterator);
-//			case "data" -> parseMapData(iterator, size, encodings);
-		}
 	}
 
 	public String iteratorToString(ListIterator<Result> iterator) {	
@@ -61,6 +38,44 @@ public class Parser {
 		tmp = iterator.previous();
 		sizeBuilder.delete(sizeBuilder.length() - tmp_l, sizeBuilder.length()); // Supprime le dernier lexeme qu'on voulait identifier mais qu'on veut pas dans le String 
 		return sizeBuilder.toString();
+	}
+	
+	public void parseMap() {
+		var tokenIterator = tokenList.listIterator();
+		while(tokenIterator.hasNext()) {
+			var token = tokenIterator.next();
+			switch(token.token()) {
+				case IDENTIFIER -> parseIdentifier(tokenIterator);
+				case LEFT_BRACKET -> {}
+				default -> throw new IllegalArgumentException("Unexpected value: " + token.token());
+			}
+			
+		}
+	}
+
+	private void parseIdentifier(ListIterator<Result> iterator) {
+		Objects.requireNonNull(iterator);
+		Point size = null; HashMap<String,String> encodings = null;
+		switch(iterator.previous().content()) {
+			case "size" -> System.out.println(parseMapSize(iterator));
+			case "encodings" -> parseMapEncodings(iterator);
+			case "grid" -> {
+				parseBrackets(iterator);
+			}
+//			case "data" -> parseMapData(iterator, size, encodings);
+		}
+	}
+
+	private void parseBrackets(ListIterator<Result> iterator) {
+		iterator.previous(); // to get again the left bracket
+		Objects.requireNonNull(iterator);
+		Pattern bracketPattern = Pattern.compile("\\[[a-z]+\\]");
+		var bracketString = iterator.next().content() + iterator.next().content() + iterator.next().content();
+		System.out.println(bracketString);
+		var m = bracketPattern.matcher(bracketString);
+		if(!m.matches()) {
+			throw new IllegalArgumentException("Grid string does not match with regex");
+		}
 	}
 	
 	private Point parseMapSize(ListIterator<Result> iterator) {
@@ -91,11 +106,14 @@ public class Parser {
 		encodingString += iteratorToString(iterator); // ajoute WALL(W), BRICK(B), etc.
 		var m = encodingPattern.matcher(encodingString);
 		while(m.find()) {
-			if(encodingsMap.putIfAbsent(m.group(2).charAt(0), "obstacle/" + m.group(1).toLowerCase(Locale.ROOT)) != null) {
-				throw new IllegalStateException("This symbol is already defined as " + m.group(1));
+			var skin = GridElement.checkSkinFile(m.group(1).toLowerCase(Locale.ROOT) + ".png");
+			if(encodingsMap.putIfAbsent(m.group(2).charAt(0), skin) != null) {
+				throw new IllegalStateException(m.group(2) + " symbol is already defined as " + m.group(1));
 			}
 		}
-		System.out.println(encodingsMap);
+		if(encodingsMap.isEmpty()) {
+			throw new IllegalStateException("The encodings map should not be empty");
+		}
 		return encodingsMap;	
 	}
 	
@@ -104,14 +122,14 @@ public class Parser {
 	 * @param iterator L'itérateur du Lexer du fichier .map
 	 * @return Un double tableau d'obstacles
 	 */
-	private Obstacle[][] parseMapData(ListIterator<Result> iterator, Point size, HashMap<String, String> encodings) {
+	/*private GridElement[][] parseMapData(ListIterator<Result> iterator, Point size, HashMap<String, String> encodings) {
 		Objects.requireNonNull(iterator);
 		
 		
-	}
+	}*/
 	
 	public static void main(String[] args) throws IOException {
-    var path = Path.of("maps/badGridDataEncodingDefinedTwice.map");
+    var path = Path.of("maps/badGridDataEncodingUnknownTile.map");
     var parser = new Parser(Lexer.toList(path));
     parser.parseMap();
 	}

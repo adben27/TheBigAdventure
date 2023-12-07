@@ -1,12 +1,11 @@
 package fr.uge.bigadventure.element;
 
 import java.awt.Point;
-import java.nio.file.Path;
 import java.util.Objects;
 
 public class Player implements Element {
 	private final String name;
-	private final Path skin;
+	private final String skin;
 	public int health;
 	public final Point position;
 	
@@ -15,7 +14,7 @@ public class Player implements Element {
 		Objects.requireNonNull(skin);
 		Objects.requireNonNull(position);
 		this.name = name;
-		this.skin = Path.of(skin);
+		this.skin = skin;
 		this.health = health;
 		this.position = position;
 	}

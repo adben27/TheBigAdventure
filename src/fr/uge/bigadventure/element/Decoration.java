@@ -1,28 +1,20 @@
 package fr.uge.bigadventure.element;
 
-import java.nio.file.Path;
+import java.awt.Point;
+import java.util.Objects;
 
-public enum Decoration implements Element {
-	ALGAE("scenery/algae.png"),
-	CLOUD("scenery/cloud.png"),
-	FLOWER("scenery/flower.png"),
-	FOLIAGE("scenery/foliage.png"),
-	GRASS("scenery/grass.png"),
-	LADDER("scenery/ladder.png"),
-	LILY("scenery/lily.png"),
-	PLANK("scenery/plank.png"),
-	REED("scenery/reed.png"),
-	ROAD("scenery/road.png"),
-	SPROUT("scenery/sprout.png"),
-	TILE("scenery/tile.png"),
-	TRACK("scenery/track.png"),
-	VINE("scenery/vine.png"),
-	;
+public record Decoration(String skin, Point position) implements GridElement {
 	
-	public Path image;
+	public Decoration {
+		Objects.requireNonNull(skin);
+		Objects.requireNonNull(position);
+	}
 	
-	private Decoration(String image) {
-		this.image = Path.of(image);
+	static final String KIND = "scenery/";
+	
+	@Override
+	public boolean isWalkable() {
+		return true;
 	}
 	
 }
