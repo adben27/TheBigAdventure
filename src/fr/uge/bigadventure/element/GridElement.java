@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import java.util.NoSuchElementException;
 
 public sealed interface GridElement extends Element permits Decoration, Obstacle {
-	boolean isWalkable();
+//	boolean isWalkable();
 	
 	static String checkSkinFile(String skin) {
 		String root = "src/fr/uge/bigadventure/graphic/img/";

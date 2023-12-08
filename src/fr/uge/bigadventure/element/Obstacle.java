@@ -12,9 +12,9 @@ public record Obstacle(String skin, Point position) implements GridElement {
 		Objects.requireNonNull(position);
 	}
 
-	@Override
-	public boolean isWalkable() {
-		return false;
-	}
+//	@Override
+//	public boolean isWalkable() {
+//		return false;
+//	}
 
 }

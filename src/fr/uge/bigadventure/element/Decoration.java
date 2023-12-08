@@ -12,9 +12,9 @@ public record Decoration(String skin, Point position) implements GridElement {
 	
 	static final String KIND = "scenery/";
 	
-	@Override
-	public boolean isWalkable() {
-		return true;
-	}
+//	@Override
+//	public boolean isWalkable() {
+//		return true;
+//	}
 	
 }

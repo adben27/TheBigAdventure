@@ -4,11 +4,13 @@ import java.awt.Point;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import fr.uge.bigadventure.element.GridElement;
 
@@ -66,11 +68,14 @@ public class Parser {
 	private void parseIdentifier(ListIterator<Result> iterator) {
 		Objects.requireNonNull(iterator);
 		Point size = null; HashMap<Character,String> encodings = null;
-		switch(iterator.previous().content()) {
+		var previousResult = iterator.previous().content();
+		switch(previousResult) {
 			case "size" -> size = parseMapSize(iterator);
 			case "encodings" -> encodings = parseMapEncodings(iterator);
 			case "grid" -> parseBrackets(iterator);
 			case "data" -> parseMapData(iterator, size, encodings);
+			// ne marche pas, je ne peux pas passer size et encodings à data, 
+			// et les methodes de parse de data encodings et size utilise la position actuelle de l'iterator
 		}
 	}
 
@@ -83,7 +88,6 @@ public class Parser {
 		Objects.requireNonNull(iterator);
 		Pattern bracketPattern = Pattern.compile("\\[[a-z]+\\]");
 		var bracketString = iterator.next().content() + iterator.next().content() + iterator.next().content();
-		System.out.println(bracketString);
 		var m = bracketPattern.matcher(bracketString);
 		if(!m.matches()) {
 			throw new IllegalArgumentException("Grid string does not match with regex");
@@ -113,8 +117,8 @@ public class Parser {
 	 * @return A map associating a character with a skin
 	 */
 	private HashMap<Character, String> parseMapEncodings(ListIterator<Result> iterator) {	
-		var encodingsMap = new HashMap<Character, String>();
 		Objects.requireNonNull(iterator);		
+		var encodingsMap = new HashMap<Character, String>();
 		var encodingString = iterator.next().content() + iterator.next().content(); // "encodings:"
 		if(!encodingString.equals("encodings:")) {
 				throw new IllegalArgumentException("Encoding string does not match with regex");
@@ -143,6 +147,11 @@ public class Parser {
 		Objects.requireNonNull(iterator);
 		Objects.requireNonNull(size);
 		Objects.requireNonNull(encodings);
+		var dataString = iterator.next().content() + iterator.next().content(); // "data:"
+
+		// blank to fill, but i need size and encodings !!!
+		
+		
 		
 		var grid = new GridElement[size.x][size.y];
 		return grid;
@@ -152,6 +161,16 @@ public class Parser {
     var path = Path.of("maps/big.map");
     var parser = new Parser(Lexer.toList(path));
     parser.parseMap();
+//    var dataString = "  data: \"\"\"\n"
+//    		+ "  WWWWWW\n"
+//    		+ "  W    W\n"
+//    		+ "  W FF W\n"
+//    		+ "  B    B\n"
+//    		+ "  BBBBBB\n"
+//    		+ "  \"\"\"";
+//    System.out.println(Arrays.asList(dataString.split("\n")).stream().map(s -> s.trim()).collect(Collectors.joining("\n")));
+    
+    
 	}
 	
 }
