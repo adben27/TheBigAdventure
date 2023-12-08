@@ -4,17 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
-import javax.imageio.ImageIO;
-
-import fr.uge.bigadventure.element.Enemy;
 import fr.uge.bigadventure.element.Entity;
 import fr.uge.bigadventure.element.Obstacle;
-import fr.uge.bigadventure.element.Player;
-import fr.umlv.zen5.KeyboardKey;
 import fr.umlv.zen5.ScreenInfo;
 
 public class Graphic {
@@ -59,16 +54,6 @@ public class Graphic {
   public static int shiftY(int coordinate) {
   	return (coordinate + nbCasesY/2 - sizeY/2) * imgSize;
   }
-	
-  /** Test if a tile is walkable
-	 * 
-	 * @param tile A tile in the map
-	 * @return true if is walkable, and false if not
-	 */
-	public static boolean isWalkable(Obstacle tile) {
-		if (tile == null) {return true;}
-		return !tile.skin().startsWith("obstacle/");
-	}
   
 	/** Print a tile if it is not null
 	 * 
@@ -92,79 +77,29 @@ public class Graphic {
 		}
 	}
 	
-	public static void eraseEntity(Graphics2D move, Obstacle[][] grid, Entity entity) {
+	public static void eraseEntity(Graphics2D move, Obstacle[][] grid, List<Entity> entityList) {
+		Objects.requireNonNull(move);
+		Objects.requireNonNull(grid);
+		Objects.requireNonNull(entityList);
     move.setColor(Color.BLACK);
-    move.fill(new Rectangle2D.Float(shiftX(entity.position().x), shiftY(entity.position().y)-4, imgSize, imgSize+4));
-	  printTile(grid[entity.position().x][entity.position().y], move);
-	  printTile(grid[entity.position().x][entity.position().y-1], move);
+    for(var entity : entityList) {
+    	move.fill(new Rectangle2D.Float(shiftX(entity.position().x), shiftY(entity.position().y)-4, imgSize, imgSize+4));
+    	printTile(grid[entity.position().x][entity.position().y], move);
+    	printTile(grid[entity.position().x][entity.position().y-1], move);
+		}
+    
 	}
 	
-	public static void entityMove(Graphics2D move, Obstacle[][] grid, Entity entity, int moveX, int moveY) { // Prend un Player et le déplace
+	public static void drawEntity(Graphics2D move, List<Entity> entityList) {
 		Objects.requireNonNull(move);
-		Objects.requireNonNull(grid);
-		Objects.requireNonNull(entity);
-		eraseEntity(move, grid, entity);
-    entity.position().x += moveX;
-    entity.position().y += moveY;
-    if (grid[entity.position().x][entity.position().y] != null && grid[entity.position().x][entity.position().y].skin().endsWith("vine")) {
-    	entity.reduceHealth(1);
-    }
-		move.setColor(Color.GRAY);
-    move.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, 20, 4));
-		move.setColor(Color.RED);
-		move.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, entity.health(), 4));
-    move.drawImage(skinMap.get(entity.skin()), shiftX(entity.position().x), shiftY(entity.position().y), null);
-	}
-	
-	public static void keySwitch(Graphics2D move, KeyboardKey key, Obstacle[][] grid, Player baba) {
-		Objects.requireNonNull(move);
-		Objects.requireNonNull(key);
-		Objects.requireNonNull(grid);
-		Objects.requireNonNull(baba);
-		int x = 0;
-		int y = 0;
-		switch (key) {
-  		case UP: {if (isWalkable(grid[baba.position().x][baba.position().y-1])) {y--;}
-  			break;
-  		}
-  		case DOWN: {if (isWalkable(grid[baba.position().x][baba.position().y+1])) {y++;}
-  			break;
-  		}
-  		case LEFT: {if (isWalkable(grid[baba.position().x-1][baba.position().y])) {x--;}
-  			break;
-  		}
-  		case RIGHT: {if (isWalkable(grid[baba.position().x+1][baba.position().y])) {x++;}
-  			break;
-  		}
-  		default:
-  			break;
-  	}
-		entityMove(move, grid, baba, x, y);
-	}
-	
-	public static void keySwitchEnemy(Graphics2D move, int value, Obstacle[][] grid, Enemy baba){
-		Objects.requireNonNull(move);
-		Objects.requireNonNull(grid);
-		Objects.requireNonNull(baba);
-		int x = 0;
-		int y = 0;
-		switch (value) {
-  		case 0: {if (isWalkable(grid[baba.position().x][baba.position().y-1])) {y--;}
-  			break;
-  		}
-  		case 1: {if (isWalkable(grid[baba.position().x][baba.position().y+1])) {y++;}
-  			break;
-  		}
-  		case 2: {if (isWalkable(grid[baba.position().x-1][baba.position().y])) {x--;}
-  			break;
-  		}
-  		case 3: {if (isWalkable(grid[baba.position().x+1][baba.position().y])) {x++;}
-  			break;
-  		}
-  		default:
-  			break;
-  	}
-		entityMove(move, grid, baba, x, y);
+		Objects.requireNonNull(entityList);
+		for(var entity : entityList) {
+			move.setColor(Color.GRAY);
+			move.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, 20, 4));
+			move.setColor(Color.RED);
+			move.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, entity.health(), 4));
+			move.drawImage(skinMap.get(entity.skin()), shiftX(entity.position().x), shiftY(entity.position().y), null);
+		}
 	}
 }
 
