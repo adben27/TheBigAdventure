@@ -4,10 +4,11 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Random;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import fr.uge.bigadventure.Input;
 import fr.uge.bigadventure.element.Enemy;
 import fr.uge.bigadventure.element.Obstacle;
 import fr.uge.bigadventure.element.Player;
@@ -20,6 +21,7 @@ public class Main {
   public static void main(String[] args) throws IOException {
   	var baba = new Player("baba", "pnj/baba", 20, new Point(1, 1));
   	var keke = new Enemy("keke", "pnj/keke", 20, new Point(18, 18), 5);
+  	var entityList = List.of(baba, keke);
   	BufferedImage image;
   	var grid = new Obstacle[20][20];
   	for (int i = 0; i < grid.length; i++) {
@@ -48,11 +50,11 @@ public class Main {
   	try(var input = Main.class.getResourceAsStream("img/" + baba.skin() + ".png")) {
 			image = ImageIO.read(input);
 		}
-		Graphic.skinMap.putIfAbsent(baba.skin(), image);
+		Graphic.skinMap.put(baba.skin(), image);
 		try(var input = Main.class.getResourceAsStream("img/" + keke.skin() + ".png")) {
 			image = ImageIO.read(input);
 		}
-		Graphic.skinMap.putIfAbsent(keke.skin(), image);
+		Graphic.skinMap.put(keke.skin(), image);
   	
   	
 
@@ -62,8 +64,7 @@ public class Main {
       
       context.renderFrame(map -> { // mise en place de l'écran de depart
       	Graphic.printMap(map, grid);
-      	Graphic.entityMove(map, grid, baba, 0, 0);
-      	Graphic.entityMove(map, grid, keke, 0, 0);
+      	Graphic.drawEntity(map, entityList);
       });
       
       for(;;) {
@@ -72,30 +73,27 @@ public class Main {
           return;
       	}
         Event event = context.pollOrWaitEvent(700);
-        context.renderFrame(enemy -> {
-        	Random r = new Random();
-        	var n = r.nextInt(4);
-        	Graphic.entityMove(enemy, grid, baba, 0, 0);
-					Graphic.keySwitchEnemy(enemy, n, grid, keke);
-        	if (keke.position.x == baba.position().x && keke.position.y == baba.position().y) {
-        		if (baba.reduceHealth(5)) {
-        			context.exit(0);
-              return;
-        		}
-        	}
-        });
-        if (event == null) {continue;}
-        Action action = event.getAction();
-        if (action == Action.POINTER_DOWN || action == Action.POINTER_UP) {
-          context.exit(0);
-          return;
-        }
+        context.renderFrame(erase ->{Graphic.eraseEntity(erase, grid, entityList);});
         
-        if (action == Action.KEY_PRESSED) {
-          context.renderFrame(move -> {
-						Graphic.keySwitch(move, event.getKey(), grid, baba);
-          });
+				Input.keySwitch(Input.randomKey(), grid, keke);
+       	if (keke.position.x == baba.position().x && keke.position.y == baba.position().y) {
+       		if (baba.reduceHealth(5)) {
+       			context.exit(0);
+             return;
+       		}
         }
+        if (event != null) {
+        	Action action = event.getAction();
+        	if (action == Action.POINTER_DOWN || action == Action.POINTER_UP) {
+        		context.exit(0);
+          	return;
+        	}
+        
+        	if (action == Action.KEY_PRESSED) {
+        		Input.keySwitch(event.getKey(), grid, baba);
+        	}
+        }
+        context.renderFrame(draw -> {Graphic.drawEntity(draw, entityList);});
       }
     });
   }
