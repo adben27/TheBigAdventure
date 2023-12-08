@@ -41,22 +41,43 @@ public class Graphic {
     sizeX = grid.length;
     sizeY = grid[0].length;
   }
-  
-  public static int shiftX(int coordinate) { // Transforme une coordonnée dans la map en coordonné à l'écran
+	
+	
+	/** Transform a grid coordinate on the horizontal axis to an adapted screen coordinate
+	 * 
+	 * @param coordinate A grid coordinate
+	 * @return The adapted screen coordinate
+	 */
+  public static int shiftX(int coordinate) {
   	return (coordinate + nbCasesX/2 - sizeX/2) * imgSize;
   }
-  public static int shiftY(int coordinate) { // Transforme une coordonnée dans la map en coordonné à l'écran
+	/** Transform a grid coordinate on the vertical axis to an adapted screen coordinate
+	 * 
+	 * @param coordinate A grid coordinate
+	 * @return The adapted screen coordinate
+	 */
+  public static int shiftY(int coordinate) {
   	return (coordinate + nbCasesY/2 - sizeY/2) * imgSize;
   }
 	
+  /** Test if a tile is walkable
+	 * 
+	 * @param tile A tile in the map
+	 * @return true if is walkable, and false if not
+	 */
 	public static boolean isWalkable(Obstacle tile) {
 		if (tile == null) {return true;}
 		return !tile.skin().startsWith("obstacle/");
 	}
   
-	public static void printCase(Obstacle tile, Graphics2D map) { // Prend un obstacle et l'affiche à sa position()
-		Objects.requireNonNull(tile);
+	/** Print a tile if it is not null
+	 * 
+	 * @param tile A tile in the map
+	 * @param map 
+	 */
+	public static void printTile(Obstacle tile, Graphics2D map) { // Prend un obstacle et l'affiche à sa position()
 		Objects.requireNonNull(map);
+		if (tile == null) {return;}
     map.drawImage(skinMap.get(tile.skin()), shiftX(tile.position().x), shiftY(tile.position().y), null);
 	}
 	
@@ -67,29 +88,29 @@ public class Graphic {
 		map.setColor(Color.BLACK);
     map.fill(new Rectangle2D.Float(0, 0, width, height));
 		for(var list : grid) {
-			for(var elem : list) {
-				if (elem != null) {printCase(elem, map);}
-			}
+			for(var elem : list) {printTile(elem, map);}
 		}
+	}
+	
+	public static void eraseEntity(Graphics2D move, Obstacle[][] grid, Entity entity) {
+    move.setColor(Color.BLACK);
+    move.fill(new Rectangle2D.Float(shiftX(entity.position().x), shiftY(entity.position().y)-4, imgSize, imgSize+4));
+	  printTile(grid[entity.position().x][entity.position().y], move);
+	  printTile(grid[entity.position().x][entity.position().y-1], move);
 	}
 	
 	public static void entityMove(Graphics2D move, Obstacle[][] grid, Entity entity, int moveX, int moveY) { // Prend un Player et le déplace
 		Objects.requireNonNull(move);
 		Objects.requireNonNull(grid);
 		Objects.requireNonNull(entity);
-    move.setColor(Color.BLACK);
-    move.fill(new Rectangle2D.Float(shiftX(entity.position().x), shiftY(entity.position().y)-4, imgSize, imgSize+4));
-		if (grid[entity.position().x][entity.position().y] != null) {
-	    move.drawImage(skinMap.get(grid[entity.position().x][entity.position().y].skin()), shiftX(entity.position().x), shiftY(entity.position().y), null);
-		}
-		if (grid[entity.position().x][entity.position().y-1] != null) {
-	    move.drawImage(skinMap.get(grid[entity.position().x][entity.position().y-1].skin()), shiftX(entity.position().x), shiftY(entity.position().y-1), null);
-		}
+		eraseEntity(move, grid, entity);
     entity.position().x += moveX;
     entity.position().y += moveY;
     if (grid[entity.position().x][entity.position().y] != null && grid[entity.position().x][entity.position().y].skin().endsWith("vine")) {
     	entity.reduceHealth(1);
     }
+		move.setColor(Color.GRAY);
+    move.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, 20, 4));
 		move.setColor(Color.RED);
 		move.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, entity.health(), 4));
     move.drawImage(skinMap.get(entity.skin()), shiftX(entity.position().x), shiftY(entity.position().y), null);
