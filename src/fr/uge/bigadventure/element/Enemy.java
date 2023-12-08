@@ -29,14 +29,17 @@ public final class Enemy implements Entity  {
 		return name;
 	}
 	
+	@Override
 	public String skin() {
 		return skin;
 	}
 	
+	@Override
 	public int health() {
 		return health;
 	}
 
+	@Override
 	public Point position() {
 		return position;
 	}
@@ -44,8 +47,12 @@ public final class Enemy implements Entity  {
 	public int damage() {
 		return damage;
 	}
-	
 
-	
+	@Override
+	public boolean reduceHealth(int damage) {
+		health -= damage;
+		if (health <= 0) {return true;}
+		return false;
+	}
 	
 }

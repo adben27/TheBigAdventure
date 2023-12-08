@@ -8,7 +8,6 @@ public sealed interface Element permits GridElement, Entity, Weapon {
 	 * 
 	 */
 	
-	
 //	public static BufferedImage skinToBufferedImage(String skin) {
 //		// TODO
 //	}

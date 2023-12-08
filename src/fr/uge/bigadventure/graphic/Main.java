@@ -4,27 +4,23 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
 
 import fr.uge.bigadventure.element.Enemy;
 import fr.uge.bigadventure.element.Obstacle;
 import fr.uge.bigadventure.element.Player;
 import fr.umlv.zen5.Application;
 import fr.umlv.zen5.Event;
-import fr.umlv.zen5.KeyboardKey;
 import fr.umlv.zen5.Event.Action;
 
 public class Main {
   
   public static void main(String[] args) throws IOException {
-  	var skinMap = new HashMap<String, BufferedImage>();
-  	//
-  	// CHARGER LES IMAGES EN DEBUT DE PROGRAMME
-  	//
   	var baba = new Player("baba", "pnj/baba", 20, new Point(1, 1));
   	var keke = new Enemy("keke", "pnj/keke", 20, new Point(18, 18), 5);
-  	
+  	BufferedImage image;
   	var grid = new Obstacle[20][20];
   	for (int i = 0; i < grid.length; i++) {
   		for (int j = 0; j < grid[i].length; j++) {
@@ -41,31 +37,46 @@ public class Main {
 	      } else if (i == 6 && j == 14) {
 	      	grid[i][j] = new Obstacle("scenery/vine", new Point(i,j));
 	      }
+  			if (grid[i][j] != null) {
+  				try(var input = Main.class.getResourceAsStream("img/" + grid[i][j].skin() + ".png")) {
+  					image = ImageIO.read(input);
+  				}
+  				Graphic.skinMap.putIfAbsent(grid[i][j].skin(), image);
+  			}
   	  }
   	}
+  	try(var input = Main.class.getResourceAsStream("img/" + baba.skin() + ".png")) {
+			image = ImageIO.read(input);
+		}
+		Graphic.skinMap.putIfAbsent(baba.skin(), image);
+		try(var input = Main.class.getResourceAsStream("img/" + keke.skin() + ".png")) {
+			image = ImageIO.read(input);
+		}
+		Graphic.skinMap.putIfAbsent(keke.skin(), image);
+  	
+  	
 
     Application.run(Color.BLACK, context -> {
       
       new Graphic(context.getScreenInfo(), grid);
       
       context.renderFrame(map -> { // mise en place de l'écran de depart
-      	try {	
-      		Graphic.printMap(map, grid);
-      		Graphic.playerMove(map, grid, baba, 0, 0);
-      		Graphic.EnemyMove(map, grid, keke, 0, 0);
-      	} catch (IOException e) {e.printStackTrace();}
+      	Graphic.printMap(map, grid);
+      	Graphic.entityMove(map, grid, baba, 0, 0);
+      	Graphic.entityMove(map, grid, keke, 0, 0);
       });
       
       for(;;) {
+      	if (baba.health() <= 0) {
+      		context.exit(0);
+          return;
+      	}
         Event event = context.pollOrWaitEvent(700);
         context.renderFrame(enemy -> {
         	Random r = new Random();
         	var n = r.nextInt(4);
-        	System.out.println(n);
-        	try {
-        		Graphic.playerMove(enemy, grid, baba, 0, 0);
-						Graphic.keySwitchEnemy(enemy, n, grid, keke);
-					} catch (IOException e) {e.printStackTrace();}
+        	Graphic.entityMove(enemy, grid, baba, 0, 0);
+					Graphic.keySwitchEnemy(enemy, n, grid, keke);
         	if (keke.position.x == baba.position().x && keke.position.y == baba.position().y) {
         		if (baba.reduceHealth(5)) {
         			context.exit(0);
@@ -82,9 +93,7 @@ public class Main {
         
         if (action == Action.KEY_PRESSED) {
           context.renderFrame(move -> {
-          	try {
-							Graphic.keySwitch(move, event.getKey(), grid, baba);
-						} catch (IOException e) {e.printStackTrace();}
+						Graphic.keySwitch(move, event.getKey(), grid, baba);
           });
         }
       }

@@ -5,17 +5,21 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
 import fr.uge.bigadventure.element.Enemy;
+import fr.uge.bigadventure.element.Entity;
 import fr.uge.bigadventure.element.Obstacle;
 import fr.uge.bigadventure.element.Player;
 import fr.umlv.zen5.KeyboardKey;
 import fr.umlv.zen5.ScreenInfo;
 
 public class Graphic {
+	public static HashMap<String, BufferedImage> skinMap = new HashMap<>();;
+	
 	public static final int imgSize = 24; //La taille des images du projet
 	
 	public static float width;  // Largeur de l'écran en pixel
@@ -50,63 +54,48 @@ public class Graphic {
 		return !tile.skin().startsWith("obstacle/");
 	}
   
-	public static void printCase(Obstacle tile, Graphics2D map) throws IOException{ // Prend un obstacle et l'affiche à sa position()
+	public static void printCase(Obstacle tile, Graphics2D map) { // Prend un obstacle et l'affiche à sa position()
 		Objects.requireNonNull(tile);
 		Objects.requireNonNull(map);
-		BufferedImage image;
-		try(var input = Main.class.getResourceAsStream("img/" + tile.skin() + ".png")) {
-  		image = ImageIO.read(input);
-  	}
-    map.drawImage(image, shiftX(tile.position().x), shiftY(tile.position().y), null);
+    map.drawImage(skinMap.get(tile.skin()), shiftX(tile.position().x), shiftY(tile.position().y), null);
 	}
 	
 	
-	public static void printMap(Graphics2D map, Obstacle[][] grid) throws IOException{ // Prend un double tableau d'Obstacle (une map) et l'affiche 
+	public static void printMap(Graphics2D map, Obstacle[][] grid) { // Prend un double tableau d'Obstacle (une map) et l'affiche 
 		Objects.requireNonNull(grid);
 		Objects.requireNonNull(map);
 		map.setColor(Color.BLACK);
     map.fill(new Rectangle2D.Float(0, 0, width, height));
 		for(var list : grid) {
 			for(var elem : list) {
-				if (elem == null) {continue;}
-		  	printCase(elem, map);
+				if (elem != null) {printCase(elem, map);}
 			}
 		}
 	}
 	
-	public static void playerMove(Graphics2D move, Obstacle[][] grid, Player baba, int moveX, int moveY) throws IOException { // Prend un Player et le déplace
+	public static void entityMove(Graphics2D move, Obstacle[][] grid, Entity entity, int moveX, int moveY) { // Prend un Player et le déplace
 		Objects.requireNonNull(move);
 		Objects.requireNonNull(grid);
-		Objects.requireNonNull(baba);
-		BufferedImage image;
+		Objects.requireNonNull(entity);
     move.setColor(Color.BLACK);
-    move.fill(new Rectangle2D.Float(shiftX(baba.position().x), shiftY(baba.position().y)-4, imgSize, imgSize+4));
-		if (grid[baba.position().x][baba.position().y] != null) {
-			try(var input = Main.class.getResourceAsStream("img/" + grid[baba.position().x][baba.position().y].skin() + ".png")) {
-	  		image = ImageIO.read(input);
-	  	}
-	    move.drawImage(image, shiftX(baba.position().x), shiftY(baba.position().y), null);
+    move.fill(new Rectangle2D.Float(shiftX(entity.position().x), shiftY(entity.position().y)-4, imgSize, imgSize+4));
+		if (grid[entity.position().x][entity.position().y] != null) {
+	    move.drawImage(skinMap.get(grid[entity.position().x][entity.position().y].skin()), shiftX(entity.position().x), shiftY(entity.position().y), null);
 		}
-		if (grid[baba.position().x][baba.position().y-1] != null) {
-	    try(var input = Main.class.getResourceAsStream("img/" + grid[baba.position().x][baba.position().y-1].skin() + ".png")) {
-	  		image = ImageIO.read(input);
-	  	}
-	    move.drawImage(image, shiftX(baba.position().x), shiftY(baba.position().y-1), null);
+		if (grid[entity.position().x][entity.position().y-1] != null) {
+	    move.drawImage(skinMap.get(grid[entity.position().x][entity.position().y-1].skin()), shiftX(entity.position().x), shiftY(entity.position().y-1), null);
 		}
-    baba.position().x += moveX;
-    baba.position().y += moveY;
-    if (grid[baba.position().x][baba.position().y] != null && grid[baba.position().x][baba.position().y].skin().endsWith("vine")) {
-    	baba.reduceHealth(1);
+    entity.position().x += moveX;
+    entity.position().y += moveY;
+    if (grid[entity.position().x][entity.position().y] != null && grid[entity.position().x][entity.position().y].skin().endsWith("vine")) {
+    	entity.reduceHealth(1);
     }
-		try(var input = Main.class.getResourceAsStream("img/" + "pnj/baba" + ".png")) {
-  		image = ImageIO.read(input);
-  	}
 		move.setColor(Color.RED);
-		move.fill(new Rectangle2D.Float(shiftX(baba.position().x)+2, shiftY(baba.position().y)-4, baba.health(), 4));
-    move.drawImage(image, shiftX(baba.position().x), shiftY(baba.position().y), null);
+		move.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, entity.health(), 4));
+    move.drawImage(skinMap.get(entity.skin()), shiftX(entity.position().x), shiftY(entity.position().y), null);
 	}
 	
-	public static void keySwitch(Graphics2D move, KeyboardKey key, Obstacle[][] grid, Player baba) throws IOException {
+	public static void keySwitch(Graphics2D move, KeyboardKey key, Obstacle[][] grid, Player baba) {
 		Objects.requireNonNull(move);
 		Objects.requireNonNull(key);
 		Objects.requireNonNull(grid);
@@ -129,39 +118,10 @@ public class Graphic {
   		default:
   			break;
   	}
-		playerMove(move, grid, baba, x, y);
-	}
-
-	public static void EnemyMove(Graphics2D move, Obstacle[][] grid, Enemy keke, int moveX, int moveY) throws IOException { // Prend un Player et le déplace
-		Objects.requireNonNull(move);
-		Objects.requireNonNull(grid);
-		Objects.requireNonNull(keke);
-		BufferedImage image;
-    move.setColor(Color.BLACK);
-    move.fill(new Rectangle2D.Float(shiftX(keke.position().x), shiftY(keke.position().y)-4, imgSize, imgSize+4));
-		if (grid[keke.position().x][keke.position().y] != null) {
-			try(var input = Main.class.getResourceAsStream("img/" + grid[keke.position().x][keke.position().y].skin() + ".png")) {
-	  		image = ImageIO.read(input);
-	  	}
-	    move.drawImage(image, shiftX(keke.position().x), shiftY(keke.position().y), null);
-		}
-		if (grid[keke.position().x][keke.position().y-1] != null) {
-	    try(var input = Main.class.getResourceAsStream("img/" + grid[keke.position().x][keke.position().y-1].skin() + ".png")) {
-	  		image = ImageIO.read(input);
-	  	}
-	    move.drawImage(image, shiftX(keke.position().x), shiftY(keke.position().y-1), null);
-		}
-    keke.position().x += moveX;
-    keke.position().y += moveY;
-		try(var input = Main.class.getResourceAsStream("img/" + "pnj/keke" + ".png")) {
-  		image = ImageIO.read(input);
-  	}
-		move.setColor(Color.RED);
-		move.fill(new Rectangle2D.Float(shiftX(keke.position().x)+2, shiftY(keke.position().y)-4, keke.health(), 4));
-    move.drawImage(image, shiftX(keke.position().x), shiftY(keke.position().y), null);
+		entityMove(move, grid, baba, x, y);
 	}
 	
-	public static void keySwitchEnemy(Graphics2D move, int value, Obstacle[][] grid, Enemy baba) throws IOException {
+	public static void keySwitchEnemy(Graphics2D move, int value, Obstacle[][] grid, Enemy baba){
 		Objects.requireNonNull(move);
 		Objects.requireNonNull(grid);
 		Objects.requireNonNull(baba);
@@ -183,7 +143,7 @@ public class Graphic {
   		default:
   			break;
   	}
-		EnemyMove(move, grid, baba, x, y);
+		entityMove(move, grid, baba, x, y);
 	}
 }
 

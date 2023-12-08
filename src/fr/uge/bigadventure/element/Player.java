@@ -26,18 +26,22 @@ public final class Player implements Entity {
 		return name;
 	}
 	
+	@Override
 	public String skin() {
 		return skin;
 	}
 	
+	@Override
 	public int health() {
 		return health;
 	}
 	
+	@Override
 	public Point position() {
 		return position;
 	}
 	
+	@Override
 	public boolean reduceHealth(int damage) {
 		health -= damage;
 		if (health <= 0) {return true;}
