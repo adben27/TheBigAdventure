@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 import fr.uge.bigadventure.element.Entity;
-import fr.uge.bigadventure.element.Obstacle;
+import fr.uge.bigadventure.element.GridElement;
 import fr.umlv.zen5.ScreenInfo;
 
 public class Graphic {
@@ -26,7 +26,7 @@ public class Graphic {
 	public static int sizeX;    // Largeur de la map
 	public static int sizeY;    // Hauteur de la map
 	
-	public Graphic(ScreenInfo screenInfo, Obstacle[][] grid) {
+	public Graphic(ScreenInfo screenInfo, GridElement[][] grid) {
 		Objects.requireNonNull(screenInfo);
 		Objects.requireNonNull(grid);
     width = screenInfo.getWidth();
@@ -60,14 +60,14 @@ public class Graphic {
 	 * @param tile A tile in the map
 	 * @param map 
 	 */
-	public static void printTile(Obstacle tile, Graphics2D map) { // Prend un obstacle et l'affiche à sa position()
+	public static void printTile(GridElement tile, Graphics2D map) { // Prend un obstacle et l'affiche à sa position()
 		Objects.requireNonNull(map);
 		if (tile == null) {return;}
     map.drawImage(skinMap.get(tile.skin()), shiftX(tile.position().x), shiftY(tile.position().y), null);
 	}
 	
 	
-	public static void printMap(Graphics2D map, Obstacle[][] grid) { // Prend un double tableau d'Obstacle (une map) et l'affiche 
+	public static void printMap(Graphics2D map, GridElement[][] grid) { // Prend un double tableau d'Obstacle (une map) et l'affiche 
 		Objects.requireNonNull(grid);
 		Objects.requireNonNull(map);
 		map.setColor(Color.BLACK);
@@ -77,7 +77,7 @@ public class Graphic {
 		}
 	}
 	
-	public static void eraseEntity(Graphics2D move, Obstacle[][] grid, List<Entity> entityList) {
+	public static void eraseEntity(Graphics2D move, GridElement[][] grid, List<Entity> entityList) {
 		Objects.requireNonNull(move);
 		Objects.requireNonNull(grid);
 		Objects.requireNonNull(entityList);

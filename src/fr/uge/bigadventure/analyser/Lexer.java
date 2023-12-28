@@ -1,9 +1,5 @@
 package fr.uge.bigadventure.analyser;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -14,7 +10,7 @@ public class Lexer {
   private static final List<Token> TOKENS = List.of(Token.values());
   private static final Pattern PATTERN = Pattern.compile(
       TOKENS.stream()
-      .map(token -> "(" + token.regex + ")")
+      .map(token -> "(" + token.regex() + ")")
       .collect(Collectors.joining("|")));
 
   private final String text;
@@ -41,16 +37,5 @@ public class Lexer {
     throw new AssertionError();
   }
 
-  public static ArrayList<Result> toList(Path path) throws IOException {
-    var text = Files.readString(path);
-  	var lexer = new Lexer(text);
-    Result result;
-    var resultList = new ArrayList<Result>();
-    while((result = lexer.nextResult()) != null) {
-    	resultList.add(result);
-      System.out.println(result);
-    }
-    return resultList;
-  }
- 
+  
 }

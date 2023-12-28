@@ -4,13 +4,16 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import fr.uge.bigadventure.Input;
+import fr.uge.bigadventure.analyser.Lexer;
+import fr.uge.bigadventure.analyser.Parser;
 import fr.uge.bigadventure.element.Enemy;
-import fr.uge.bigadventure.element.Obstacle;
 import fr.uge.bigadventure.element.Player;
 import fr.umlv.zen5.Application;
 import fr.umlv.zen5.Event;
@@ -23,24 +26,27 @@ public class Main {
   	var keke = new Enemy("keke", "pnj/keke", 20, new Point(18, 18), 5);
   	var entityList = List.of(baba, keke);
   	BufferedImage image;
-  	var grid = new Obstacle[20][20];
-  	for (int i = 0; i < grid.length; i++) {
-  		for (int j = 0; j < grid[i].length; j++) {
-  			if (i == 0 || j == 0 || i == grid.length-1 || j == grid[i].length-1) {
-  	      grid[i][j] = new Obstacle("obstacle/wall", new Point(i,j));
-  	    } else if (i == 7 && j < 16) {
-  	      grid[i][j] = new Obstacle("obstacle/pillar", new Point(i,j));
-  	    } else if (i == 14 && j > 4) {
-  	    	grid[i][j] = new Obstacle("obstacle/pillar", new Point(i,j));
-	      } else if (i == 4 && j == 4) {
-	      	grid[i][j] = new Obstacle("scenery/flower", new Point(i,j));
-	      } else if (i == 12 && j == 7) {
-	      	grid[i][j] = new Obstacle("scenery/foliage", new Point(i,j));
-	      } else if (i == 6 && j == 14) {
-	      	grid[i][j] = new Obstacle("scenery/vine", new Point(i,j));
-	      }
+    var path = Path.of("maps/big.map");
+    var text = Files.readString(path);
+    var lexer = new Lexer(text);
+    var grid = Parser.parse(lexer);
+  	for (int i = 0; i < grid[i].length; i++) {
+  		for (int j = 0; j < grid.length; j++) {
+//  			if (i == 0 || j == 0 || i == grid.length-1 || j == grid[i].length-1) {
+//  	      grid[i][j] = new Obstacle("obstacle/wall", new Point(i,j));
+//  	    } else if (i == 7 && j < 16) {
+//  	      grid[i][j] = new Obstacle("obstacle/pillar", new Point(i,j));
+//  	    } else if (i == 14 && j > 4) {
+//  	    	grid[i][j] = new Obstacle("obstacle/pillar", new Point(i,j));
+//	      } else if (i == 4 && j == 4) {
+//	      	grid[i][j] = new Obstacle("scenery/flower", new Point(i,j));
+//	      } else if (i == 12 && j == 7) {
+//	      	grid[i][j] = new Obstacle("scenery/foliage", new Point(i,j));
+//	      } else if (i == 6 && j == 14) {
+//	      	grid[i][j] = new Obstacle("scenery/vine", new Point(i,j));
+//	      }
   			if (grid[i][j] != null) {
-  				try(var input = Main.class.getResourceAsStream("img/" + grid[i][j].skin() + ".png")) {
+  				try(var input = Main.class.getResourceAsStream(grid[i][j].skin())) {
   					image = ImageIO.read(input);
   				}
   				Graphic.skinMap.putIfAbsent(grid[i][j].skin(), image);

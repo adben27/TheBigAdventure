@@ -12,10 +12,14 @@ public enum Token {
   QUOTE("\"\"\"[^\"]+\"\"\""),
   ;
 
-  public final String regex;
+  private final String regex;
 
   Token(String regex) {
     this.regex = regex;
+  }
+  
+  public String regex() {
+  	return regex;
   }
 }
 

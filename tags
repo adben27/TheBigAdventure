@@ -1221,7 +1221,9 @@ ENTER	misc/docZen5/doc/jquery/jquery-ui.js	/^		ENTER: 13,$/;"	p	property:anonymo
 ENTER	misc/docZen5/doc/jquery/jquery-ui.min.js	/^(function(e){"function"==typeof define&&define.amd?define(["jquery"],e):e(jQuery)})(function(e){/;"	p	property:anonymousObject0afdce430405.keyCode
 ESCAPE	misc/docZen5/doc/jquery/jquery-ui.js	/^		ESCAPE: 27,$/;"	p	property:anonymousObject5316d5710305.keyCode
 ESCAPE	misc/docZen5/doc/jquery/jquery-ui.min.js	/^(function(e){"function"==typeof define&&define.amd?define(["jquery"],e):e(jQuery)})(function(e){/;"	p	property:anonymousObject0afdce430405.keyCode
-Element	src/fr/uge/bigadventure/element/Element.java	/^public interface Element {$/;"	i
+Enemy	src/fr/uge/bigadventure/element/Enemy.java	/^	public Enemy(String name, String skin, int health, Point position, int damage) {$/;"	m	class:Enemy
+Enemy	src/fr/uge/bigadventure/element/Enemy.java	/^public final class Enemy implements Entity  {$/;"	c
+Entity	src/fr/uge/bigadventure/element/Entity.java	/^public sealed interface Entity extends Element permits Player, Enemy {$/;"	i
 Enum	misc/docZen5/doc/help-doc.html	/^<h2>Enum<\/h2>$/;"	i
 Enum Constant Detail	misc/docZen5/doc/fr/umlv/zen5/Event.Action.html	/^<h3>Enum Constant Detail<\/h3>$/;"	j
 Enum Constant Detail	misc/docZen5/doc/fr/umlv/zen5/Event.Modifier.html	/^<h3>Enum Constant Detail<\/h3>$/;"	j
@@ -1250,6 +1252,7 @@ GameMap	src/fr/uge/bigadventure/GameMap.java	/^public class GameMap {$/;"	c
 Generated Documentation (Untitled)	misc/docZen5/doc/index.html	/^<title>Generated Documentation (Untitled)<\/title>$/;"	j
 Graphic	src/fr/uge/bigadventure/graphic/Graphic.java	/^	public Graphic(ScreenInfo screenInfo, Obstacle[][] grid) {$/;"	m	class:Graphic
 Graphic	src/fr/uge/bigadventure/graphic/Graphic.java	/^public class Graphic {$/;"	c
+GridElement	src/fr/uge/bigadventure/element/GridElement.java	/^public sealed interface GridElement extends Element permits Decoration, Obstacle {$/;"	i
 H	misc/docZen5/doc/fr/umlv/zen5/KeyboardKey.html	/^<a name="H">$/;"	a
 H	misc/docZen5/doc/index-all.html	/^<h2 class="title">H<\/h2>$/;"	i
 HOME	misc/docZen5/doc/jquery/jquery-ui.js	/^		HOME: 36,$/;"	p	property:anonymousObject5316d5710305.keyCode
@@ -1292,6 +1295,7 @@ ID	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^		"ID": new RegExp( "^#(" + charac
 IDENTIFIER	src/fr/uge/bigadventure/analyser/Token.java	/^  IDENTIFIER("[A-Za-z]+"),$/;"	e	enum:Token	file:
 Index	misc/docZen5/doc/help-doc.html	/^<h2>Index<\/h2>$/;"	i
 Index	misc/docZen5/doc/index-all.html	/^<title>Index<\/title>$/;"	j
+Input	src/fr/uge/bigadventure/Input.java	/^public class Input {$/;"	c
 Interface ApplicationContext	misc/docZen5/doc/fr/umlv/zen5/ApplicationContext.html	/^<h2 title="Interface ApplicationContext" class="title">Interface ApplicationContext<\/h2>$/;"	i
 Interface Hierarchy	misc/docZen5/doc/fr/umlv/zen5/package-tree.html	/^<h2 title="Interface Hierarchy">Interface Hierarchy<\/h2>$/;"	i
 Interface Hierarchy	misc/docZen5/doc/overview-tree.html	/^<h2 title="Interface Hierarchy">Interface Hierarchy<\/h2>$/;"	i
@@ -1350,7 +1354,6 @@ NUMBER	src/fr/uge/bigadventure/analyser/Token.java	/^  NUMBER("[0-9]+"),$/;"	e	e
 Nested Class Summary	misc/docZen5/doc/fr/umlv/zen5/Event.html	/^<h3>Nested Class Summary<\/h3>$/;"	j
 O	misc/docZen5/doc/fr/umlv/zen5/KeyboardKey.html	/^<a name="O">$/;"	a
 O	misc/docZen5/doc/index-all.html	/^<h2 class="title">O<\/h2>$/;"	i
-Obstacle	src/fr/uge/bigadventure/element/GridElement.java	/^public sealed interface GridElement permits Decoration, Obstacle {$/;"	i
 P	misc/docZen5/doc/fr/umlv/zen5/KeyboardKey.html	/^<a name="P">$/;"	a
 P	misc/docZen5/doc/index-all.html	/^<h2 class="title">P<\/h2>$/;"	i
 PAGE_DOWN	misc/docZen5/doc/jquery/jquery-ui.js	/^		PAGE_DOWN: 34,$/;"	p	property:anonymousObject5316d5710305.keyCode
@@ -1372,7 +1375,7 @@ Parser	build.xml	/^    <target name="Parser">$/;"	t	project:TheBigAdventure
 Parser	src/fr/uge/bigadventure/analyser/Parser.java	/^	public Parser(ArrayList<Result> tokenList) {$/;"	m	class:Parser
 Parser	src/fr/uge/bigadventure/analyser/Parser.java	/^public class Parser {$/;"	c
 Player	src/fr/uge/bigadventure/element/Player.java	/^	public Player(String name, String skin, int health, Point position) {$/;"	m	class:Player
-Player	src/fr/uge/bigadventure/element/Player.java	/^public class Player implements Element {$/;"	c
+Player	src/fr/uge/bigadventure/element/Player.java	/^public final class Player implements Entity {$/;"	c
 Prev/Next	misc/docZen5/doc/help-doc.html	/^<h2>Prev\/Next<\/h2>$/;"	i
 Q	misc/docZen5/doc/fr/umlv/zen5/KeyboardKey.html	/^<a name="Q">$/;"	a
 Q	misc/docZen5/doc/index-all.html	/^<h2 class="title">Q<\/h2>$/;"	i
@@ -1433,6 +1436,7 @@ V	misc/docZen5/doc/index-all.html	/^<h2 class="title">V<\/h2>$/;"	i
 W	misc/docZen5/doc/fr/umlv/zen5/KeyboardKey.html	/^<a name="W">$/;"	a
 W	misc/docZen5/doc/index-all.html	/^<h2 class="title">W<\/h2>$/;"	i
 WEST	src/fr/uge/bigadventure/Direction.java	/^	WEST,$/;"	e	enum:Direction	file:
+Weapon	src/fr/uge/bigadventure/element/Element.java	/^public sealed interface Element permits GridElement, Entity, Weapon {$/;"	i
 Widget	misc/docZen5/doc/jquery/jquery-ui.js	/^	$.Widget.prototype[ "_" + method ] = function( element, options, callback ) {$/;"	c	variable:$
 Widget	misc/docZen5/doc/jquery/jquery-ui.min.js	/^(function(e){"function"==typeof define&&define.amd?define(["jquery"],e):e(jQuery)})(function(e){/;"	c	variable:e
 Width	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^jQuery.each( { Height: "height", Width: "width" }, function( name, type ) {$/;"	p	variable:anonymousObject18c763c717605
@@ -3200,7 +3204,7 @@ checkOffset	misc/docZen5/doc/jquery/jszip/dist/jszip.js	/^    checkOffset: funct
 checkOffset	misc/docZen5/doc/jquery/jszip/dist/jszip.min.js	/^!function(a){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=a();else if(/;"	m	variable:anonymousFunction682e498a0200.anonymousObject682e498a1405
 checkSignature	misc/docZen5/doc/jquery/jszip/dist/jszip.js	/^    checkSignature: function(expectedSignature) {$/;"	m	variable:anonymousFunction75d6c5380200.anonymousObject75d6c5380405.anonymousObject75d6c538f705
 checkSignature	misc/docZen5/doc/jquery/jszip/dist/jszip.min.js	/^!function(a){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=a();else if(/;"	m	variable:anonymousFunction682e498a0200.anonymousObject682e498aa005
-checkSkinFile	src/fr/uge/bigadventure/element/GridElement.java	/^	static String checkSkinFile(String skin) {$/;"	m	interface:Obstacle
+checkSkinFile	src/fr/uge/bigadventure/element/GridElement.java	/^	static String checkSkinFile(String skin) {$/;"	m	interface:GridElement
 checkbox	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^for ( i in { radio: true, checkbox: true, file: true, password: true, image: true } ) {$/;"	p	variable:anonymousObject18c763c77805
 checkbox	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^for ( i in { radio: true, checkbox: true, file: true, password: true, image: true } ) {$/;"	p	variable:anonymousObjectfb1b35937805
 children	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^		children: true,$/;"	p	variable:guaranteedUnique
@@ -3390,6 +3394,8 @@ curlen	misc/docZen5/doc/jquery/jszip/dist/jszip.js	/^    curlen = nextlen;$/;"	p
 curlen	misc/docZen5/doc/jquery/jszip/dist/jszip.js	/^    curlen = nextlen;$/;"	p	variable:anonymousFunction75d6c5380200.anonymousObject75d6c5380405.anonymousObject75d6c5382b205
 d	misc/docZen5/doc/jquery/jszip/dist/jszip.min.js	/^!function(a){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=a();else if(/;"	M	variable:anonymousFunction682e498a0200
 d	misc/docZen5/doc/jquery/jszip/dist/jszip.min.js	/^break}for(c.back=0;Ab=c.lencode[m&(1<<c.lenbits)-1],qb=Ab>>>24,rb=Ab>>>16&255,sb=65535&Ab,!(n>=q/;"	M	variable:anonymousFunction682e498a0200
+damage	src/fr/uge/bigadventure/element/Enemy.java	/^	private final int damage;$/;"	f	class:Enemy	file:
+damage	src/fr/uge/bigadventure/element/Enemy.java	/^	public int damage() {$/;"	m	class:Enemy
 data	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^				data: data,$/;"	p	variable:jQuery.event.add.anonymousObject18c763c7cf05
 data	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^			data: data,$/;"	p	variable:anonymousObject18c763c713505
 data	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^			data: params$/;"	p	variable:anonymousObject18c763c712a05
@@ -3519,6 +3525,7 @@ done	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^		function done( status
 done	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^		function done( status, nativeStatusText, responses, headers ) {$/;"	f	method:anonymousObjectfb1b359312f05.ajax
 dosPermissions	misc/docZen5/doc/jquery/jszip/dist/jszip.js	/^            dosPermissions : input.dosPermissions,$/;"	p	variable:anonymousFunction75d6c5380200.anonymousObject75d6c5380405.anonymousObject75d6c5384005.anonymousObject75d6c5384105
 dosPermissions	misc/docZen5/doc/jquery/jszip/dist/jszip.min.js	/^!function(a){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=a();else if(/;"	p	variable:anonymousFunction682e498a0200.anonymousObject682e498a3a05
+drawEntity	src/fr/uge/bigadventure/graphic/Graphic.java	/^	public static void drawEntity(Graphics2D move, List<Entity> entityList) {$/;"	m	class:Graphic
 dt code	misc/docZen5/doc/stylesheet.css	/^dt code {$/;"	s
 duration	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^			duration: options.duration,$/;"	p	variable:anonymousObject18c763c714a05
 duration	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^			duration: options.duration,$/;"	p	variable:anonymousObjectfb1b359314a05
@@ -3578,12 +3585,14 @@ enc3	misc/docZen5/doc/jquery/jszip/dist/jszip.js	/^            enc3 = enc4 = 64;
 enc4	misc/docZen5/doc/jquery/jszip/dist/jszip.js	/^            enc4 = 64;$/;"	p	property:anonymousFunction75d6c5380200.anonymousObject75d6c5380405.anonymousObject75d6c5380705.chr1
 encode	misc/docZen5/doc/jquery/jszip/dist/jszip.js	/^    encode : function(input) {$/;"	m	variable:anonymousFunction75d6c5380200.anonymousObject75d6c5380405.anonymousObject75d6c5383a05
 encode	misc/docZen5/doc/jquery/jszip/dist/jszip.min.js	/^!function(a){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=a();else if(/;"	m	variable:anonymousFunction682e498a0200.anonymousObject682e498a3505
+entityMove	src/fr/uge/bigadventure/element/Entity.java	/^	public static void entityMove(Entity entity, int moveX, int moveY) { \/\/ Prend un Player et le/;"	m	interface:Entity
 enum.constant.detail	misc/docZen5/doc/fr/umlv/zen5/Event.Action.html	/^<li class="blockList"><a name="enum.constant.detail">$/;"	a
 enum.constant.detail	misc/docZen5/doc/fr/umlv/zen5/Event.Modifier.html	/^<li class="blockList"><a name="enum.constant.detail">$/;"	a
 enum.constant.detail	misc/docZen5/doc/fr/umlv/zen5/KeyboardKey.html	/^<li class="blockList"><a name="enum.constant.detail">$/;"	a
 enum.constant.summary	misc/docZen5/doc/fr/umlv/zen5/Event.Action.html	/^<li class="blockList"><a name="enum.constant.summary">$/;"	a
 enum.constant.summary	misc/docZen5/doc/fr/umlv/zen5/Event.Modifier.html	/^<li class="blockList"><a name="enum.constant.summary">$/;"	a
 enum.constant.summary	misc/docZen5/doc/fr/umlv/zen5/KeyboardKey.html	/^<li class="blockList"><a name="enum.constant.summary">$/;"	a
+eraseEntity	src/fr/uge/bigadventure/graphic/Graphic.java	/^	public static void eraseEntity(Graphics2D move, Obstacle[][] grid, List<Entity> entityList) {$/;"	m	class:Graphic
 error	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^		for ( i in { success: 1, error: 1, complete: 1 } ) {$/;"	p	variable:anonymousObject18c763c712f05.ajax.anonymousObject18c763c713105
 error	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^Sizzle.error = function( msg ) {$/;"	f	class:Sizzle
 error	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^		for ( i in { success: 1, error: 1, complete: 1 } ) {$/;"	p	variable:anonymousObjectfb1b359312f05.ajax.anonymousObjectfb1b359313105
@@ -3727,12 +3736,15 @@ for	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^		"for": "htmlFor",$/;"	
 for	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^		"for": "htmlFor",$/;"	p	property:anonymousObjectfb1b3593c805.propFix
 fr.uge.bigadventure	src/fr/uge/bigadventure/Direction.java	/^package fr.uge.bigadventure;$/;"	p
 fr.uge.bigadventure	src/fr/uge/bigadventure/GameMap.java	/^package fr.uge.bigadventure;$/;"	p
+fr.uge.bigadventure	src/fr/uge/bigadventure/Input.java	/^package fr.uge.bigadventure;$/;"	p
 fr.uge.bigadventure.analyser	src/fr/uge/bigadventure/analyser/Lexer.java	/^package fr.uge.bigadventure.analyser;$/;"	p
 fr.uge.bigadventure.analyser	src/fr/uge/bigadventure/analyser/Parser.java	/^package fr.uge.bigadventure.analyser;$/;"	p
 fr.uge.bigadventure.analyser	src/fr/uge/bigadventure/analyser/Result.java	/^package fr.uge.bigadventure.analyser;$/;"	p
 fr.uge.bigadventure.analyser	src/fr/uge/bigadventure/analyser/Token.java	/^package fr.uge.bigadventure.analyser;$/;"	p
 fr.uge.bigadventure.element	src/fr/uge/bigadventure/element/Decoration.java	/^package fr.uge.bigadventure.element;$/;"	p
 fr.uge.bigadventure.element	src/fr/uge/bigadventure/element/Element.java	/^package fr.uge.bigadventure.element;$/;"	p
+fr.uge.bigadventure.element	src/fr/uge/bigadventure/element/Enemy.java	/^package fr.uge.bigadventure.element;$/;"	p
+fr.uge.bigadventure.element	src/fr/uge/bigadventure/element/Entity.java	/^package fr.uge.bigadventure.element;$/;"	p
 fr.uge.bigadventure.element	src/fr/uge/bigadventure/element/GridElement.java	/^package fr.uge.bigadventure.element;$/;"	p
 fr.uge.bigadventure.element	src/fr/uge/bigadventure/element/Obstacle.java	/^package fr.uge.bigadventure.element;$/;"	p
 fr.uge.bigadventure.element	src/fr/uge/bigadventure/element/Player.java	/^package fr.uge.bigadventure.element;$/;"	p
@@ -3870,7 +3882,11 @@ hasClass	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^	hasClass: function( selecto
 hasData	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^	hasData: function( elem ) {$/;"	m	variable:anonymousObject18c763c7aa05
 hasData	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^	hasData: function( elem ) {$/;"	m	variable:anonymousObjectfb1b3593aa05
 header	misc/docZen5/doc/stylesheet.css	/^main, nav, header, footer, section {$/;"	s
-health	src/fr/uge/bigadventure/element/Player.java	/^	public int health;$/;"	f	class:Player
+health	src/fr/uge/bigadventure/element/Enemy.java	/^	public int health() {$/;"	m	class:Enemy
+health	src/fr/uge/bigadventure/element/Enemy.java	/^	public int health;$/;"	f	class:Enemy
+health	src/fr/uge/bigadventure/element/Entity.java	/^	int health();$/;"	m	interface:Entity
+health	src/fr/uge/bigadventure/element/Player.java	/^	private int health;$/;"	f	class:Player	file:
+health	src/fr/uge/bigadventure/element/Player.java	/^	public int health() {$/;"	m	class:Player
 height	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^		attrs = { height: type },$/;"	p	variable:genFx.attrs
 height	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^		attrs = { height: type },$/;"	p	variable:genFx.attrs
 height	misc/docZen5/doc/jquery/jquery-ui.js	/^							height: elemHeight$/;"	p	property:$.fn.position.anonymousFunction5316d5715700.using.feedback.element
@@ -4008,8 +4024,7 @@ isSimple	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^var isSimple = \/^.
 isSimple	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^var isSimple = \/^.[^:#\\[\\.,]*$\/,$/;"	v
 isSimulated	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^				isSimulated: true,$/;"	p	variable:jQuery.event.simulate.anonymousObject18c763c7d205
 isSimulated	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^				isSimulated: true,$/;"	p	variable:jQuery.event.simulate.anonymousObjectfb1b3593d205
-isWalkable	src/fr/uge/bigadventure/element/GridElement.java	/^	boolean isWalkable();$/;"	m	interface:Obstacle
-isWalkable	src/fr/uge/bigadventure/graphic/Graphic.java	/^	public static boolean isWalkable(Obstacle tile) {$/;"	m	class:Graphic
+isWalkable	src/fr/uge/bigadventure/Input.java	/^	public static boolean isWalkable(Obstacle tile) {$/;"	m	class:Input
 item	misc/docZen5/doc/jquery/jquery-ui.js	/^				if ( false !== this._trigger( "focus", event, { item: item } ) ) {$/;"	p	variable:anonymousObject5316d5717905._create.anonymousObject5316d5717c05.menufocus.anonymousObject5316d5718105
 item	misc/docZen5/doc/jquery/jquery-ui.js	/^				if ( false !== this._trigger( "select", event, { item: item } ) ) {$/;"	p	variable:anonymousObject5316d5717905._create.anonymousObject5316d5717c05.menuselect.anonymousObject5316d5718305
 item	misc/docZen5/doc/jquery/jquery-ui.js	/^			this._trigger( "change", event, { item: this.selectedItem } );$/;"	p	variable:anonymousObject5316d5717905._change.anonymousObject5316d5718d05
@@ -4087,7 +4102,7 @@ keyCode	misc/docZen5/doc/jquery/jquery-ui.js	/^	keyCode: {$/;"	p	variable:anonym
 keyCode	misc/docZen5/doc/jquery/jquery-ui.min.js	/^(function(e){"function"==typeof define&&define.amd?define(["jquery"],e):e(jQuery)})(function(e){/;"	p	variable:anonymousObject0afdce430405
 keyHooks	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^	keyHooks: {$/;"	p	property:jQuery.event
 keyHooks	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^	keyHooks: {$/;"	p	property:jQuery.event
-keySwitch	src/fr/uge/bigadventure/graphic/Graphic.java	/^	public static void keySwitch(Graphics2D move, KeyboardKey key, Obstacle[][] grid, Player baba) /;"	m	class:Graphic
+keySwitch	src/fr/uge/bigadventure/Input.java	/^	public static void keySwitch(KeyboardKey key, Obstacle[][] grid, Entity entity) {$/;"	m	class:Input
 keydown	misc/docZen5/doc/jquery/jquery-ui.js	/^			keydown: "_keydown"$/;"	p	variable:anonymousObject5316d5716405._create.anonymousObject5316d5716605
 keydown	misc/docZen5/doc/jquery/jquery-ui.js	/^			keydown: function( event ) {$/;"	m	variable:anonymousObject5316d5717905._create.anonymousObject5316d5717a05
 keydown	misc/docZen5/doc/jquery/jquery-ui.min.js	/^(function(e){"function"==typeof define&&define.amd?define(["jquery"],e):e(jQuery)})(function(e){/;"	m	variable:anonymousObject0afdce438605
@@ -4347,7 +4362,10 @@ name	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^	var src, copyIsArray, 
 name	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^	var src, copyIsArray, copy, name, options, clone,$/;"	v
 name	misc/docZen5/doc/jquery/jszip/dist/jszip.js	/^        name = forceTrailingSlash(name);$/;"	p	variable:anonymousFunction75d6c5380200.anonymousObject75d6c5380405.anonymousObject75d6c5386205
 name	misc/docZen5/doc/jquery/jszip/dist/jszip.js	/^        name = this.root + name;$/;"	p	variable:anonymousFunction75d6c5380200.anonymousObject75d6c5380405.anonymousObject75d6c5388705
+name	src/fr/uge/bigadventure/element/Enemy.java	/^	private final String name;$/;"	f	class:Enemy	file:
+name	src/fr/uge/bigadventure/element/Enemy.java	/^	public String name() {$/;"	m	class:Enemy
 name	src/fr/uge/bigadventure/element/Player.java	/^	private final String name;$/;"	f	class:Player	file:
+name	src/fr/uge/bigadventure/element/Player.java	/^	public String name() {$/;"	m	class:Player
 namespace	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^				namespace: namespaces.join(".")$/;"	p	variable:jQuery.event.add.anonymousObject18c763c7cf05
 namespace	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^				namespace: namespaces.join(".")$/;"	p	variable:jQuery.event.add.anonymousObjectfb1b3593cf05
 namespace	misc/docZen5/doc/jquery/jquery-ui.js	/^		namespace: namespace,$/;"	p	variable:constructor.anonymousObject5316d5712e05
@@ -4684,6 +4702,7 @@ parseBrackets	src/fr/uge/bigadventure/analyser/Parser.java	/^	private void parse
 parseCss	misc/docZen5/doc/jquery/jquery-ui.js	/^function parseCss( element, property ) {$/;"	f	function:anonymousFunction5316d5715100
 parseIdentifier	src/fr/uge/bigadventure/analyser/Parser.java	/^	private void parseIdentifier(ListIterator<Result> iterator) {$/;"	m	class:Parser	file:
 parseMap	src/fr/uge/bigadventure/analyser/Parser.java	/^	public void parseMap() {$/;"	m	class:Parser
+parseMapData	src/fr/uge/bigadventure/analyser/Parser.java	/^	private GridElement[][] parseMapData(ListIterator<Result> iterator, Point size, HashMap<Charact/;"	m	class:Parser	file:
 parseMapEncodings	src/fr/uge/bigadventure/analyser/Parser.java	/^	private HashMap<Character, String> parseMapEncodings(ListIterator<Result> iterator) {	$/;"	m	class:Parser	file:
 parseMapSize	src/fr/uge/bigadventure/analyser/Parser.java	/^	private Point parseMapSize(ListIterator<Result> iterator) {$/;"	m	class:Parser	file:
 parseZIP64ExtraField	misc/docZen5/doc/jquery/jszip/dist/jszip.js	/^    parseZIP64ExtraField: function(reader) {$/;"	m	variable:anonymousFunction75d6c5380200.anonymousObject75d6c5380405.anonymousObject75d6c53810f05
@@ -4695,7 +4714,6 @@ pending	misc/docZen5/doc/jquery/jquery-ui.js	/^	pending: 0,$/;"	p	variable:anony
 pending	misc/docZen5/doc/jquery/jquery-ui.min.js	/^(function(e){"function"==typeof define&&define.amd?define(["jquery"],e):e(jQuery)})(function(e){/;"	p	variable:anonymousObject0afdce438505
 platform	misc/docZen5/doc/jquery/jszip/dist/jszip.js	/^            platform: "DOS",$/;"	p	variable:anonymousFunction75d6c5380200.anonymousObject75d6c5380405.anonymousObject75d6c5388c05.anonymousObject75d6c5388e05
 platform	misc/docZen5/doc/jquery/jszip/dist/jszip.min.js	/^!function(a){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=a();else if(/;"	p	variable:anonymousFunction682e498a0200.anonymousObject682e498a5805.generate.anonymousObject682e498a5e05
-playerMove	src/fr/uge/bigadventure/graphic/Graphic.java	/^	public static void playerMove(Graphics2D move, Obstacle[][] grid, Player baba, int moveX, int m/;"	m	class:Graphic
 pollEvent--	misc/docZen5/doc/fr/umlv/zen5/ApplicationContext.html	/^<a name="pollEvent--">$/;"	a
 pollOrWaitEvent-long-	misc/docZen5/doc/fr/umlv/zen5/ApplicationContext.html	/^<a name="pollOrWaitEvent-long-">$/;"	a
 pos	misc/docZen5/doc/jquery/jquery-ui.js	/^			pos = rhorizontal.test( pos[ 0 ] ) ?$/;"	p	variable:anonymousObject5316d5715605
@@ -4716,7 +4734,11 @@ position	misc/docZen5/doc/jquery/jquery-ui.min.js	/^(function(e){"function"==typ
 position	misc/docZen5/doc/jquery/jquery-ui.min.js	/^(function(e){"function"==typeof define&&define.amd?define(["jquery"],e):e(jQuery)})(function(e){/;"	p	property:anonymousObject0afdce438505.options
 position	misc/docZen5/doc/jquery/jquery-ui.min.js	/^(function(e){"function"==typeof define&&define.amd?define(["jquery"],e):e(jQuery)})(function(e){/;"	p	variable:anonymousObject0afdce436005
 position	misc/docZen5/doc/search.js	/^        position: {$/;"	p	variable:anonymousObjectda37f98d0805
-position	src/fr/uge/bigadventure/element/Player.java	/^	public final Point position;$/;"	f	class:Player
+position	src/fr/uge/bigadventure/element/Enemy.java	/^	public Point position() {$/;"	m	class:Enemy
+position	src/fr/uge/bigadventure/element/Enemy.java	/^	public final Point position;$/;"	f	class:Enemy
+position	src/fr/uge/bigadventure/element/Entity.java	/^	Point position();$/;"	m	interface:Entity
+position	src/fr/uge/bigadventure/element/Player.java	/^	private final Point position;$/;"	f	class:Player	file:
+position	src/fr/uge/bigadventure/element/Player.java	/^	public Point position() {$/;"	m	class:Player
 postDispatch	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^			postDispatch: function( event ) {$/;"	m	property:jQuery.event.special.beforeunload
 postDispatch	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^		postDispatch: function( event ) {$/;"	m	property:jQuery.event.special.submit
 postDispatch	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^			postDispatch: function( event ) {$/;"	m	property:jQuery.event.special.beforeunload
@@ -4747,8 +4769,8 @@ preventDefault	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^	preventDefau
 preventDefault	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^	preventDefault: function() {$/;"	m	class:jQuery.Event
 previous	misc/docZen5/doc/jquery/jquery-ui.js	/^	previous: function( event ) {$/;"	m	variable:anonymousObject5316d5716405
 previousPage	misc/docZen5/doc/jquery/jquery-ui.js	/^	previousPage: function( event ) {$/;"	m	variable:anonymousObject5316d5716405
-printCase	src/fr/uge/bigadventure/graphic/Graphic.java	/^	public static void printCase(Obstacle tile, Graphics2D map) throws IOException{ \/\/ Prend un o/;"	m	class:Graphic
-printMap	src/fr/uge/bigadventure/graphic/Graphic.java	/^	public static void printMap(Graphics2D map, Obstacle[][] grid) throws IOException{ \/\/ Prend u/;"	m	class:Graphic
+printMap	src/fr/uge/bigadventure/graphic/Graphic.java	/^	public static void printMap(Graphics2D map, Obstacle[][] grid) { \/\/ Prend un double tableau d/;"	m	class:Graphic
+printTile	src/fr/uge/bigadventure/graphic/Graphic.java	/^	public static void printTile(Obstacle tile, Graphics2D map) { \/\/ Prend un obstacle et l'affic/;"	m	class:Graphic
 processAttributes	misc/docZen5/doc/jquery/jszip/dist/jszip.js	/^    processAttributes: function () {$/;"	m	variable:anonymousFunction75d6c5380200.anonymousObject75d6c5380405.anonymousObject75d6c53810f05
 processAttributes	misc/docZen5/doc/jquery/jszip/dist/jszip.min.js	/^!function(a){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=a();else if(/;"	m	variable:anonymousFunction682e498a0200.anonymousObject682e498aa505
 processData	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^		processData: true,$/;"	p	property:anonymousObject18c763c712f05.ajaxSettings
@@ -4807,6 +4829,7 @@ radio	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^for ( i in { radio: tr
 radio	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^for ( i in { radio: true, checkbox: true, file: true, password: true, image: true } ) {$/;"	p	variable:anonymousObjectfb1b35937805
 ralpha	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^	ralpha = \/alpha\\([^)]*\\)\/i,$/;"	v
 ralpha	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^	ralpha = \/alpha\\([^)]*\\)\/i,$/;"	v
+randomKey	src/fr/uge/bigadventure/Input.java	/^	public static KeyboardKey randomKey(){$/;"	m	class:Input
 rbrace	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^var rbrace = \/(?:\\{[\\s\\S]*\\}|\\[[\\s\\S]*\\])$\/,$/;"	v
 rbrace	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^var rbrace = \/(?:\\{[\\s\\S]*\\}|\\[[\\s\\S]*\\])$\/,$/;"	v
 rbracket	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^	rbracket = \/\\[\\]$\/,$/;"	v
@@ -4843,6 +4866,9 @@ readyState	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^				readyState: 0,$/;"	p	v
 readyWait	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^	readyWait: 1,$/;"	p	variable:anonymousObject18c763c71305
 readyWait	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^	readyWait: 1,$/;"	p	variable:anonymousObjectfb1b35931305
 reduce	misc/docZen5/doc/jquery/jquery-ui.js	/^		function reduce( elem, size, border, margin ) {$/;"	f	function:anonymousFunction5316d5711000
+reduceHealth	src/fr/uge/bigadventure/element/Enemy.java	/^	public boolean reduceHealth(int damage) {$/;"	m	class:Enemy
+reduceHealth	src/fr/uge/bigadventure/element/Entity.java	/^	boolean reduceHealth(int damage);$/;"	m	interface:Entity
+reduceHealth	src/fr/uge/bigadventure/element/Player.java	/^	public boolean reduceHealth(int damage) {$/;"	m	class:Player
 refresh	misc/docZen5/doc/jquery/jquery-ui.js	/^	refresh: function() {$/;"	m	variable:anonymousObject5316d5716405
 refresh	misc/docZen5/doc/jquery/jquery-ui.min.js	/^(function(e){"function"==typeof define&&define.amd?define(["jquery"],e):e(jQuery)})(function(e){/;"	m	variable:anonymousObject0afdce436105
 regex	src/fr/uge/bigadventure/analyser/Token.java	/^  public final String regex;$/;"	f	class:Token
@@ -5166,8 +5192,8 @@ setup	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^		setup: function() {$
 setup	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^			setup: function() {$/;"	m	variable:anonymousObjectfb1b3593df05
 setup	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^		setup: function() {$/;"	m	property:jQuery.event.special.change
 setup	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^		setup: function() {$/;"	m	property:jQuery.event.special.submit
-shiftX	src/fr/uge/bigadventure/graphic/Graphic.java	/^  public static int shiftX(int coordinate) { \/\/ Transforme une coordonnée dans la map en coor/;"	m	class:Graphic
-shiftY	src/fr/uge/bigadventure/graphic/Graphic.java	/^  public static int shiftY(int coordinate) { \/\/ Transforme une coordonnée dans la map en coor/;"	m	class:Graphic
+shiftX	src/fr/uge/bigadventure/graphic/Graphic.java	/^  public static int shiftX(int coordinate) {$/;"	m	class:Graphic
+shiftY	src/fr/uge/bigadventure/graphic/Graphic.java	/^  public static int shiftY(int coordinate) {$/;"	m	class:Graphic
 show	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^	show: function() {$/;"	m	variable:anonymousObject18c763c710905
 show	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^	show: function() {$/;"	m	variable:anonymousObjectfb1b359310905
 show	misc/docZen5/doc/jquery/jquery-ui.js	/^$.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {$/;"	p	variable:anonymousObject5316d5714d05
@@ -5190,7 +5216,12 @@ size	misc/docZen5/doc/jquery/external/jquery/jquery.js	/^jQuery.fn.size = functi
 size	misc/docZen5/doc/jquery/jquery-1.10.2.js	/^jQuery.fn.size = function() {$/;"	f	function:jQuery.fn
 sizeX	src/fr/uge/bigadventure/graphic/Graphic.java	/^	public static int sizeX;    \/\/ Largeur de la map$/;"	f	class:Graphic
 sizeY	src/fr/uge/bigadventure/graphic/Graphic.java	/^	public static int sizeY;    \/\/ Hauteur de la map$/;"	f	class:Graphic
+skin	src/fr/uge/bigadventure/element/Enemy.java	/^	private final String skin;$/;"	f	class:Enemy	file:
+skin	src/fr/uge/bigadventure/element/Enemy.java	/^	public String skin() {$/;"	m	class:Enemy
+skin	src/fr/uge/bigadventure/element/Entity.java	/^	String skin();$/;"	m	interface:Entity
 skin	src/fr/uge/bigadventure/element/Player.java	/^	private final String skin;$/;"	f	class:Player	file:
+skin	src/fr/uge/bigadventure/element/Player.java	/^	public String skin() {$/;"	m	class:Player
+skinMap	src/fr/uge/bigadventure/graphic/Graphic.java	/^	public static HashMap<String, BufferedImage> skinMap = new HashMap<>();;$/;"	f	class:Graphic
 skip	misc/docZen5/doc/jquery/jszip/dist/jszip.js	/^    skip: function(n) {$/;"	m	variable:anonymousFunction75d6c5380200.anonymousObject75d6c5380405.anonymousObject75d6c5381905
 skip.navbar.bottom	misc/docZen5/doc/constant-values.html	/^<a name="skip.navbar.bottom">$/;"	a
 skip.navbar.bottom	misc/docZen5/doc/deprecated-list.html	/^<a name="skip.navbar.bottom">$/;"	a

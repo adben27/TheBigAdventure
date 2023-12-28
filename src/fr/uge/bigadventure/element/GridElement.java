@@ -1,11 +1,15 @@
 package fr.uge.bigadventure.element;
 
+import java.awt.Point;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.NoSuchElementException;
 
 public sealed interface GridElement extends Element permits Decoration, Obstacle {
 //	boolean isWalkable();
+
+	String skin();
+	Point position();
 	
 	static String checkSkinFile(String skin) {
 		String root = "src/fr/uge/bigadventure/graphic/img/";

@@ -3,7 +3,7 @@
   encodings : WALL(W) BRICK(B) FENCE(F)
   data: """
   WWWWWW
-  W    W
+  F    W
   W FF W
   B    B
   BBBBBB
