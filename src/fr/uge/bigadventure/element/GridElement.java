@@ -12,13 +12,13 @@ public sealed interface GridElement extends Element permits Decoration, Obstacle
 	Point position();
 	
 	static String checkSkinFile(String skin) {
-		String root = "src/fr/uge/bigadventure/graphic/img/";
-		if(!Files.exists(Path.of(root + "obstacle/" + skin	))) {
-			if(!Files.exists(Path.of(root + "scenery/" + skin	))) {
+		String root = "src/fr/uge/bigadventure/graphic/";
+		if(!Files.exists(Path.of(root + "img/obstacle/" + skin	))) {
+			if(!Files.exists(Path.of(root + "img/scenery/" + skin	))) {
 				throw new NoSuchElementException(skin + " is not an Obstacle neither a Decoration");
 			}
-			return root + "scenery/" + skin;
+			return "img/scenery/" + skin;
 		}
-		return root + "obstacle/" + skin;
+		return "img/obstacle/" + skin;
 	}
 }

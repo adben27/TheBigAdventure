@@ -23,15 +23,16 @@ public class Main {
   
   public static void main(String[] args) throws IOException {
   	var baba = new Player("baba", "pnj/baba", 20, new Point(1, 1));
-  	var keke = new Enemy("keke", "pnj/keke", 20, new Point(18, 18), 5);
+  	var keke = new Enemy("keke", "pnj/keke", 20, new Point(4, 4), 5);
   	var entityList = List.of(baba, keke);
   	BufferedImage image;
-    var path = Path.of("maps/big.map");
+    var path = Path.of("maps/maze.map");
     var text = Files.readString(path);
     var lexer = new Lexer(text);
     var grid = Parser.parse(lexer);
-  	for (int i = 0; i < grid[i].length; i++) {
-  		for (int j = 0; j < grid.length; j++) {
+    
+  	for (var row : grid) {
+  		for (var element : row) {
 //  			if (i == 0 || j == 0 || i == grid.length-1 || j == grid[i].length-1) {
 //  	      grid[i][j] = new Obstacle("obstacle/wall", new Point(i,j));
 //  	    } else if (i == 7 && j < 16) {
@@ -45,11 +46,11 @@ public class Main {
 //	      } else if (i == 6 && j == 14) {
 //	      	grid[i][j] = new Obstacle("scenery/vine", new Point(i,j));
 //	      }
-  			if (grid[i][j] != null) {
-  				try(var input = Main.class.getResourceAsStream(grid[i][j].skin())) {
+  			if (element != null) {
+  				try(var input = Main.class.getResourceAsStream(element.skin())) {
   					image = ImageIO.read(input);
   				}
-  				Graphic.skinMap.putIfAbsent(grid[i][j].skin(), image);
+  				Graphic.skinMap.putIfAbsent(element.skin(), image);
   			}
   	  }
   	}

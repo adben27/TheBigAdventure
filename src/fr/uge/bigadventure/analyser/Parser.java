@@ -15,7 +15,7 @@ import fr.uge.bigadventure.element.Obstacle;
 
 public class Parser {
 
-	private static final Pattern SIZE_PATTERN = Pattern.compile(":\\((\\d)x(\\d)");
+	private static final Pattern SIZE_PATTERN = Pattern.compile(":\\((\\d+)x(\\d+)");
 	private static final Pattern ENCODING_PATTERN = Pattern.compile("([A-Z]+)\\(([A-Z])\\)");
 	
 //	/** Returns a String for a single line of a .map file for it to be examined with a regex
@@ -108,7 +108,7 @@ public class Parser {
 		}
 		var sizeString = sizeBuilder.toString();
 		var m = SIZE_PATTERN.matcher(sizeString);
-		var matches = m.find();
+		var matches = m.matches();
 		if(!matches) {
 			throw new IllegalArgumentException("Size string does not match with regex");
 		}
@@ -171,8 +171,9 @@ public class Parser {
 			var rowIndex = gridList.indexOf(row);
 			var column = 0;
 			while(m.find()) {
-				System.out.println(m.group());
-				if(m.group().charAt(0) != ' ') {
+//				System.out.println(m.group());
+				if(!m.group().isBlank()) {
+					System.out.println(rowIndex + " " + column + " " + encodings.get(m.group().charAt(0)));
 					grid[rowIndex][column] = new Obstacle(encodings.get(m.group().charAt(0)), new Point(column, rowIndex));
 				}
 				column++;	
