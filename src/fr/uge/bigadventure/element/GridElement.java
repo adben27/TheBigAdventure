@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.NoSuchElementException;
 
-public sealed interface GridElement extends Element permits Decoration, Obstacle {
+public sealed interface GridElement permits Decoration, Obstacle {
 //	boolean isWalkable();
 
 	String skin();

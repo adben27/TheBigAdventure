@@ -4,19 +4,31 @@ import java.awt.Point;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+import fr.uge.bigadventure.element.Behavior;
+import fr.uge.bigadventure.element.Element;
 import fr.uge.bigadventure.element.GridElement;
+import fr.uge.bigadventure.element.Kind;
 import fr.uge.bigadventure.element.Obstacle;
+import fr.uge.bigadventure.element.Weapon;
 
 public class Parser {
 
 	private static final Pattern SIZE_PATTERN = Pattern.compile(":\\((\\d+)x(\\d+)");
 	private static final Pattern ENCODING_PATTERN = Pattern.compile("([A-Z]+)\\(([A-Z])\\)");
+	private static final Pattern ELEMENT_STRING = Pattern.compile(":([a-zA-Z]+)");
+	private static final Pattern ELEMENT_BOOL = Pattern.compile(":(true|false)");
+	private static final Pattern ELEMENT_POSITION = Pattern.compile(":\\((\\d+),(\\d+)");
+	private static final Pattern ELEMENT_INT = Pattern.compile(":(\\d+)");
+	private static final Pattern ELEMENT_ZONE = Pattern.compile(":\\((\\d+),(\\d+)\\)\\((\\d+)x(\\d+)\\)");
+	
 	
 //	/** Returns a String for a single line of a .map file for it to be examined with a regex
 //	 * 
@@ -47,10 +59,11 @@ public class Parser {
 	public static GridElement[][] parse(Lexer lexer) {
 		Objects.requireNonNull(lexer);
 		Result result;
-		GridElement[][] grid = null;
+		GridElement[][] grid = null; var elementList = new ArrayList<Element>();
 		while((result = lexer.nextResult()) != null) {
 			switch(result.content()) {
 				case "grid" -> grid = parseGrid(lexer);
+				case "element" -> elementList.add(parseElement(lexer));
 			};	
 		}
 		return grid;
@@ -73,8 +86,6 @@ public class Parser {
         case "encodings" -> encodings = parseMapEncodings(lexer);
       };
 		}
-		System.out.println(size);
-		System.out.println(encodings);
     var grid = parseMapData(result, size, encodings);
     return grid;
 	}
@@ -108,8 +119,7 @@ public class Parser {
 		}
 		var sizeString = sizeBuilder.toString();
 		var m = SIZE_PATTERN.matcher(sizeString);
-		var matches = m.matches();
-		if(!matches) {
+		if(!m.matches()) {
 			throw new IllegalArgumentException("Size string does not match with regex");
 		}
 		int width = Integer.parseInt(m.group(1)); int height = Integer.parseInt(m.group(2));
@@ -171,20 +181,145 @@ public class Parser {
 			var rowIndex = gridList.indexOf(row);
 			var column = 0;
 			while(m.find()) {
-//				System.out.println(m.group());
 				if(!m.group().isBlank()) {
-					System.out.println(rowIndex + " " + column + " " + encodings.get(m.group().charAt(0)));
 					grid[rowIndex][column] = new Obstacle(encodings.get(m.group().charAt(0)), new Point(column, rowIndex));
 				}
 				column++;	
 			}
 		}
-		for(var row : grid) {
-			for(var element : row) {
-				System.out.println(element);
-			}
-		}
 		return grid;
+	}
+
+	private static Element parseElement(Lexer lexer) {
+		Objects.requireNonNull(lexer);		
+		Result result;
+		if((result = lexer.nextResult()).token() != Token.RIGHT_BRACKET) {
+			throw new IllegalArgumentException("Wrong format of [element] instruction");
+		}
+		String name = null; boolean player, phantomized; 
+		Point position = null;
+		int health, damage;
+		Kind kind = null; Behavior behavior = null; List<Point> zone = null;
+		// Bug ici... null exception j'arrive pas à arreter le lexer
+		while((result = lexer.nextResult()).token() != Token.LEFT_BRACKET) {
+			
+      switch(result.content()) {
+      	case "name" -> name = parseElementName(lexer);
+//      	case "skin" ->
+      	case "player" -> player = parseElementBool(lexer);
+      	case "position" -> position = parseElementPosition(lexer);
+      	case "health" -> health = parseElementInt(lexer);
+      	case "kind" -> kind = parseElementKind(lexer); 
+      	case "zone" -> zone = parseElementZone(lexer);
+      	case "behavior" -> behavior = parseElementBehavior(lexer);
+      	case "damage" -> damage = parseElementInt(lexer);
+      	// case "text" ->
+      	// case "steal" ->
+      	// case "trade" ->
+      	// case "locked" ->
+      	// case "flow" ->
+      	case "phantomized" -> phantomized = parseElementBool(lexer);
+      	// case "teleport" ->
+      	
+      };
+		}
+		return new Weapon("sword", "word", new Point(0,0), 10); //debug
+	}
+
+	private static String parseElementName(Lexer lexer) {
+		Objects.requireNonNull(lexer);
+		var propertyBuilder = new StringBuilder();
+		propertyBuilder.append(lexer.nextResult().content()).append(lexer.nextResult().content());
+		var m = ELEMENT_STRING.matcher(propertyBuilder);
+		if(!m.matches()) {
+			throw new IllegalArgumentException("Wrong format of name property");
+		}
+		return m.group(1);
+	}
+	
+	private static boolean parseElementBool(Lexer lexer) {
+		Objects.requireNonNull(lexer);
+		var propertyBuilder = new StringBuilder();
+		propertyBuilder.append(lexer.nextResult().content()).append(lexer.nextResult().content());
+		var m = ELEMENT_BOOL.matcher(propertyBuilder);
+		if(!m.matches()) {
+			throw new IllegalArgumentException("Wrong format of player property");
+		}
+		return Boolean.parseBoolean(m.group(1));
+	}
+	
+	private static Point parseElementPosition(Lexer lexer) {
+		Objects.requireNonNull(lexer);
+		var propertyBuilder = new StringBuilder();
+		Result result;
+		while((result = lexer.nextResult()).token() != Token.RIGHT_PARENS) {
+			propertyBuilder.append(result.content());
+		}
+		var m = ELEMENT_POSITION.matcher(propertyBuilder);
+		if(!m.matches()) {
+			throw new IllegalArgumentException("Wrong format of position property");
+		}
+		return new Point(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)));	
+	}
+	
+	private static int parseElementInt(Lexer lexer) {
+		Objects.requireNonNull(lexer);
+		var propertyBuilder = new StringBuilder();
+		propertyBuilder.append(lexer.nextResult().content()).append(lexer.nextResult().content());
+		var m = ELEMENT_INT.matcher(propertyBuilder);
+		if(!m.matches()) {
+			throw new IllegalArgumentException("Wrong format of damage/health property");
+		}
+		return Integer.parseInt(m.group(1));
+	}
+
+	private static Kind parseElementKind(Lexer lexer) {
+		Objects.requireNonNull(lexer);
+		var propertyBuilder = new StringBuilder();
+		propertyBuilder.append(lexer.nextResult().content()).append(lexer.nextResult().content());
+		var m = ELEMENT_STRING.matcher(propertyBuilder);
+		if(!m.matches()) {
+			throw new IllegalArgumentException("Wrong format of kind property");
+		}
+		return switch(m.group(1)) {
+			case "friend" -> Kind.FRIEND; 
+			case "enemy" -> Kind.ENEMY;
+			case "item" -> Kind.ITEM;
+			case "obstacle" -> Kind.OBSTACLE;
+			default -> throw new IllegalArgumentException("Wrong kind name : " + m.group(1));
+		};
+	}
+
+	private static Behavior parseElementBehavior(Lexer lexer) {
+		Objects.requireNonNull(lexer);
+		var propertyBuilder = new StringBuilder();
+		propertyBuilder.append(lexer.nextResult().content()).append(lexer.nextResult().content());
+		var m = ELEMENT_STRING.matcher(propertyBuilder);
+		if(!m.matches()) {
+			throw new IllegalArgumentException("Wrong format of behavior property");
+		}
+		return switch(m.group(1)) {
+			case "shy" -> Behavior.SHY; 
+			case "stroll" -> Behavior.STROLL;
+			case "agressive" -> Behavior.AGRESSIVE;
+			default -> throw new IllegalArgumentException("Wrong behavior name : " + m.group(1));
+		};
+	}
+	
+	private static List<Point> parseElementZone(Lexer lexer) {
+		Objects.requireNonNull(lexer);
+		var propertyBuilder = new StringBuilder();
+		// On doit avoir 11 lexemes pour zone
+		for(int n = 0; n < 11; n++) {
+			propertyBuilder.append(lexer.nextResult().content());
+		}
+		var m = ELEMENT_ZONE.matcher(propertyBuilder);
+		if(!m.matches()) {
+			throw new IllegalArgumentException("Wrong format of zone property");
+		}
+		var topLeftOfZone = new Point(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)));
+		var bottomRightOfZone = new Point(topLeftOfZone.x + Integer.parseInt(m.group(3)), topLeftOfZone.y + Integer.parseInt(m.group(4)));
+		return List.of(topLeftOfZone, bottomRightOfZone);
 	}
 	
   public static void main(String[] args) throws IOException {

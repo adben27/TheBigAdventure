@@ -1,5 +1,5 @@
 package fr.uge.bigadventure.element;
 
-public sealed interface Element permits GridElement, Entity, Weapon {
+public sealed interface Element permits Entity, Item {
 
 }
