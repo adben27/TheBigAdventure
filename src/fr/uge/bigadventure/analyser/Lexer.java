@@ -15,10 +15,12 @@ public class Lexer {
 
   private final String text;
   private final Matcher matcher;
+  private int lineNo;
 
   public Lexer(String text) {
     this.text = Objects.requireNonNull(text);
     this.matcher = PATTERN.matcher(text);
+    this.lineNo = 1;
   }
 
   public Result nextResult() {
@@ -31,7 +33,11 @@ public class Lexer {
       if (start != -1) {
         var end = matcher.end(group);
         var content = text.substring(start, end);
-        return new Result(TOKENS.get(group - 1), content);
+        if(TOKENS.get(group - 1) == Token.NEWLINE) {
+        	lineNo++;
+        	return nextResult();
+        }
+        return new Result(TOKENS.get(group - 1), content, lineNo);
       }
     }
     throw new AssertionError();

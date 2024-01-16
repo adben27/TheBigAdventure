@@ -28,7 +28,10 @@ public class Parser {
 	private static final Pattern ELEMENT_POSITION = Pattern.compile(":\\((\\d+),(\\d+)");
 	private static final Pattern ELEMENT_INT = Pattern.compile(":(\\d+)");
 	private static final Pattern ELEMENT_ZONE = Pattern.compile(":\\((\\d+),(\\d+)\\)\\((\\d+)x(\\d+)\\)");
-	
+
+	private static String lineError(Result result ,String message) {
+		return message + " at line " + result.lineNo();
+	}
 	
 //	/** Returns a String for a single line of a .map file for it to be examined with a regex
 //	 * 
@@ -77,7 +80,7 @@ public class Parser {
 		Objects.requireNonNull(lexer);		
 		Result result;
 		if((result = lexer.nextResult()).token() != Token.RIGHT_BRACKET) {
-			throw new IllegalArgumentException("Wrong format of [grid] instruction");
+			throw new IllegalArgumentException(lineError(result, "Wrong format of [grid] instruction"));
 		}
 		Point size = null; HashMap<Character,String> encodings = null;
 		while((result = lexer.nextResult()).token() != Token.QUOTE) {
@@ -120,7 +123,7 @@ public class Parser {
 		var sizeString = sizeBuilder.toString();
 		var m = SIZE_PATTERN.matcher(sizeString);
 		if(!m.matches()) {
-			throw new IllegalArgumentException("Size string does not match with regex");
+			throw new IllegalArgumentException(lineError(result, "Size string does not match with regex"));
 		}
 		int width = Integer.parseInt(m.group(1)); int height = Integer.parseInt(m.group(2));
 		return new Point(width, height);	
@@ -145,7 +148,7 @@ public class Parser {
 		while(m.find()) {
 			var skin = GridElement.checkSkinFile(m.group(1).toLowerCase(Locale.ROOT) + ".png");
 			if(encodingsMap.putIfAbsent(m.group(2).charAt(0), skin) != null) {
-				throw new IllegalStateException(m.group(2) + " symbol is already defined as " + m.group(1));
+				throw new IllegalStateException(lineError(result, m.group(2) + " symbol is already defined as " + m.group(1)));
 			}
 		}
 		if(encodingsMap.isEmpty()) {
@@ -168,11 +171,11 @@ public class Parser {
 		Objects.requireNonNull(encodings);
 		var gridList = Arrays.asList(quote.content().split("\n")).stream().map(s -> s.trim()).toList();
 		if(!(gridList.get(0).equals("\"\"\"") && gridList.get(gridList.size() - 1).equals("\"\"\""))) {
-			throw new IllegalArgumentException("Data string does not match with regex");
+			throw new IllegalArgumentException(lineError(quote, "Data string does not match with regex"));
 		}
 		gridList = gridList.subList(1, gridList.size() - 1);
 		if(gridList.size() != size.y) {
-			throw new IllegalStateException("The grid is not at the right height");
+			throw new IllegalStateException(lineError(quote, "The grid is not at the right height"));
 		}
 		var dataPattern = Pattern.compile("([A-Z]| )");
 		var grid = new GridElement[size.y][size.x];
@@ -194,15 +197,16 @@ public class Parser {
 		Objects.requireNonNull(lexer);		
 		Result result;
 		if((result = lexer.nextResult()).token() != Token.RIGHT_BRACKET) {
-			throw new IllegalArgumentException("Wrong format of [element] instruction");
+			throw new IllegalArgumentException(lineError(result, "Wrong format of [element] instruction"));
 		}
 		String name = null; boolean player, phantomized; 
 		Point position = null;
 		int health, damage;
 		Kind kind = null; Behavior behavior = null; List<Point> zone = null;
-		// Bug ici... null exception j'arrive pas à arreter le lexer
-		while((result = lexer.nextResult()).token() != Token.LEFT_BRACKET) {
-			
+		while((result = lexer.nextResult()) != null) {
+			if(result.token() == Token.LEFT_BRACKET) {
+				break;
+			}
       switch(result.content()) {
       	case "name" -> name = parseElementName(lexer);
 //      	case "skin" ->
@@ -223,16 +227,19 @@ public class Parser {
       	
       };
 		}
+		System.out.println(zone);
 		return new Weapon("sword", "word", new Point(0,0), 10); //debug
 	}
 
 	private static String parseElementName(Lexer lexer) {
 		Objects.requireNonNull(lexer);
 		var propertyBuilder = new StringBuilder();
-		propertyBuilder.append(lexer.nextResult().content()).append(lexer.nextResult().content());
+		propertyBuilder.append(lexer.nextResult().content());
+		var result = lexer.nextResult();
+		propertyBuilder.append(result.content());
 		var m = ELEMENT_STRING.matcher(propertyBuilder);
 		if(!m.matches()) {
-			throw new IllegalArgumentException("Wrong format of name property");
+			throw new IllegalArgumentException(lineError(result, "Wrong format of name property"));
 		}
 		return m.group(1);
 	}
@@ -240,10 +247,12 @@ public class Parser {
 	private static boolean parseElementBool(Lexer lexer) {
 		Objects.requireNonNull(lexer);
 		var propertyBuilder = new StringBuilder();
-		propertyBuilder.append(lexer.nextResult().content()).append(lexer.nextResult().content());
+		propertyBuilder.append(lexer.nextResult().content());
+		var result = lexer.nextResult();
+		propertyBuilder.append(result.content());
 		var m = ELEMENT_BOOL.matcher(propertyBuilder);
 		if(!m.matches()) {
-			throw new IllegalArgumentException("Wrong format of player property");
+			throw new IllegalArgumentException(lineError(result, "Wrong format of player property"));
 		}
 		return Boolean.parseBoolean(m.group(1));
 	}
@@ -257,7 +266,7 @@ public class Parser {
 		}
 		var m = ELEMENT_POSITION.matcher(propertyBuilder);
 		if(!m.matches()) {
-			throw new IllegalArgumentException("Wrong format of position property");
+			throw new IllegalArgumentException(lineError(result, "Wrong format of position property"));
 		}
 		return new Point(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)));	
 	}
@@ -265,10 +274,12 @@ public class Parser {
 	private static int parseElementInt(Lexer lexer) {
 		Objects.requireNonNull(lexer);
 		var propertyBuilder = new StringBuilder();
-		propertyBuilder.append(lexer.nextResult().content()).append(lexer.nextResult().content());
+		propertyBuilder.append(lexer.nextResult().content());
+		var result = lexer.nextResult();
+		propertyBuilder.append(result.content());
 		var m = ELEMENT_INT.matcher(propertyBuilder);
 		if(!m.matches()) {
-			throw new IllegalArgumentException("Wrong format of damage/health property");
+			throw new IllegalArgumentException(lineError(result, "Wrong format of damage/health property"));
 		}
 		return Integer.parseInt(m.group(1));
 	}
@@ -276,33 +287,37 @@ public class Parser {
 	private static Kind parseElementKind(Lexer lexer) {
 		Objects.requireNonNull(lexer);
 		var propertyBuilder = new StringBuilder();
-		propertyBuilder.append(lexer.nextResult().content()).append(lexer.nextResult().content());
+		propertyBuilder.append(lexer.nextResult().content());
+		var result = lexer.nextResult();
+		propertyBuilder.append(result.content());
 		var m = ELEMENT_STRING.matcher(propertyBuilder);
 		if(!m.matches()) {
-			throw new IllegalArgumentException("Wrong format of kind property");
+			throw new IllegalArgumentException(lineError(result, "Wrong format of kind property"));
 		}
 		return switch(m.group(1)) {
 			case "friend" -> Kind.FRIEND; 
 			case "enemy" -> Kind.ENEMY;
 			case "item" -> Kind.ITEM;
 			case "obstacle" -> Kind.OBSTACLE;
-			default -> throw new IllegalArgumentException("Wrong kind name : " + m.group(1));
+			default -> throw new IllegalArgumentException(lineError(result, "Wrong kind name : " + m.group(1)));
 		};
 	}
 
 	private static Behavior parseElementBehavior(Lexer lexer) {
 		Objects.requireNonNull(lexer);
 		var propertyBuilder = new StringBuilder();
-		propertyBuilder.append(lexer.nextResult().content()).append(lexer.nextResult().content());
+		propertyBuilder.append(lexer.nextResult().content());
+		var result = lexer.nextResult();
+		propertyBuilder.append(result.content());
 		var m = ELEMENT_STRING.matcher(propertyBuilder);
 		if(!m.matches()) {
-			throw new IllegalArgumentException("Wrong format of behavior property");
+			throw new IllegalArgumentException(lineError(result, "Wrong format of behavior property"));
 		}
 		return switch(m.group(1)) {
 			case "shy" -> Behavior.SHY; 
 			case "stroll" -> Behavior.STROLL;
 			case "agressive" -> Behavior.AGRESSIVE;
-			default -> throw new IllegalArgumentException("Wrong behavior name : " + m.group(1));
+			default -> throw new IllegalArgumentException(lineError(result, "Wrong behavior name : " + m.group(1)));
 		};
 	}
 	
@@ -310,12 +325,15 @@ public class Parser {
 		Objects.requireNonNull(lexer);
 		var propertyBuilder = new StringBuilder();
 		// On doit avoir 11 lexemes pour zone
+		Result result = lexer.nextResult();
 		for(int n = 0; n < 11; n++) {
-			propertyBuilder.append(lexer.nextResult().content());
+			propertyBuilder.append(result.content());
+			if(n != 10) result = lexer.nextResult(); // Pour eviter de manger le Result de la ligne suivante
 		}
+		System.out.println(result);
 		var m = ELEMENT_ZONE.matcher(propertyBuilder);
 		if(!m.matches()) {
-			throw new IllegalArgumentException("Wrong format of zone property");
+			throw new IllegalArgumentException(lineError(result, "Wrong format of zone property"));
 		}
 		var topLeftOfZone = new Point(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)));
 		var bottomRightOfZone = new Point(topLeftOfZone.x + Integer.parseInt(m.group(3)), topLeftOfZone.y + Integer.parseInt(m.group(4)));

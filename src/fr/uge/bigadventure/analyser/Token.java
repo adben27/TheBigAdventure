@@ -10,6 +10,7 @@ public enum Token {
   COMMA(","),
   COLON(":"),
   QUOTE("\"\"\"[^\"]+\"\"\""),
+  NEWLINE("\n"),
   ;
 
   private final String regex;
