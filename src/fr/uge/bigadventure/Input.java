@@ -16,7 +16,7 @@ public class Input {
 	 */
 	public static boolean isWalkable(GridElement tile) {
 		if (tile == null) {return true;}
-		return !tile.skin().startsWith("obstacle/");
+		return !tile.skin().startsWith("img\\obstacle");
 	}
 	
 	public static void keySwitch(KeyboardKey key, GridElement[][] grid, Entity entity) {
