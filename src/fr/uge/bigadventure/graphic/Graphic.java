@@ -13,7 +13,7 @@ import fr.uge.bigadventure.element.GridElement;
 import fr.umlv.zen5.ScreenInfo;
 
 public class Graphic {
-	public static HashMap<String, BufferedImage> skinMap = new HashMap<>();;
+	public static HashMap<String, BufferedImage> skinMap = new HashMap<>();
 	
 	public static final int imgSize = 24; //La taille des images du projet
 	
