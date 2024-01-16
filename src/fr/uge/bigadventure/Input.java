@@ -5,6 +5,7 @@ import java.util.Random;
 
 import fr.uge.bigadventure.element.Entity;
 import fr.uge.bigadventure.element.GridElement;
+import fr.uge.bigadventure.element.Obstacle;
 import fr.umlv.zen5.KeyboardKey;
 
 public class Input {
@@ -16,7 +17,7 @@ public class Input {
 	 */
 	public static boolean isWalkable(GridElement tile) {
 		if (tile == null) {return true;}
-		return !tile.skin().startsWith("img\\obstacle");
+		return !Obstacle.obstacleSet.contains(tile.skin());
 	}
 	
 	public static void keySwitch(KeyboardKey key, GridElement[][] grid, Entity entity) {

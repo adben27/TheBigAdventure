@@ -15,6 +15,7 @@ import fr.uge.bigadventure.Input;
 import fr.uge.bigadventure.analyser.Lexer;
 import fr.uge.bigadventure.analyser.Parser;
 import fr.uge.bigadventure.element.Enemy;
+import fr.uge.bigadventure.element.Obstacle;
 import fr.uge.bigadventure.element.Player;
 import fr.umlv.zen5.Application;
 import fr.umlv.zen5.Event;
@@ -33,15 +34,18 @@ public class Main {
         BufferedImage image;
     		try(var input = Main.class.getResourceAsStream(imageName)) {
 					image = ImageIO.read(input);
-					System.out.println("IMG path : " + imageName.substring(4, imageName.length()-4));
-	        Graphic.skinMap.putIfAbsent(imageName.substring(4, imageName.length()-4).replace('\\', '/'), image);
+					imageName = imageName.substring(4, imageName.length()-4).replace('\\', '/');
+					if (imageName.startsWith("obstacle/")) {
+						Obstacle.obstacleSet.add(imageName);
+					}
+	        Graphic.skinMap.putIfAbsent(imageName, image);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
     	});
   	
-  	var baba = new Player("baba", "img/pnj/baba.png", 20, new Point(1, 1));
-  	var keke = new Enemy("keke", "img/pnj/keke.png", 20, new Point(4, 4), 5);
+  	var baba = new Player("baba", "pnj/baba", 20, new Point(1, 1));
+  	var keke = new Enemy("keke", "pnj/keke", 20, new Point(4, 4), 5);
   	var entityList = List.of(baba, keke);
 
     var path = Path.of("maps/big.map");
