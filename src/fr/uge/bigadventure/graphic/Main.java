@@ -48,7 +48,7 @@ public class Main {
   	var keke = new Enemy("keke", "pnj/keke", 20, new Point(4, 4), 5);
   	var entityList = List.of(baba, keke);
 
-    var path = Path.of("maps/big.map");
+    var path = Path.of("maps/maze.map");
     var text = Files.readString(path);
     var lexer = new Lexer(text);
     var grid = Parser.parse(lexer);  	

@@ -1,34 +1,27 @@
 [grid]
     size: (22 x 22)
-    encodings : WALL(W) PILLAR(P)
+    encodings : WALL(W) PILLAR(P) DOOR(D)
     data: """
 WWWWWWWWWWWWWWWWWWWWWW
-W       P    P       W
-W P PPPPPPPP P P PPP W
-WPP P     P  P P P   W
-W     PPP P PP P P PPW
-WPPPP P P P P  P P   W
-W P   P P P   PP P P W
-W PPPPP P PPPPP  P PPW
-W       P       PP  PW
-W PPPPP PPPPPPPPPPP  W
-W P   P P  P      PP W
-W P P     PPPP PP P  W
-WPP PPP P       P P PW
-W     P PPPPPPP PP  PW
-W PPPPP P     P    PPW
-W P     P P P PPPPPPPW
-W P PP PP P P P    P W
-W PPPP P  P P  P P P W
-W  P   P PP PP   P   W
-W PPPPPP P   PPPPPPP W
-W        P P    P    W
-WWWWWWWWWWWWWWWWWWWWWW
+W       P   P        W
+W P PPPPPPP P P PPPP W
+WPP P     P P P P    W
+W     PPP P P P P PPPW
+W PPP P P P P P P    W
+W P   P P P   P PPPP W
+W PPPPP P PPPPP P    W
+W       P       PPPPPW
+W PPPPP P PPPPPPP   PW
+W P     P      P  P  W
+W P PPPPPPPPPPPP PPP W
+W P  P         P   P W
+WPPP P PPPPPPP PPP P W
+W    P P P   P     P W
+W PPPP P P P PPPPPPP W
+W P    P P P P   P   W
+W P P PP P P P P P PPW
+W P   P  P P P P P   W
+W P PPP PP P P P PPP W
+W       P  P   P     W
+WWWWWWWWWDWWWWWWWWWWWW
 """
-
-[element]
-	name: Durendale
-	skin: SWORD
-	position: (3,1)
-	kind: item
-	damage: 15
