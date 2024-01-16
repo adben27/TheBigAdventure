@@ -117,7 +117,6 @@ public class Parser {
 		if(encodingsMap.isEmpty()) {
 			throw new IllegalStateException("The encodings map should not be empty");
 		}
-		System.out.println(encodingsMap);
 		return encodingsMap;	
 	}
 	
@@ -143,13 +142,12 @@ public class Parser {
 		}
 		var dataPattern = Pattern.compile("([A-Z]| )");
 		var grid = new GridElement[size.x][size.y];
-		for(var row : gridList) {
-			var m = dataPattern.matcher(row);
-			var rowIndex = gridList.indexOf(row);
+		for(int i = 0; i < gridList.size(); i++) {
+			var m = dataPattern.matcher(gridList.get(i));
 			var column = 0;
 			while(m.find()) {
 				if(!m.group().isBlank()) {
-					grid[column][rowIndex] = new Obstacle(encodings.get(m.group().charAt(0)), new Point(column, rowIndex));
+					grid[column][i] = new Obstacle(encodings.get(m.group().charAt(0)), new Point(column, i));
 				}
 				column++;	
 			}
@@ -305,7 +303,7 @@ public class Parser {
 	}
 	
   public static void main(String[] args) throws IOException {
-    var path = Path.of("maps/big.map");
+    var path = Path.of("maps/maze.map");
     var text = Files.readString(path);
     var lexer = new Lexer(text);
     parse(lexer);
