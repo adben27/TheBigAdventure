@@ -33,28 +33,6 @@ public class Parser {
 		return message + " at line " + result.lineNo();
 	}
 	
-//	/** Returns a String for a single line of a .map file for it to be examined with a regex
-//	 * 
-//	 * @param iterator The iterator corresponding to the .map file
-//	 * @return A String to be analysed by sub-methods of parseMap
-//	 */
-//	public String iteratorToString(ListIterator<Result> iterator) {	
-//		Pattern breakingPattern = Pattern.compile(".*\\)(\\[|[a-z])+"); // any character then ) then [ or a lowercase character
-//		var tmp = iterator.next();
-//		var sizeBuilder = new StringBuilder(tmp.content());
-//		var tmp_l = 0;
-//		var m = breakingPattern.matcher(sizeBuilder);
-//		while(!m.matches()) {
-//			tmp = iterator.next();
-//			sizeBuilder.append(tmp.content());
-//			tmp_l = tmp.content().length();
-//			m = breakingPattern.matcher(sizeBuilder);
-//		}
-//		tmp = iterator.previous();
-//		sizeBuilder.delete(sizeBuilder.length() - tmp_l, sizeBuilder.length()); // Supprime le dernier lexeme qu'on voulait identifier mais qu'on veut pas dans le String 
-//		return sizeBuilder.toString();
-//	}
-	
 	/** The general method to parse a .map file
 	 * It calls sub-methods depending of what the iterator on the file finds.
 	 * 
@@ -93,21 +71,6 @@ public class Parser {
     return grid;
 	}
 
-	/** Parses the [grid] or [element] line in a .map file
-	 * 
-	 * @param iterator The iterator corresponding to the .map file
-	 */
-	/*private void parseBrackets(ListIterator<Result> iterator) {
-		iterator.previous(); // to get again the left bracket
-		Objects.requireNonNull(iterator);
-		Pattern bracketPattern = Pattern.compile("\\[[a-z]+\\]");
-		var bracketString = iterator.next().content() + iterator.next().content() + iterator.next().content();
-		var m = bracketPattern.matcher(bracketString);
-		if(!m.matches()) {
-			throw new IllegalArgumentException("Grid string does not match with regex");
-		}
-	}*/
-	
 	/** Parses the main section of a .map file
 	 * 
 	 * @param iterator The iterator corresponding to the .map file
@@ -146,7 +109,7 @@ public class Parser {
 		var m = ENCODING_PATTERN.matcher(encodingString);
 		var encodingsMap = new HashMap<Character, String>();
 		while(m.find()) {
-			var skin = GridElement.checkSkinFile(m.group(1).toLowerCase(Locale.ROOT) + ".png");
+			var skin = GridElement.checkSkinFile(m.group(1).toLowerCase(Locale.ROOT));
 			if(encodingsMap.putIfAbsent(m.group(2).charAt(0), skin) != null) {
 				throw new IllegalStateException(lineError(result, m.group(2) + " symbol is already defined as " + m.group(1)));
 			}
@@ -154,6 +117,7 @@ public class Parser {
 		if(encodingsMap.isEmpty()) {
 			throw new IllegalStateException("The encodings map should not be empty");
 		}
+		System.out.println(encodingsMap);
 		return encodingsMap;	
 	}
 	
