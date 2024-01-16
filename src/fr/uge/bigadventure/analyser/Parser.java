@@ -142,14 +142,14 @@ public class Parser {
 			throw new IllegalStateException(lineError(quote, "The grid is not at the right height"));
 		}
 		var dataPattern = Pattern.compile("([A-Z]| )");
-		var grid = new GridElement[size.y][size.x];
+		var grid = new GridElement[size.x][size.y];
 		for(var row : gridList) {
 			var m = dataPattern.matcher(row);
 			var rowIndex = gridList.indexOf(row);
 			var column = 0;
 			while(m.find()) {
 				if(!m.group().isBlank()) {
-					grid[rowIndex][column] = new Obstacle(encodings.get(m.group().charAt(0)), new Point(column, rowIndex));
+					grid[column][rowIndex] = new Obstacle(encodings.get(m.group().charAt(0)), new Point(column, rowIndex));
 				}
 				column++;	
 			}
