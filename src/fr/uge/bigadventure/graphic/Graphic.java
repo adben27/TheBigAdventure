@@ -33,6 +33,11 @@ public class Graphic {
 	public static int sizeX;    // Largeur de la map
 	public static int sizeY;    // Hauteur de la map
 	
+	/** Initialize class field
+	 * 
+	 * @param screenInfo Info of the current screen
+	 * @param grid Grid of the game 
+	 */
 	public Graphic(ScreenInfo screenInfo, GridElement[][] grid) {
 		Objects.requireNonNull(screenInfo);
 		Objects.requireNonNull(grid);
@@ -44,6 +49,10 @@ public class Graphic {
     sizeY = grid[0].length;
   }
 	
+	/** Load all images from the folder img
+	 * 
+	 * @throws IOException
+	 */
 	public static void loadImage() throws IOException {
 		var folderPath = Paths.get("img/");
   	Files.walk(folderPath)
@@ -90,7 +99,7 @@ public class Graphic {
 	/** Print a tile if it is not null
 	 * 
 	 * @param tile A tile in the map
-	 * @param map 
+	 * @param map
 	 */
 	public static void printTile(GridElement tile, Graphics2D map, int x, int y) { // Prend un obstacle et l'affiche à sa position()
 		Objects.requireNonNull(map);
@@ -98,7 +107,12 @@ public class Graphic {
     map.drawImage(skinMap.get(tile.skin()), shiftX(x), shiftY(y), null);
 	}
 	
-	
+	/**	Print the current map
+	 * 
+	 * @param map 
+	 * @param grid Contains the map
+	 * @param baba The player 
+	 */
 	public static void printMap(Graphics2D map, GridElement[][] grid, Entity baba) { // Prend un double tableau d'Obstacle (une map) et l'affiche 
 		Objects.requireNonNull(grid);
 		Objects.requireNonNull(map);
