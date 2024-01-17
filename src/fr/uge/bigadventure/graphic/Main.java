@@ -24,11 +24,7 @@ public class Main {
   	Graphic.loadImage();
   	
   	var baba = new Player("baba", "pnj/baba", 20, new Point(1, 1));
-<<<<<<< HEAD
   	var keke = new Enemy("keke", "pnj/keke", 20, new Point(10, 10), 5, Behavior.STROLL);
-=======
-  	var keke = new Enemy("keke", "pnj/keke", 20, new Point(2, 3), 5);
->>>>>>> branch 'main' of git@gitlab.com:adben27/TheBigAdventure.git
   	var entityList = List.of(baba, keke);
 
     var path = Path.of("maps/void.map");
