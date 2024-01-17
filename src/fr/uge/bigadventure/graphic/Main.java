@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import fr.uge.bigadventure.Input;
 import fr.uge.bigadventure.analyser.Lexer;
 import fr.uge.bigadventure.analyser.Parser;
+import fr.uge.bigadventure.element.Behavior;
 import fr.uge.bigadventure.element.Enemy;
 import fr.uge.bigadventure.element.Obstacle;
 import fr.uge.bigadventure.element.Player;
@@ -45,13 +46,14 @@ public class Main {
     	});
   	
   	var baba = new Player("baba", "pnj/baba", 20, new Point(1, 1));
-  	var keke = new Enemy("keke", "pnj/keke", 20, new Point(10, 10), 5);
+  	var keke = new Enemy("keke", "pnj/keke", 20, new Point(10, 10), 5, Behavior.STROLL);
   	var entityList = List.of(baba, keke);
 
     var path = Path.of("maps/void.map");
     var text = Files.readString(path);
     var lexer = new Lexer(text);
-    var grid = Parser.parse(lexer);  	
+    var gameMap = Parser.parse(lexer);
+    var grid = gameMap.grid();
     
     System.out.println(grid[0][0].toString());
 

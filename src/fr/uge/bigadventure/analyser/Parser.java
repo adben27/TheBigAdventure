@@ -12,11 +12,17 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+import fr.uge.bigadventure.GameMap;
 import fr.uge.bigadventure.element.Behavior;
 import fr.uge.bigadventure.element.Element;
+import fr.uge.bigadventure.element.Enemy;
+import fr.uge.bigadventure.element.Friend;
 import fr.uge.bigadventure.element.GridElement;
+import fr.uge.bigadventure.element.InventoryItem;
+import fr.uge.bigadventure.element.Item;
 import fr.uge.bigadventure.element.Kind;
 import fr.uge.bigadventure.element.Obstacle;
+import fr.uge.bigadventure.element.Player;
 import fr.uge.bigadventure.element.Weapon;
 
 public class Parser {
@@ -37,17 +43,20 @@ public class Parser {
 	 * It calls sub-methods depending of what the iterator on the file finds.
 	 * 
 	 */
-	public static GridElement[][] parse(Lexer lexer) {
+	public static GameMap parse(Lexer lexer) {
 		Objects.requireNonNull(lexer);
 		Result result;
 		GridElement[][] grid = null; var elementList = new ArrayList<Element>();
 		while((result = lexer.nextResult()) != null) {
 			switch(result.content()) {
 				case "grid" -> grid = parseGrid(lexer);
-				case "element" -> elementList.add(parseElement(lexer));
+				case "element" -> elementList.add(parseElement(grid, lexer));
 			};	
 		}
-		return grid;
+		elementList.removeIf(Objects::isNull);
+		System.out.println(elementList);
+		var gameMap = new GameMap(grid, elementList);
+		return gameMap;
 	}
 
 	/** Redirects the parsing to the dedicated parsing method depending of the identifier
@@ -155,15 +164,16 @@ public class Parser {
 		return grid;
 	}
 
-	private static Element parseElement(Lexer lexer) {
+	private static Element parseElement(GridElement[][] grid, Lexer lexer) {
 		Objects.requireNonNull(lexer);		
 		Result result;
 		if((result = lexer.nextResult()).token() != Token.RIGHT_BRACKET) {
 			throw new IllegalArgumentException(lineError(result, "Wrong format of [element] instruction"));
 		}
-		String name = null; boolean player, phantomized; 
+		String name = null; String skin = null;
+		boolean player = false, phantomized; 
 		Point position = null;
-		int health, damage;
+		int health = 0, damage = 0;
 		Kind kind = null; Behavior behavior = null; List<Point> zone = null;
 		while((result = lexer.nextResult()) != null) {
 			if(result.token() == Token.LEFT_BRACKET) {
@@ -171,7 +181,7 @@ public class Parser {
 			}
       switch(result.content()) {
       	case "name" -> name = parseElementName(lexer);
-//      	case "skin" ->
+      	case "skin" -> skin = parseElementName(lexer);
       	case "player" -> player = parseElementBool(lexer);
       	case "position" -> position = parseElementPosition(lexer);
       	case "health" -> health = parseElementInt(lexer);
@@ -189,10 +199,33 @@ public class Parser {
       	
       };
 		}
-		System.out.println(zone);
-		return new Weapon("sword", "word", new Point(0,0), 10); //debug
+		if(player) {
+			skin = "pnj/" + skin.toLowerCase(Locale.ROOT);
+			return new Player(name, skin, health, position);
+		}
+		return switch(kind) {			 
+			case Kind.FRIEND -> new Friend(name, "pnj/" + skin, health, position); 
+			case Kind.ENEMY -> new Enemy(name, "pnj/" + skin, health, position, damage, behavior);
+			case Kind.ITEM -> parseItem(name, "item/" + skin, position, damage);
+			case Kind.OBSTACLE -> {
+				if(grid[position.x][position.y] == null) {
+					grid[position.x][position.y] = new Obstacle("obstacle/" + skin, position);
+				}
+				yield null;
+			}
+		};
 	}
-
+	
+	private static Item parseItem(String name, String skin, Point position, int damage) {
+		Objects.requireNonNull(name);
+		Objects.requireNonNull(skin);
+		Objects.requireNonNull(position);
+		if(damage == 0) {
+			return new InventoryItem(skin, position);
+		}
+		return new Weapon(name, skin, damage, position);
+	}
+	
 	private static String parseElementName(Lexer lexer) {
 		Objects.requireNonNull(lexer);
 		var propertyBuilder = new StringBuilder();
@@ -303,7 +336,7 @@ public class Parser {
 	}
 	
   public static void main(String[] args) throws IOException {
-    var path = Path.of("maps/maze.map");
+    var path = Path.of("maps/void.map");
     var text = Files.readString(path);
     var lexer = new Lexer(text);
     parse(lexer);

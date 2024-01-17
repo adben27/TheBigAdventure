@@ -25,3 +25,10 @@ W                    W
 W                    W
 WWWWWWWWWDWWWWWWWWWWWW
 """
+
+[element]
+	name: Durendale
+	skin: SWORD
+	position: (3,1)
+	kind: item
+	damage: 15
