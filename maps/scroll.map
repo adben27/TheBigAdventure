@@ -45,3 +45,20 @@ W                                                                      W
 W                                                   S                  W
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 """
+
+[element]
+	name: John
+	player: true
+	skin: BABA
+	position: (1,1)
+	health: 10
+	
+[element]
+	name: keke
+	skin: KEKE
+	position: (1, 2)
+	kind: enemy
+	health: 10
+	zone: (1, 1) (5 x 3)
+	behavior: agressive
+	damage: 10
