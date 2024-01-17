@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 import fr.uge.bigadventure.GameMap;
 import fr.uge.bigadventure.element.Behavior;
+import fr.uge.bigadventure.element.Decoration;
 import fr.uge.bigadventure.element.Element;
 import fr.uge.bigadventure.element.Enemy;
 import fr.uge.bigadventure.element.Friend;
@@ -28,7 +29,7 @@ import fr.uge.bigadventure.element.Weapon;
 public class Parser {
 
 	private static final Pattern SIZE_PATTERN = Pattern.compile(":\\((\\d+)x(\\d+)");
-	private static final Pattern ENCODING_PATTERN = Pattern.compile("([A-Z]+)\\(([A-Z])\\)");
+	private static final Pattern ENCODING_PATTERN = Pattern.compile("([A-Z]+)\\(([A-Z]|[a-z])\\)");
 	private static final Pattern ELEMENT_STRING = Pattern.compile(":([a-zA-Z]+)");
 	private static final Pattern ELEMENT_BOOL = Pattern.compile(":(true|false)");
 	private static final Pattern ELEMENT_POSITION = Pattern.compile(":\\((\\d+),(\\d+)");
@@ -110,10 +111,11 @@ public class Parser {
 		Objects.requireNonNull(lexer);
 		var encodingsBuilder = new StringBuilder();
 		Result result = lexer.nextResult();
-		while((result.content().equals(result.content().toUpperCase(Locale.ROOT)))) {
+		while((result.content().equals(result.content().toUpperCase(Locale.ROOT))) || result.content().length() == 1) {
 			encodingsBuilder.append(result.content());
 			result = lexer.nextResult();
 		}
+		
 		var encodingString = encodingsBuilder.toString().substring(1);
 		var m = ENCODING_PATTERN.matcher(encodingString);
 		var encodingsMap = new HashMap<Character, String>();
@@ -126,6 +128,7 @@ public class Parser {
 		if(encodingsMap.isEmpty()) {
 			throw new IllegalStateException("The encodings map should not be empty");
 		}
+		System.out.println(encodingsMap);
 		return encodingsMap;	
 	}
 	
@@ -149,16 +152,26 @@ public class Parser {
 		if(gridList.size() != size.y) {
 			throw new IllegalStateException(lineError(quote, "The grid is not at the right height"));
 		}
-		var dataPattern = Pattern.compile("([A-Z]| )");
+		var dataPattern = Pattern.compile("([A-Z]|[a-z]| )");
 		var grid = new GridElement[size.x][size.y];
 		for(int i = 0; i < gridList.size(); i++) {
 			var m = dataPattern.matcher(gridList.get(i));
 			var column = 0;
 			while(m.find()) {
 				if(!m.group().isBlank()) {
-					grid[column][i] = new Obstacle(encodings.get(m.group().charAt(0)), new Point(column, i));
+					var skin = encodings.get(m.group().charAt(0));
+					if(skin.startsWith("obstacle/")) {
+						grid[column][i] = new Obstacle(encodings.get(m.group().charAt(0)), new Point(column, i));
+					} else {
+						grid[column][i] = new Decoration(encodings.get(m.group().charAt(0)), new Point(column, i));
+					}
 				}
 				column++;	
+			}
+		}
+		for(var row : grid) {
+			for(var element : row) {
+				System.out.println(element);
 			}
 		}
 		return grid;
@@ -336,7 +349,7 @@ public class Parser {
 	}
 	
   public static void main(String[] args) throws IOException {
-    var path = Path.of("maps/void.map");
+    var path = Path.of("maps/big.map");
     var text = Files.readString(path);
     var lexer = new Lexer(text);
     parse(lexer);
