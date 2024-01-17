@@ -21,7 +21,3 @@ public sealed interface GridElement permits Decoration, Obstacle {
 		return "obstacle/" + skin;
 	}
 }
-
-	/*static GridElement gridElementFromSkin() {
-		
-	}*/
