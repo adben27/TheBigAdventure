@@ -122,10 +122,11 @@ public class Graphic {
 		Objects.requireNonNull(entityList);
 		for(var entity : entityList) {
 			draw.setColor(Color.GRAY);
-			draw.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, 20, 4));
+			draw.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, entity.initialHealth(), 4));
 			draw.setColor(Color.RED);
 			draw.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, entity.health(), 4));
 			draw.drawImage(skinMap.get(entity.skin()), shiftX(entity.position().x), shiftY(entity.position().y), null);
+			// texte à mettre en bas aussi
 		}
 	}
 	

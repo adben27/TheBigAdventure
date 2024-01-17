@@ -7,6 +7,7 @@ public final class Player implements Entity {
 	private final String name;
 	private final String skin;
 	private int health;
+	private final int initialHealth;
 	private final Point position;
 	
 	public Player(String name, String skin, int health, Point position) {
@@ -18,6 +19,7 @@ public final class Player implements Entity {
 		}	
 		this.name = name;
 		this.skin = skin;
+		this.initialHealth = health;
 		this.health = health;
 		this.position = position;
 	}
@@ -29,6 +31,11 @@ public final class Player implements Entity {
 	@Override
 	public String skin() {
 		return skin;
+	}
+	
+	@Override
+	public int initialHealth() {
+		return initialHealth;
 	}
 	
 	@Override
@@ -46,6 +53,11 @@ public final class Player implements Entity {
 		health -= damage;
 		if (health <= 0) {return true;}
 		return false;
+	}
+
+	@Override
+	public String toString() {
+		return "Enemy : " + name + " " + skin + " health " + health + " " + position;  
 	}
 	
 }

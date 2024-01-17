@@ -204,12 +204,12 @@ public class Parser {
 			return new Player(name, skin, health, position);
 		}
 		return switch(kind) {			 
-			case Kind.FRIEND -> new Friend(name, "pnj/" + skin, health, position); 
-			case Kind.ENEMY -> new Enemy(name, "pnj/" + skin, health, position, damage, behavior);
-			case Kind.ITEM -> parseItem(name, "item/" + skin, position, damage);
+			case Kind.FRIEND -> new Friend(name, "pnj/" + skin.toLowerCase(Locale.ROOT), health, position); 
+			case Kind.ENEMY -> new Enemy(name, "pnj/" + skin.toLowerCase(Locale.ROOT), health, position, zone, damage, behavior);
+			case Kind.ITEM -> parseItem(name, "item/" + skin.toLowerCase(Locale.ROOT), position, damage);
 			case Kind.OBSTACLE -> {
 				if(grid[position.x][position.y] == null) {
-					grid[position.x][position.y] = new Obstacle("obstacle/" + skin, position);
+					grid[position.x][position.y] = new Obstacle("obstacle/" + skin.toLowerCase(Locale.ROOT), position);
 				}
 				yield null;
 			}
