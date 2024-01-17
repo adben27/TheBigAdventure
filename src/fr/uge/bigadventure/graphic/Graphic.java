@@ -17,7 +17,6 @@ import javax.imageio.ImageIO;
 import fr.uge.bigadventure.element.Entity;
 import fr.uge.bigadventure.element.GridElement;
 import fr.uge.bigadventure.element.Obstacle;
-import fr.uge.bigadventure.element.Player;
 import fr.umlv.zen5.ScreenInfo;
 
 public class Graphic {
@@ -100,7 +99,7 @@ public class Graphic {
 	}
 	
 	
-	public static void printMap(Graphics2D map, GridElement[][] grid, Player baba) { // Prend un double tableau d'Obstacle (une map) et l'affiche 
+	public static void printMap(Graphics2D map, GridElement[][] grid, Entity baba) { // Prend un double tableau d'Obstacle (une map) et l'affiche 
 		Objects.requireNonNull(grid);
 		Objects.requireNonNull(map);
 		map.setColor(Color.BLACK);
@@ -138,10 +137,11 @@ public class Graphic {
 		Objects.requireNonNull(entityList);
 		for(var entity : entityList) {
 			draw.setColor(Color.GRAY);
-			draw.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, 20, 4));
+			draw.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, entity.initialHealth(), 4));
 			draw.setColor(Color.RED);
 			draw.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, entity.health(), 4));
 			draw.drawImage(skinMap.get(entity.skin()), shiftX(entity.position().x), shiftY(entity.position().y), null);
+			// texte à mettre en bas aussi
 		}
 	}
 	

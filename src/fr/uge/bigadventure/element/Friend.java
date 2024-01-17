@@ -7,6 +7,7 @@ public final class Friend implements Entity  {
 	private final String name;
 	private final String skin;
 	public int health;
+	private final int initialHealth;
 	public final Point position;
 	
 	public Friend(String name, String skin, int health, Point position) {
@@ -19,6 +20,7 @@ public final class Friend implements Entity  {
 		this.name = name;
 		this.skin = skin;
 		this.health = health;
+		this.initialHealth = health;
 		this.position = position;
 	}
 	
@@ -36,6 +38,11 @@ public final class Friend implements Entity  {
 		return health;
 	}
 
+	@Override
+	public int initialHealth() {
+		return initialHealth;
+	}
+	
 	@Override
 	public Point position() {
 		return position;
