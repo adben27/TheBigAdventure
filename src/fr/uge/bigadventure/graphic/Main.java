@@ -45,10 +45,10 @@ public class Main {
     	});
   	
   	var baba = new Player("baba", "pnj/baba", 20, new Point(1, 1));
-  	var keke = new Enemy("keke", "pnj/keke", 20, new Point(4, 4), 5);
+  	var keke = new Enemy("keke", "pnj/keke", 20, new Point(10, 10), 5);
   	var entityList = List.of(baba, keke);
 
-    var path = Path.of("maps/maze.map");
+    var path = Path.of("maps/void.map");
     var text = Files.readString(path);
     var lexer = new Lexer(text);
     var grid = Parser.parse(lexer);  	
@@ -65,18 +65,17 @@ public class Main {
       });
       
       for(;;) {
-      	if (baba.health() <= 0) {
-      		context.exit(0);
-          return;
-      	}
-        Event event = context.pollOrWaitEvent(700);
+        Event event = context.pollOrWaitEvent(100);
+        long startEvent = System.currentTimeMillis();
+        long timeBetweenEvents = 0;
+        
         context.renderFrame(erase ->{Graphic.eraseEntity(erase, grid, entityList);});
         
-				//Input.keySwitch(Input.randomKey(), grid, keke);
+				Input.keySwitch(Input.randomKey(), grid, keke);
        	if (keke.position.x == baba.position().x && keke.position.y == baba.position().y) {
        		if (baba.reduceHealth(5)) {
        			context.exit(0);
-             return;
+       			return;
        		}
         }
         if (event != null) {
@@ -90,7 +89,19 @@ public class Main {
         		Input.keySwitch(event.getKey(), grid, baba);
         	}
         }
+        
         context.renderFrame(draw -> {Graphic.drawEntity(draw, entityList);});
+      	if (baba.health() <= 0) {
+      		context.exit(0);
+          return;
+      	}
+
+      	while (timeBetweenEvents <= 300) {
+      		if (event != null && event.getAction() != Action.KEY_RELEASED) {
+          	event = context.pollEvent();
+      		}
+        	timeBetweenEvents = System.currentTimeMillis() - startEvent;
+        }
       }
     });
   }
