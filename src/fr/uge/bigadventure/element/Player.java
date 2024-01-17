@@ -57,7 +57,7 @@ public final class Player implements Entity {
 
 	@Override
 	public String toString() {
-		return "Enemy : " + name + " " + skin + " health " + health + " " + position;  
+		return "Player : " + name + " " + skin + " health " + health + " " + position;  
 	}
 	
 }

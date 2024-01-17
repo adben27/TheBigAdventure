@@ -89,15 +89,17 @@ public class Main {
         
         // collision entre player et enemy
         // faut fix ça, player c bon. Mais faut dire que si l'entité qui touche est un ennemi on réduit la vide du player
-        if (enemyList.get(0).position.x == entityList.get(0).position().x && enemyList.get(0).position().y == entityList.get(0).position().y) {
-       		if (entityList.get(0).reduceHealth(5)) {
-            context.renderFrame(over -> {Graphic.drawGameOver(over);});
-          	while (event == null || event.getAction() != Action.POINTER_UP) {
-              	event = context.pollOrWaitEvent(10000);
-          	}
-       			context.exit(0);
-       			return;
-       		}
+        if(!enemyList.isEmpty()) {
+        	if (enemyList.get(0).position.x == entityList.get(0).position().x && enemyList.get(0).position().y == entityList.get(0).position().y) {
+        		if (entityList.get(0).reduceHealth(5)) {
+              context.renderFrame(over -> {Graphic.drawGameOver(over);});
+              while (event == null || event.getAction() != Action.POINTER_UP) {
+                  event = context.pollOrWaitEvent(10000);
+              }
+               context.exit(0);
+               return;
+             }
+          }
         }
        	
       	while (timeBetweenEvents <= 200) {
