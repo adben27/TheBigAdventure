@@ -1,0 +1,47 @@
+[grid]
+    size: (72 x 42)
+    encodings : WALL(W) PILLAR(P) DOOR(D) TREE(T) FENCE(F) STUMP(S) HOUSE(H) HUSK(h) FLOWER(f) REED(r)
+    data: """
+WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+W                                                   h                  W
+W     S                   T                                            W
+W                h                                       F             W
+W                                       f                     S        W
+W     h                                      H                         W
+W            h          S                                              W
+W                                      F                               W
+W                                                                      W
+W   h                          T                                       W
+W                                                    rrr               W
+W             T                                                        W
+W                          S                        F                  W
+W             FFFFF                                      S             W
+W                            H             rr                          W
+W                                        fff                           W
+W                                      ffff                            W
+W     h                       T          ff                            W
+W                                                   S                  W
+WS           F                                                         W
+W                                       FFFFF                          W
+W       h                                                      f       W
+W                                                                      W
+W                         S         f                   F              W
+W            F                                                         W
+W                                  T                                   W
+W           f                                                          W
+W       T         F                     S           H                  W
+W                                T                             F       W
+W                                                                      W
+W   T                         F                                        W
+W                                                 T      F             W
+W             S                                                        W
+W                                       TT                             W
+W                                                                      W
+W                   T                                                  W
+W                               T                                      W
+W                             TTT                        S             W
+W             T                TTT                                     W
+W                                                                      W
+W                                                   S                  W
+WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+"""

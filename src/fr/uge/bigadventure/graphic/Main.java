@@ -22,23 +22,21 @@ public class Main {
   	
   	Graphic.loadImage();
   	
-  	var baba = new Player("baba", "pnj/baba", 20, new Point(1, 1));
+  	var baba = new Player("baba", "pnj/baba", 20, new Point(10, 10));
   	var keke = new Enemy("keke", "pnj/keke", 20, new Point(2, 3), 5);
   	var entityList = List.of(baba, keke);
 
-    var path = Path.of("maps/void.map");
+    var path = Path.of("maps/scroll.map");
     var text = Files.readString(path);
     var lexer = new Lexer(text);
     var grid = Parser.parse(lexer);  	
-    
-    System.out.println(grid[0][0].toString());
 
     Application.run(Color.BLACK, context -> {
       
       new Graphic(context.getScreenInfo(), grid);
       
       context.renderFrame(map -> { // mise en place de l'écran de depart
-      	Graphic.printMap(map, grid);
+      	Graphic.printMap(map, grid, baba);
       	Graphic.drawEntity(map, entityList);
       });
       
@@ -59,6 +57,9 @@ public class Main {
         
         	if (action == Action.KEY_PRESSED) {
         		Input.keySwitch(event.getKey(), grid, baba);
+            context.renderFrame(map -> { // mise en place de l'écran de depart
+            	Graphic.printMap(map, grid, baba);
+            });
         	}
         }
         
@@ -74,8 +75,8 @@ public class Main {
        			return;
        		}
         }
-
-      	while (timeBetweenEvents <= 300) {
+       	
+      	while (timeBetweenEvents <= 200) {
       		if (event != null && event.getAction() != Action.KEY_RELEASED) {
           	event = context.pollEvent();
       		}

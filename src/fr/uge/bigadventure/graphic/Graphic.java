@@ -2,7 +2,6 @@ package fr.uge.bigadventure.graphic;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -18,6 +17,7 @@ import javax.imageio.ImageIO;
 import fr.uge.bigadventure.element.Entity;
 import fr.uge.bigadventure.element.GridElement;
 import fr.uge.bigadventure.element.Obstacle;
+import fr.uge.bigadventure.element.Player;
 import fr.umlv.zen5.ScreenInfo;
 
 public class Graphic {
@@ -71,7 +71,10 @@ public class Graphic {
 	 * @return The adapted screen coordinate
 	 */
   public static int shiftX(int coordinate) {
-  	return (coordinate + nbCasesX/2 - sizeX/2) * imgSize;
+  	if (sizeX < nbCasesX) {
+  		return (coordinate + nbCasesX/2 - sizeX/2) * imgSize;
+  	}
+  	return coordinate * imgSize;
   }
 	/** Transform a grid coordinate on the vertical axis to an adapted screen coordinate
 	 * 
@@ -79,7 +82,10 @@ public class Graphic {
 	 * @return The adapted screen coordinate
 	 */
   public static int shiftY(int coordinate) {
-  	return (coordinate + nbCasesY/2 - sizeY/2) * imgSize;
+  	if (sizeY < nbCasesY) {
+  		return (coordinate + nbCasesY/2 - sizeY/2) * imgSize;
+  	}
+  	return coordinate * imgSize;
   }
   
 	/** Print a tile if it is not null
@@ -87,21 +93,31 @@ public class Graphic {
 	 * @param tile A tile in the map
 	 * @param map 
 	 */
-	public static void printTile(GridElement tile, Graphics2D map) { // Prend un obstacle et l'affiche à sa position()
+	public static void printTile(GridElement tile, Graphics2D map, int x, int y) { // Prend un obstacle et l'affiche à sa position()
 		Objects.requireNonNull(map);
 		if (tile == null) {return;}
-    map.drawImage(skinMap.get(tile.skin()), shiftX(tile.position().x), shiftY(tile.position().y), null);
+    map.drawImage(skinMap.get(tile.skin()), shiftX(x), shiftY(y), null);
 	}
 	
 	
-	public static void printMap(Graphics2D map, GridElement[][] grid) { // Prend un double tableau d'Obstacle (une map) et l'affiche 
+	public static void printMap(Graphics2D map, GridElement[][] grid, Player baba) { // Prend un double tableau d'Obstacle (une map) et l'affiche 
 		Objects.requireNonNull(grid);
 		Objects.requireNonNull(map);
 		map.setColor(Color.BLACK);
     map.fill(new Rectangle2D.Float(0, 0, width, height));
-		for(var list : grid) {
-			for(var elem : list) {printTile(elem, map);}
-		}
+    int xStart = Math.min(Math.max(0, baba.position().x - nbCasesX/2), sizeX - nbCasesX);
+    int yStart = Math.min(Math.max(0, baba.position().y - nbCasesY/2), sizeY - nbCasesY);
+    int x = 0;
+    int y = 0;
+    for(int i = xStart; i < xStart + nbCasesX; i++) {
+    	for(int j = yStart; j < yStart + nbCasesY; j++) {
+    		System.out.println("i : " + x + " j : " + y);
+    		printTile(grid[i][j], map, x, y);
+    		y++;
+    	}
+    	y = 0;
+    	x++;
+    }
 	}
 	
 	public static void eraseEntity(Graphics2D erase, GridElement[][] grid, List<Entity> entityList) {
@@ -111,8 +127,8 @@ public class Graphic {
     erase.setColor(Color.BLACK);
     for(var entity : entityList) {
     	erase.fill(new Rectangle2D.Float(shiftX(entity.position().x), shiftY(entity.position().y)-4, imgSize, imgSize+4));
-    	printTile(grid[entity.position().x][entity.position().y], erase);
-    	printTile(grid[entity.position().x][entity.position().y-1], erase);
+    	//printTile(grid[entity.position().x][entity.position().y], erase);
+    	//printTile(grid[entity.position().x][entity.position().y-1], erase);
 		}
     
 	}
