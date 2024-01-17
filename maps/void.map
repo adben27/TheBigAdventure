@@ -1,0 +1,27 @@
+[grid]
+    size: (22 x 22)
+    encodings : WALL(W) PILLAR(P) DOOR(D)
+    data: """
+WWWWWWWWWWWWWWWWWWWWWW
+W                    W
+W                    W
+W                    W
+W                    W
+W                    W
+W                    W
+W                    W
+W                    W
+W                    W
+W                    W
+W                    W
+W                    W
+W                    W
+W                    W
+W                    W
+W                    W
+W                    W
+W                    W
+W                    W
+W                    W
+WWWWWWWWWDWWWWWWWWWWWW
+"""
