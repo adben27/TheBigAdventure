@@ -2,21 +2,16 @@ package fr.uge.bigadventure.graphic;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-
-import javax.imageio.ImageIO;
 
 import fr.uge.bigadventure.Input;
 import fr.uge.bigadventure.analyser.Lexer;
 import fr.uge.bigadventure.analyser.Parser;
 import fr.uge.bigadventure.element.Behavior;
 import fr.uge.bigadventure.element.Enemy;
-import fr.uge.bigadventure.element.Obstacle;
 import fr.uge.bigadventure.element.Player;
 import fr.umlv.zen5.Application;
 import fr.umlv.zen5.Event;
@@ -26,24 +21,7 @@ public class Main {
   
   public static void main(String[] args) throws IOException {
   	
-  	var folderPath = Paths.get("img/");
-  	Files.walk(folderPath)
-  		.filter(path -> path.toString().endsWith(".png"))
-    	.forEach(imagePath -> {
-    		var imageName = imagePath.toString();
-    		System.out.println("IMG path : " + imageName);
-        BufferedImage image;
-    		try(var input = Main.class.getResourceAsStream(imageName)) {
-					image = ImageIO.read(input);
-					imageName = imageName.substring(4, imageName.length()-4).replace('\\', '/');
-					if (imageName.startsWith("obstacle/")) {
-						Obstacle.obstacleSet.add(imageName);
-					}
-	        Graphic.skinMap.putIfAbsent(imageName, image);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-    	});
+  	Graphic.loadImage();
   	
   	var baba = new Player("baba", "pnj/baba", 20, new Point(1, 1));
   	var keke = new Enemy("keke", "pnj/keke", 20, new Point(10, 10), 5, Behavior.STROLL);
