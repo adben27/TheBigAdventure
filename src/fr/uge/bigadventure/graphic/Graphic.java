@@ -4,12 +4,18 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import javax.imageio.ImageIO;
+
 import fr.uge.bigadventure.element.Entity;
 import fr.uge.bigadventure.element.GridElement;
+import fr.uge.bigadventure.element.Obstacle;
 import fr.umlv.zen5.ScreenInfo;
 
 public class Graphic {
@@ -37,6 +43,26 @@ public class Graphic {
     sizeY = grid[0].length;
   }
 	
+	public static void loadImage() throws IOException {
+		var folderPath = Paths.get("img/");
+  	Files.walk(folderPath)
+  		.filter(path -> path.toString().endsWith(".png"))
+    	.forEach(imagePath -> {
+    		var imageName = imagePath.toString();
+    		System.out.println("IMG path : " + imageName);
+        BufferedImage image;
+    		try(var input = Main.class.getResourceAsStream(imageName)) {
+					image = ImageIO.read(input);
+					imageName = imageName.substring(4, imageName.length()-4).replace('\\', '/');
+					if (imageName.startsWith("obstacle/")) {
+						Obstacle.obstacleSet.add(imageName);
+					}
+	        Graphic.skinMap.putIfAbsent(imageName, image);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+    	});
+	}
 	
 	/** Transform a grid coordinate on the horizontal axis to an adapted screen coordinate
 	 * 
