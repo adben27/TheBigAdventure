@@ -23,7 +23,8 @@ public final class Friend implements Entity  {
 		this.initialHealth = health;
 		this.position = position;
 	}
-	
+
+	@Override
 	public String name() {
 		return name;
 	}

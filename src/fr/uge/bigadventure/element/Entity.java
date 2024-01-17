@@ -4,7 +4,8 @@ import java.awt.Point;
 import java.util.Objects;
 
 public sealed interface Entity extends Element permits Player, Enemy, Friend {
-	
+
+	String name();
 	Point position();
 	String skin();
 	int health();

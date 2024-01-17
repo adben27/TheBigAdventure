@@ -33,6 +33,9 @@ public class Lexer {
       if (start != -1) {
         var end = matcher.end(group);
         var content = text.substring(start, end);
+        if(TOKENS.get(group - 1) == Token.QUOTE) {
+        	lineNo += content.split("\n", -1).length - 1;
+        }
         if(TOKENS.get(group - 1) == Token.NEWLINE) {
         	lineNo++;
         	return nextResult();

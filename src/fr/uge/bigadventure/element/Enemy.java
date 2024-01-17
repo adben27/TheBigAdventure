@@ -32,7 +32,8 @@ public final class Enemy implements Entity  {
 		this.damage = damage;
 		this.behavior = behavior;
 	}
-	
+
+	@Override
 	public String name() {
 		return name;
 	}

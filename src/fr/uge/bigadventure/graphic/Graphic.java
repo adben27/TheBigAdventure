@@ -145,7 +145,8 @@ public class Graphic {
 			draw.setColor(Color.RED);
 			draw.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, entity.health(), 4));
 			draw.drawImage(skinMap.get(entity.skin()), shiftX(entity.position().x), shiftY(entity.position().y), null);
-			// texte à mettre en bas aussi
+			draw.setColor(Color.WHITE);
+			draw.drawString(entity.name(), shiftX(entity.position().x), shiftY(entity.position().y) + 30);
 		}
 	}
 	

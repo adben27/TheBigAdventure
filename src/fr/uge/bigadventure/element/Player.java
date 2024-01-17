@@ -24,6 +24,7 @@ public final class Player implements Entity {
 		this.position = position;
 	}
 
+	@Override
 	public String name() {
 		return name;
 	}

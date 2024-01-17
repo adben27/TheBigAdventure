@@ -36,13 +36,20 @@ public class Parser {
 	private static final Pattern ELEMENT_INT = Pattern.compile(":(\\d+)");
 	private static final Pattern ELEMENT_ZONE = Pattern.compile(":\\((\\d+),(\\d+)\\)\\((\\d+)x(\\d+)\\)");
 
+	/** Gives an error message that indicates the line of the error while parsing 
+	 * 
+	 * @param result the result from which to extract the line number
+	 * @param message the error message to be followed by the line number
+	 * @return a concatenated String of error message and line number
+	 */
 	private static String lineError(Result result ,String message) {
 		return message + " at line " + result.lineNo();
 	}
 	
 	/** The general method to parse a .map file
 	 * It calls sub-methods depending of what the iterator on the file finds.
-	 * 
+	 * @param lexer The lexer corresponding to the .map file
+	 * @return A GameMap containing the grid and the list of Element
 	 */
 	public static GameMap parse(Lexer lexer) {
 		Objects.requireNonNull(lexer);
@@ -60,9 +67,10 @@ public class Parser {
 		return gameMap;
 	}
 
-	/** Redirects the parsing to the dedicated parsing method depending of the identifier
+	/** Parses the grid section of a .map
 	 * 
-	 * @param iterator The iterator corresponding to the .map file
+	 * @param lexer The lexer corresponding to the .map file
+	 * @return The grid of Obstacle or Decoration parsed 
 	 */
 	private static GridElement[][] parseGrid(Lexer lexer) {
 		Objects.requireNonNull(lexer);		
@@ -81,9 +89,9 @@ public class Parser {
     return grid;
 	}
 
-	/** Parses the main section of a .map file
+	/** Parses the size line of a .map file
 	 * 
-	 * @param iterator The iterator corresponding to the .map file
+	 * @param lexer The lexer corresponding to the .map file
 	 * @return A point with width of the grid as x and height of the grid as y
 	 */
 	private static Point parseMapSize(Lexer lexer) {
@@ -102,10 +110,10 @@ public class Parser {
 		return new Point(width, height);	
 	}
 	
-	/** Parses the encodings section of a .map file
+	/** Parses the encodings line of a .map file
 	 * 
-	 * @param iterator The iterator corresponding to the .map file
-	 * @return A map associating a character with a skin
+	 * @param lexer The lexer corresponding to the .map file
+	 * @return A map associating a character with a skin partial path
 	 */
 	private static HashMap<Character, String> parseMapEncodings(Lexer lexer) {	
 		Objects.requireNonNull(lexer);
@@ -134,7 +142,7 @@ public class Parser {
 	
 	/** Parses the data section of a .map file
 	 * 
-	 * @param iterator The iterator corresponding to the .map file
+	 * @param lexer The lexer corresponding to the .map file
 	 * @return A 2D Array of Obstacle and Decoration
 	 */
 	private static GridElement[][] parseMapData(Result quote, Point size, HashMap<Character, String> encodings) {
@@ -169,14 +177,15 @@ public class Parser {
 				column++;	
 			}
 		}
-		for(var row : grid) {
-			for(var element : row) {
-				System.out.println(element);
-			}
-		}
 		return grid;
 	}
 
+	/** Parses an element of a .map file
+	 * 
+	 * @param grid The grid parsed via the .map file
+	 * @param lexer The lexer corresponding to the .map file
+	 * @return An Element to be added to the list of Element
+	 */
 	private static Element parseElement(GridElement[][] grid, Lexer lexer) {
 		Objects.requireNonNull(lexer);		
 		Result result;
@@ -229,16 +238,29 @@ public class Parser {
 		};
 	}
 	
+	/** Determine if an Item is a Weapon or just an InventoryItem. 
+	 * 
+	 * @param name The name of the item
+	 * @param skin The partial skin path of the item
+	 * @param position The position in the grid of the item
+	 * @param damage The damage : zero or less for an inventory item, else a weapon 
+	 * @return a Weapon or InventoryItem to be added to the list of Element
+	 */
 	private static Item parseItem(String name, String skin, Point position, int damage) {
 		Objects.requireNonNull(name);
 		Objects.requireNonNull(skin);
 		Objects.requireNonNull(position);
-		if(damage == 0) {
+		if(damage <= 0) {
 			return new InventoryItem(skin, position);
 		}
 		return new Weapon(name, skin, damage, position);
 	}
 	
+	/** Parses the name line of element section of a .map file
+	 * 
+	 * @param lexer The lexer corresponding to the .map file
+	 * @return a String containing the name parsed
+	 */
 	private static String parseElementName(Lexer lexer) {
 		Objects.requireNonNull(lexer);
 		var propertyBuilder = new StringBuilder();
@@ -251,7 +273,12 @@ public class Parser {
 		}
 		return m.group(1);
 	}
-	
+
+	/** Parses a line of element section of a .map file that takes a boolean as argument
+	 * 
+	 * @param lexer The lexer corresponding to the .map file
+	 * @return a parsed boolean
+	 */
 	private static boolean parseElementBool(Lexer lexer) {
 		Objects.requireNonNull(lexer);
 		var propertyBuilder = new StringBuilder();
@@ -264,7 +291,12 @@ public class Parser {
 		}
 		return Boolean.parseBoolean(m.group(1));
 	}
-	
+
+	/** Parses the position line of the element section of a .map file
+	 * 
+	 * @param lexer The lexer corresponding to the .map file
+	 * @return a point with the coordinates of the position in argument
+	 */
 	private static Point parseElementPosition(Lexer lexer) {
 		Objects.requireNonNull(lexer);
 		var propertyBuilder = new StringBuilder();
@@ -278,7 +310,12 @@ public class Parser {
 		}
 		return new Point(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)));	
 	}
-	
+
+	/** Parses a line of element section of a .map file that takes an int as argument
+	 * 
+	 * @param lexer The lexer corresponding to the .map file
+	 * @return a parsed int
+	 */
 	private static int parseElementInt(Lexer lexer) {
 		Objects.requireNonNull(lexer);
 		var propertyBuilder = new StringBuilder();
@@ -292,6 +329,11 @@ public class Parser {
 		return Integer.parseInt(m.group(1));
 	}
 
+	/** Parses the kind line of element section of a .map file
+	 * 
+	 * @param lexer The lexer corresponding to the .map file
+	 * @return a Kind, that is an enum value
+	 */
 	private static Kind parseElementKind(Lexer lexer) {
 		Objects.requireNonNull(lexer);
 		var propertyBuilder = new StringBuilder();
@@ -311,6 +353,11 @@ public class Parser {
 		};
 	}
 
+	/** Parses the behavior line of element section of a .map file
+	 * 
+	 * @param lexer The lexer corresponding to the .map file
+	 * @return a Behavior, that is an enum value
+	 */
 	private static Behavior parseElementBehavior(Lexer lexer) {
 		Objects.requireNonNull(lexer);
 		var propertyBuilder = new StringBuilder();
@@ -329,6 +376,11 @@ public class Parser {
 		};
 	}
 	
+	/** Parses the zone line of element section of a .map file
+	 * 
+	 * @param lexer The lexer corresponding to the .map file
+	 * @return a two Point list, that contains the top left and the bottom right point of the zone.
+	 */
 	private static List<Point> parseElementZone(Lexer lexer) {
 		Objects.requireNonNull(lexer);
 		var propertyBuilder = new StringBuilder();
@@ -352,11 +404,11 @@ public class Parser {
     var path = Path.of("maps/big.map");
     var text = Files.readString(path);
     var lexer = new Lexer(text);
-    parse(lexer);
-//    Result result;
-//    while((result = lexer.nextResult()) != null) {
-//      System.out.println(result);
-//    }
+//    parse(lexer);
+    Result result;
+    while((result = lexer.nextResult()) != null) {
+      System.out.println(result);
+    }
   }
 	
     
