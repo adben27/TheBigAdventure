@@ -3,7 +3,7 @@ package fr.uge.bigadventure.element;
 import java.awt.Point;
 import java.util.Objects;
 
-public sealed interface Entity extends Element permits Player, Enemy {
+public sealed interface Entity extends Element permits Player, Enemy, Friend {
 	
 	Point position();
 	String skin();

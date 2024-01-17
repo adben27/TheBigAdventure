@@ -10,6 +10,7 @@ import java.util.List;
 import fr.uge.bigadventure.Input;
 import fr.uge.bigadventure.analyser.Lexer;
 import fr.uge.bigadventure.analyser.Parser;
+import fr.uge.bigadventure.element.Behavior;
 import fr.uge.bigadventure.element.Enemy;
 import fr.uge.bigadventure.element.Player;
 import fr.umlv.zen5.Application;
@@ -22,14 +23,15 @@ public class Main {
   	
   	Graphic.loadImage();
   	
-  	var baba = new Player("baba", "pnj/baba", 20, new Point(10, 10));
-  	var keke = new Enemy("keke", "pnj/keke", 20, new Point(2, 3), 5);
   	var entityList = List.of(baba, keke);
 
     var path = Path.of("maps/scroll.map");
     var text = Files.readString(path);
     var lexer = new Lexer(text);
-    var grid = Parser.parse(lexer);  	
+    var gameMap = Parser.parse(lexer);
+    var grid = gameMap.grid();
+    
+    System.out.println(grid[0][0].toString());
 
     Application.run(Color.BLACK, context -> {
       

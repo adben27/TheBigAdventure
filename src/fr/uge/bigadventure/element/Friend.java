@@ -3,28 +3,23 @@ package fr.uge.bigadventure.element;
 import java.awt.Point;
 import java.util.Objects;
 
-public final class Enemy implements Entity  {
+public final class Friend implements Entity  {
 	private final String name;
 	private final String skin;
 	public int health;
 	public final Point position;
-	private final int damage;
-	private final Behavior behavior;
 	
-	public Enemy(String name, String skin, int health, Point position, int damage, Behavior behavior) {
+	public Friend(String name, String skin, int health, Point position) {
 		Objects.requireNonNull(name);
 		Objects.requireNonNull(skin);
 		Objects.requireNonNull(position);
-		Objects.requireNonNull(behavior);
-		if(health <= 0 || damage <= 0) {
-			throw new IllegalArgumentException("health or damage can't be zero or less");
+		if(health <= 0) {
+			throw new IllegalArgumentException("health can't be zero or less");
 		}
 		this.name = name;
 		this.skin = skin;
 		this.health = health;
 		this.position = position;
-		this.damage = damage;
-		this.behavior = behavior;
 	}
 	
 	public String name() {
@@ -44,14 +39,6 @@ public final class Enemy implements Entity  {
 	@Override
 	public Point position() {
 		return position;
-	}
-	
-	public int damage() {
-		return damage;
-	}
-
-	public Behavior behavior() {
-		return behavior;
 	}
 	
 	@Override
