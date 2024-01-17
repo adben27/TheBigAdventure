@@ -1,6 +1,8 @@
 package fr.uge.bigadventure.graphic;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -49,7 +51,6 @@ public class Graphic {
   		.filter(path -> path.toString().endsWith(".png"))
     	.forEach(imagePath -> {
     		var imageName = imagePath.toString();
-    		System.out.println("IMG path : " + imageName);
         BufferedImage image;
     		try(var input = Main.class.getResourceAsStream(imageName)) {
 					image = ImageIO.read(input);
@@ -103,29 +104,37 @@ public class Graphic {
 		}
 	}
 	
-	public static void eraseEntity(Graphics2D move, GridElement[][] grid, List<Entity> entityList) {
-		Objects.requireNonNull(move);
+	public static void eraseEntity(Graphics2D erase, GridElement[][] grid, List<Entity> entityList) {
+		Objects.requireNonNull(erase);
 		Objects.requireNonNull(grid);
 		Objects.requireNonNull(entityList);
-    move.setColor(Color.BLACK);
+    erase.setColor(Color.BLACK);
     for(var entity : entityList) {
-    	move.fill(new Rectangle2D.Float(shiftX(entity.position().x), shiftY(entity.position().y)-4, imgSize, imgSize+4));
-    	printTile(grid[entity.position().x][entity.position().y], move);
-    	printTile(grid[entity.position().x][entity.position().y-1], move);
+    	erase.fill(new Rectangle2D.Float(shiftX(entity.position().x), shiftY(entity.position().y)-4, imgSize, imgSize+4));
+    	printTile(grid[entity.position().x][entity.position().y], erase);
+    	printTile(grid[entity.position().x][entity.position().y-1], erase);
 		}
     
 	}
 	
-	public static void drawEntity(Graphics2D move, List<Entity> entityList) {
-		Objects.requireNonNull(move);
+	public static void drawEntity(Graphics2D draw, List<Entity> entityList) {
+		Objects.requireNonNull(draw);
 		Objects.requireNonNull(entityList);
 		for(var entity : entityList) {
-			move.setColor(Color.GRAY);
-			move.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, 20, 4));
-			move.setColor(Color.RED);
-			move.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, entity.health(), 4));
-			move.drawImage(skinMap.get(entity.skin()), shiftX(entity.position().x), shiftY(entity.position().y), null);
+			draw.setColor(Color.GRAY);
+			draw.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, 20, 4));
+			draw.setColor(Color.RED);
+			draw.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, entity.health(), 4));
+			draw.drawImage(skinMap.get(entity.skin()), shiftX(entity.position().x), shiftY(entity.position().y), null);
 		}
+	}
+	
+	public static void drawGameOver(Graphics2D over) {
+		over.setColor(Color.BLACK);
+		over.fill(new Rectangle2D.Float(0, 0, width, height));
+		over.setColor(Color.RED);
+		over.setFont(new Font("Game Over", 1, 50));
+		over.drawString("GAME OVER", width/2 - 150, height/2);
 	}
 }
 

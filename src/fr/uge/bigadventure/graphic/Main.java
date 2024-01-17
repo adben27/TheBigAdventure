@@ -24,7 +24,11 @@ public class Main {
   	Graphic.loadImage();
   	
   	var baba = new Player("baba", "pnj/baba", 20, new Point(1, 1));
+<<<<<<< HEAD
   	var keke = new Enemy("keke", "pnj/keke", 20, new Point(10, 10), 5, Behavior.STROLL);
+=======
+  	var keke = new Enemy("keke", "pnj/keke", 20, new Point(2, 3), 5);
+>>>>>>> branch 'main' of git@gitlab.com:adben27/TheBigAdventure.git
   	var entityList = List.of(baba, keke);
 
     var path = Path.of("maps/void.map");
@@ -51,13 +55,7 @@ public class Main {
         
         context.renderFrame(erase ->{Graphic.eraseEntity(erase, grid, entityList);});
         
-				Input.keySwitch(Input.randomKey(), grid, keke);
-       	if (keke.position.x == baba.position().x && keke.position.y == baba.position().y) {
-       		if (baba.reduceHealth(5)) {
-       			context.exit(0);
-       			return;
-       		}
-        }
+				//Input.keySwitch(Input.randomKey(), grid, keke);
         if (event != null) {
         	Action action = event.getAction();
         	if (action == Action.POINTER_DOWN || action == Action.POINTER_UP) {
@@ -71,10 +69,17 @@ public class Main {
         }
         
         context.renderFrame(draw -> {Graphic.drawEntity(draw, entityList);});
-      	if (baba.health() <= 0) {
-      		context.exit(0);
-          return;
-      	}
+        
+       	if (keke.position.x == baba.position().x && keke.position.y == baba.position().y) {
+       		if (baba.reduceHealth(5)) {
+            context.renderFrame(over -> {Graphic.drawGameOver(over);});
+          	while (event == null || event.getAction() != Action.POINTER_UP) {
+              	event = context.pollOrWaitEvent(10000);
+          	}
+       			context.exit(0);
+       			return;
+       		}
+        }
 
       	while (timeBetweenEvents <= 300) {
       		if (event != null && event.getAction() != Action.KEY_RELEASED) {
