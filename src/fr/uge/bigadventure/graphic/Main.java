@@ -25,7 +25,7 @@ public class Main {
   	
   	Graphic.loadImage();
 
-    var path = Path.of("maps/maze.map");
+    var path = Path.of("maps/big.map");
 
     var text = Files.readString(path);
     var lexer = new Lexer(text);
