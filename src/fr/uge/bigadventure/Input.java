@@ -20,6 +20,12 @@ public class Input {
 		return !Obstacle.obstacleSet.contains(tile.skin());
 	}
 	
+	/** Do an action on an Entity depending on the key pressed
+	 * 
+	 * @param key The key pressed by the user
+	 * @param grid The map of the game
+	 * @param entity The Entity who have to do an action
+	 */
 	public static void keySwitch(KeyboardKey key, GridElement[][] grid, Entity entity) {
 		Objects.requireNonNull(key);
 		Objects.requireNonNull(grid);
@@ -45,6 +51,10 @@ public class Input {
 		Entity.entityMove(entity, x, y);
 	}
 	
+	/** Choose a random direction key
+	 * 
+	 * @return The KeybordKey of the direction 
+	 */
 	public static KeyboardKey randomKey(){
     Random r = new Random();
    	var n = r.nextInt(4);

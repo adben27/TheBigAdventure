@@ -25,7 +25,7 @@ public class Main {
   	
   	Graphic.loadImage();
 
-    var path = Path.of("maps/scroll.map");
+    var path = Path.of("maps/maze.map");
 
     var text = Files.readString(path);
     var lexer = new Lexer(text);
@@ -78,9 +78,9 @@ public class Main {
         
         	if (action == Action.KEY_PRESSED) {
 						Input.keySwitch(event.getKey(), grid, entityList.get(0));
-            context.renderFrame(map -> { // mise en place de l'écran de depart
-            	Graphic.printMap(map, grid, entityList.get(0));
-            });
+						if (Graphic.scrolling()) {
+							context.renderFrame(map -> {Graphic.printMap(map, grid, entityList.get(0));});
+						}
         	}
         }
         

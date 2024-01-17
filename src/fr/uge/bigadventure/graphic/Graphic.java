@@ -104,12 +104,12 @@ public class Graphic {
 		Objects.requireNonNull(map);
 		map.setColor(Color.BLACK);
     map.fill(new Rectangle2D.Float(0, 0, width, height));
-    int xStart = Math.min(Math.max(0, baba.position().x - nbCasesX/2), sizeX - nbCasesX);
-    int yStart = Math.min(Math.max(0, baba.position().y - nbCasesY/2), sizeY - nbCasesY);
+    int xStart = Math.min(Math.max(0, baba.position().x - nbCasesX/2), Math.max(0,sizeX - nbCasesX));
+    int yStart = Math.min(Math.max(0, baba.position().y - nbCasesY/2), Math.max(0,sizeY - nbCasesY));
     int x = 0;
     int y = 0;
-    for(int i = xStart; i < xStart + nbCasesX; i++) {
-    	for(int j = yStart; j < yStart + nbCasesY; j++) {
+    for(int i = xStart; i < Math.min(xStart + nbCasesX, sizeX); i++) {
+    	for(int j = yStart; j < Math.min(yStart + nbCasesY, sizeY); j++) {
     		System.out.println("i : " + x + " j : " + y);
     		printTile(grid[i][j], map, x, y);
     		y++;
@@ -119,6 +119,10 @@ public class Graphic {
     }
 	}
 	
+	public static boolean scrolling() {
+		return sizeX > nbCasesX || sizeY > nbCasesY;
+	}
+	
 	public static void eraseEntity(Graphics2D erase, GridElement[][] grid, List<Entity> entityList) {
 		Objects.requireNonNull(erase);
 		Objects.requireNonNull(grid);
@@ -126,8 +130,8 @@ public class Graphic {
     erase.setColor(Color.BLACK);
     for(var entity : entityList) {
     	erase.fill(new Rectangle2D.Float(shiftX(entity.position().x), shiftY(entity.position().y)-4, imgSize, imgSize+4));
-    	//printTile(grid[entity.position().x][entity.position().y], erase);
-    	//printTile(grid[entity.position().x][entity.position().y-1], erase);
+    	printTile(grid[entity.position().x][entity.position().y], erase, entity.position().x, entity.position().y);
+    	printTile(grid[entity.position().x][entity.position().y-1], erase, entity.position().x, entity.position().y-1);
 		}
     
 	}
@@ -146,6 +150,7 @@ public class Graphic {
 	}
 	
 	public static void drawGameOver(Graphics2D over) {
+		Objects.requireNonNull(over);
 		over.setColor(Color.BLACK);
 		over.fill(new Rectangle2D.Float(0, 0, width, height));
 		over.setColor(Color.RED);

@@ -30,7 +30,7 @@ WWWWWWWWWDWWWWWWWWWWWW
 	name: John
 	player: true
 	skin: BABA
-	position: (1,1)
+	position: (10,1)
 	health: 10
 
 [element]
