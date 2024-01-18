@@ -1,7 +1,40 @@
-<project name="TheBigAdventure" >
-	<target name="init">
-    </target>
-    <target name="clean">
-        <delete dir="classes"/>
-    </target>
+<?xml version="1.0"?>
+	<project name="TheBigAdventure" default="jar">
+		
+		<target name="jar" depends="compile">
+			<jar destfile="thebigadventure.jar" basedir="classes">	
+				<manifest>
+					<attribute name="Main-Class" value="fr.uge.bigadventure.graphic.Main"/>
+				</manifest>
+				<fileset dir="zenSource"/>
+				<fileset dir="src/fr/uge/bigadventure/graphic">
+					<include name ="img/**"/>
+				</fileset>
+			</jar>
+		</target>
+		
+	
+		<target name="compile" depends="clean">
+			<javac srcdir="src" destdir="classes/">
+				<classpath>
+			    	<pathelement path="lib/zen5.jar"/>
+				</classpath>
+				<src path="src/fr/uge/bigadventure" />
+				<src path="src/fr/uge/bigadventure/analyser" />
+				<src path="src/fr/uge/bigadventure/element" />
+				<src path="src/fr/uge/bigadventure/graphic" />
+			</javac>
+			<copy todir="classes/fr/uge/bigadventure/graphic">
+				<fileset dir="src/fr/uge/bigadventure/graphic">
+					<include name ="img/**"/>
+				</fileset>
+			</copy>	
+		</target>
+		
+		<target name="clean">
+			<delete includeemptydirs="true">
+				<fileset dir="classes" includes="**/*"/>
+			</delete>
+			<delete file="thebigadventure.jar" />
+		</target>
 </project>

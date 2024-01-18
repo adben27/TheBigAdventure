@@ -49,18 +49,19 @@ public class Main {
 
   if(levelFileName != null) {
     if (validateOption) {
-    	var path = Path.of("maps/" + levelFileName);
+    	var path = Path.of(levelFileName);
     	var text = Files.readString(path);
     	var lexer = new Lexer(text);
     	Parser.parse(lexer);
+    	return;
     }
-   } else {
-    levelFileName = "scroll.map";
-   }
+  } else {
+    levelFileName = "maps/scroll.map";
+  }
   	
-  	Graphic.loadImage();
+  Graphic.loadImage();
 
-    var path = Path.of("maps/" + levelFileName);
+    var path = Path.of(levelFileName);
     var text = Files.readString(path);
     var lexer = new Lexer(text);
     var gameMap = Parser.parse(lexer);
@@ -74,7 +75,7 @@ public class Main {
     
     for(var element : elementList) {
     	switch(element) {
-    		case Player listPlayer -> entityList.addFirst(listPlayer); // le player est mis en tête de liste, car il ne doit y en avoir qu'un seul
+    		case Player listPlayer -> entityList.addFirst(listPlayer);
     		case Enemy listEnemy -> {
     			enemyList.add(listEnemy);
     			entityList.add(listEnemy);
