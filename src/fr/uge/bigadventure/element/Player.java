@@ -11,7 +11,7 @@ public final class Player implements Entity {
 	private int health;
 	private final int initialHealth;
 	private final Point position;
-	private Weapon currentweapon;
+	private Weapon currentWeapon;
 	private ArrayList<Element> inventory;
 
 	/** Creates a Player
@@ -33,18 +33,19 @@ public final class Player implements Entity {
 		this.initialHealth = health;
 		this.health = health;
 		this.position = position;
-		this.currentweapon = null;
 		this.inventory = new ArrayList<Element>();
 	}
 	
 	public static void loot(Player baba, List<Weapon> weaponList) {
+		Objects.requireNonNull(baba);
+		Objects.requireNonNull(weaponList);
 		for (var weapon : weaponList) {
 			if (baba.position().x == weapon.position().x && baba.position().y == weapon.position().y) {
-				baba.currentweapon = weapon;
+				baba.currentWeapon = weapon;
 				break;
 			}
 		}
-		weaponList.remove(baba.currentweapon);
+		weaponList.remove(baba.currentWeapon);
 	}
 
 	@Override
@@ -72,6 +73,10 @@ public final class Player implements Entity {
 		return position;
 	}
 
+	public Weapon currentWeapon() {
+		return currentWeapon;
+	}
+	
 	public ArrayList<Element> inventory() {
 		return inventory;
 	}

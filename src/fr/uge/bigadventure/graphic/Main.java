@@ -1,6 +1,7 @@
 package fr.uge.bigadventure.graphic;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,6 +24,8 @@ import fr.umlv.zen5.Event.Action;
 
 public class Main {
 	private static Player player;
+	private static Point lastMove;
+	private static boolean hit = false;
   public static void main(String[] args) throws IOException {
   
     /*if (args.length == 0) {
@@ -104,15 +107,20 @@ public class Main {
       	Graphic.drawEntity(map, entityList);
       });
       
-      KeyboardKey lastMove = null;
       for(;;) {
         Event event = context.pollOrWaitEvent(100);
         long startEvent = System.currentTimeMillis();
         long timeBetweenEvents = 0;
         
-        context.renderFrame(erase ->{Graphic.eraseEntity(erase, grid, entityList);});
+        context.renderFrame(erase ->{
+        	Graphic.eraseEntity(erase, grid, entityList);
+        	if (hit) {
+        		Graphic.eraseHit(erase, grid, player, lastMove);
+        		hit = false;
+        	}
+        });
         
-				Input.keySwitch(Input.randomKey(), grid, enemyList.get(0));
+				//Input.keySwitch(Input.randomKey(), grid, enemyList.get(0));
         if (event != null) {
         	Action action = event.getAction();
         	if (action == Action.POINTER_DOWN || action == Action.POINTER_UP) {
@@ -126,19 +134,24 @@ public class Main {
 						if (saveMove != null) {
 							lastMove = saveMove;
 						}
-						if (Graphic.scrolling()) {
-							context.renderFrame(map -> {Graphic.printMap(map, grid, player);});
+						if (key == KeyboardKey.SPACE && player.currentWeapon() != null) {
+							hit = true;
+							Input.hit(lastMove, player, enemyList, entityList);
 						}
-						if (key == KeyboardKey.SPACE) {
-							Input.hit(lastMove, (Player)entityList.get(0), enemyList);
-						}
-						Player.loot((Player)entityList.get(0), weaponList);
+						Player.loot(player, weaponList);
         	}
         }
         
         context.renderFrame(draw -> {
+					if (Graphic.scrolling()) {
+						Graphic.printMap(draw, grid, player);
+					}
+					if (hit) {
+						Graphic.drawHit(draw, lastMove, player);
+					}
         	Graphic.drawEntity(draw, entityList);
         	Graphic.drawWeapon(draw, weaponList);
+        	
         });
         
         
@@ -156,8 +169,8 @@ public class Main {
              }
           }
         }
-       	
-      	while (timeBetweenEvents <= 200) {
+        
+      	while (timeBetweenEvents <= 300) {
       		if (event != null && event.getAction() != Action.KEY_RELEASED) {
           	event = context.pollEvent();
       		}

@@ -31,7 +31,7 @@ WWWWWWWWWDWWWWWWWWWWWW
 	player: true
 	skin: BABA
 	position: (10,1)
-	health: 10
+	health: 25
 
 [element]
 	name: Durendale
@@ -43,12 +43,12 @@ WWWWWWWWWDWWWWWWWWWWWW
 [element]
 	name: Waldo
 	skin: CRAB
-	position: (1, 2)
+	position: (2, 2)
 	kind: enemy
-	health: 10
+	health: 50
 	zone: (1, 1) (5 x 3)
 	behavior: agressive
-	damage: 10
+	damage: 1
 
 [element]
 	name: Gram

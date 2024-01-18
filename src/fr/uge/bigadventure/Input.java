@@ -1,5 +1,6 @@
 package fr.uge.bigadventure;
 
+import java.awt.Point;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -18,7 +19,7 @@ public class Input {
 	 * @param grid The map of the game
 	 * @param entity The Entity who have to do an action
 	 */
-	public static KeyboardKey keySwitch(KeyboardKey key, GridElement[][] grid, Entity entity) {
+	public static Point keySwitch(KeyboardKey key, GridElement[][] grid, Entity entity) {
 		Objects.requireNonNull(key);
 		Objects.requireNonNull(grid);
 		Objects.requireNonNull(entity);
@@ -41,7 +42,7 @@ public class Input {
   			return null;
   	}
 		Entity.entityMove(entity, x, y);
-		return key;
+		return new Point(x,y);
 	}
 	
 	/** Choose a random direction key
@@ -60,23 +61,20 @@ public class Input {
   	};
 	}
 	
-	public static void hit(KeyboardKey lastMove, Player baba, List<Enemy> weaponList) {
-		switch (lastMove) {
-		case UP: {
-			break;
+	public static void hit(Point lastMove, Player baba, List<Enemy> enemyList, List<Entity> entityList) {
+		Objects.requireNonNull(lastMove);
+		Objects.requireNonNull(baba);
+		Objects.requireNonNull(enemyList);
+		var hit1 = new Point(baba.position().x + lastMove.x, baba.position().y + lastMove.y);
+		var hit2 = new Point(baba.position().x + lastMove.x*2, baba.position().y + lastMove.y*2);
+		for (var enemy : enemyList) {
+			if (enemy.position().x == hit1.x && enemy.position().y == hit1.y || enemy.position().x == hit2.x && enemy.position().y == hit2.y) {
+				if(enemy.reduceHealth(baba.currentWeapon().damage())){
+					enemyList.remove(enemy);
+					entityList.remove(enemy);
+					return;
+				}
+			}
 		}
-		case DOWN: {
-			break;
-		}
-		case LEFT: {
-			break;
-		}
-		case RIGHT: {
-			break;
-		}
-		default:
-			break;
-	}
-		System.out.println("YES");
 	}
 }

@@ -1,8 +1,10 @@
 package fr.uge.bigadventure.graphic;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -149,11 +151,10 @@ public class Graphic {
 		Objects.requireNonNull(erase);
 		Objects.requireNonNull(grid);
 		Objects.requireNonNull(entityList);
-    erase.setColor(Color.BLACK);
     for(var entity : entityList) {
     	int shiftName = erase.getFontMetrics(erase.getFont()).stringWidth(entity.name())/2 - imgSize/2;
-    	erase.fill(new Rectangle2D.Float(shiftX(entity.position().x), shiftY(entity.position().y)-4, imgSize, imgSize+4));
-    	erase.fill(new Rectangle2D.Float(shiftX(entity.position().x) - shiftName, shiftY(entity.position().y+1), shiftName*2 + imgSize, 12));
+    	erase.clearRect(shiftX(entity.position().x), shiftY(entity.position().y)-4, imgSize, imgSize+4);
+    	erase.clearRect(shiftX(entity.position().x) - shiftName, shiftY(entity.position().y+1), shiftName*2 + imgSize, 12);
     	printTile(grid[entity.position().x][entity.position().y], erase, entity.position().x, entity.position().y);
     	printTile(grid[entity.position().x][entity.position().y-1], erase, entity.position().x, entity.position().y-1);
     	for (int i = entity.position().x - shiftName/imgSize - 1; i <= entity.position().x + shiftName/imgSize + 1; i++) {
@@ -174,9 +175,10 @@ public class Graphic {
 		Objects.requireNonNull(entityList);
 		for(var entity : entityList) {
 			draw.setColor(Color.GRAY);
-			draw.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, entity.initialHealth(), 4));
+			draw.fill(new Rectangle2D.Float(shiftX(entity.position().x), shiftY(entity.position().y)-4, 24, 4));
 			draw.setColor(Color.RED);
-			draw.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, entity.health(), 4));
+			float percentHealth = (float) entity.health()/entity.initialHealth();
+			draw.fill(new Rectangle2D.Float(shiftX(entity.position().x), shiftY(entity.position().y)-4, (int)(percentHealth*24), 4));
 			draw.drawImage(skinMap.get(entity.skin()), shiftX(entity.position().x), shiftY(entity.position().y), null);
 			draw.setColor(Color.WHITE);
 			int shiftNameX = draw.getFontMetrics(draw.getFont()).stringWidth(entity.name())/2 - imgSize/2;
@@ -202,9 +204,45 @@ public class Graphic {
 	 * @param item The Graphics context
 	 */
 	public static void drawWeapon(Graphics2D item, List<Weapon> weaponList) {
+		Objects.requireNonNull(item);
+		Objects.requireNonNull(weaponList);
 		for (var weapon : weaponList) {
 			item.drawImage(skinMap.get(weapon.skin()), shiftX(weapon.position().x), shiftY(weapon.position().y), null);
 		}
+	}
+	
+	public static void eraseHit(Graphics2D erase, GridElement[][] grid, Player baba, Point hit) {
+		Objects.requireNonNull(erase);
+		Objects.requireNonNull(grid);
+		Objects.requireNonNull(baba);
+		Objects.requireNonNull(hit);
+		if (hit.x == 0) {
+			erase.clearRect(shiftX(baba.position().x), shiftY(baba.position().y - 2), imgSize, 5*imgSize);
+			for (int i = baba.position().y - 2; i <= baba.position().y + 2; i++) {
+    		if (i < 0 || i >= sizeX) {continue;}
+    		printTile(grid[baba.position().x][i], erase, baba.position().x, i);
+    	}
+		}
+		else {
+			erase.clearRect(shiftX(baba.position().x - 2), shiftY(baba.position().y), 5*imgSize, imgSize);
+			for (int i = baba.position().x - 2; i <= baba.position().x + 2; i++) {
+    		if (i < 0 || i >= sizeX) {continue;}
+    		printTile(grid[i][baba.position().y], erase, i, baba.position().y);
+    	}
+		}
+	}
+	
+	public static void drawHit(Graphics2D hit, Point lastMove, Player baba) {
+		Objects.requireNonNull(hit);
+		Objects.requireNonNull(lastMove);
+		Objects.requireNonNull(baba);
+		hit.setColor(Color.RED);
+		float alpha = 0.4f;
+		hit.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+		hit.fill(new Rectangle2D.Float(shiftX(baba.position().x + lastMove.x), shiftY(baba.position().y + lastMove.y), imgSize, imgSize));
+		hit.fill(new Rectangle2D.Float(shiftX(baba.position().x + lastMove.x*2), shiftY(baba.position().y + lastMove.y*2), imgSize, imgSize));
+		hit.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+		hit.drawImage(skinMap.get(baba.currentWeapon().skin()), shiftX(baba.position().x + lastMove.x), shiftY(baba.position().y + lastMove.y), null);
 	}
 }
 
