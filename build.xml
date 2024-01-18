@@ -6,7 +6,7 @@
 				<manifest>
 					<attribute name="Main-Class" value="fr.uge.bigadventure.graphic.Main"/>
 				</manifest>
-				<fileset dir="zenSource"/>
+				<zipfileset src="lib/zen5.jar"/>
 				<fileset dir="src/fr/uge/bigadventure/graphic">
 					<include name ="img/**"/>
 				</fileset>
