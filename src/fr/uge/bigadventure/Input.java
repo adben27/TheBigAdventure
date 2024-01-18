@@ -9,16 +9,6 @@ import fr.umlv.zen5.KeyboardKey;
 
 public class Input {
 	
-  /** Test if a tile is walkable
-	 * 
-	 * @param tile A tile in the map
-	 * @return true if is walkable, and false if not
-	 */
-	public static boolean isWalkable(GridElement tile) {
-		if (tile == null) {return true;}
-		return tile.isWalkable();
-	}
-	
 	/** Do an action on an Entity depending on the key pressed
 	 * 
 	 * @param key The key pressed by the user
@@ -32,16 +22,16 @@ public class Input {
 		int x = 0;
 		int y = 0;
 		switch (key) {
-  		case UP: {if (isWalkable(grid[entity.position().x][entity.position().y-1])) {y--;}
+  		case UP: {if (GridElement.isWalkable(grid[entity.position().x][entity.position().y-1])) {y--;}
   			break;
   		}
-  		case DOWN: {if (isWalkable(grid[entity.position().x][entity.position().y+1])) {y++;}
+  		case DOWN: {if (GridElement.isWalkable(grid[entity.position().x][entity.position().y+1])) {y++;}
   			break;
   		}
-  		case LEFT: {if (isWalkable(grid[entity.position().x-1][entity.position().y])) {x--;}
+  		case LEFT: {if (GridElement.isWalkable(grid[entity.position().x-1][entity.position().y])) {x--;}
   			break;
   		}
-  		case RIGHT: {if (isWalkable(grid[entity.position().x+1][entity.position().y])) {x++;}
+  		case RIGHT: {if (GridElement.isWalkable(grid[entity.position().x+1][entity.position().y])) {x++;}
   			break;
   		}
   		default:

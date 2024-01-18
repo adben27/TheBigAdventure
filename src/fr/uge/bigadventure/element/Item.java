@@ -1,5 +1,8 @@
 package fr.uge.bigadventure.element;
 
-public sealed interface Item extends Element permits InventoryItem, Weapon {
+import java.awt.Point;
 
+public sealed interface Item extends Element permits InventoryItem, Weapon {
+	String skin();
+	Point position();
 }

@@ -18,6 +18,16 @@ public sealed interface GridElement permits Decoration, Obstacle {
 	default boolean isWalkable() {
 		return true;
 	};
+		
+  /** Test if a tile is walkable
+	 * 
+	 * @param tile A tile in the map
+	 * @return true if is walkable, and false if not
+	 */
+	public static boolean isWalkable(GridElement tile) {
+		if (tile == null) {return true;}
+		return tile.isWalkable();
+	}
 	
 	/** Searches in the file system if this skin exists as an Obstacle or a Decoration
 	 * 

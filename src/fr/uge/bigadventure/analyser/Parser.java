@@ -199,7 +199,7 @@ public class Parser {
 			System.err.println(lineError(result, "Wrong format of [element] instruction"));
 		}
 		String name = null; String skin = null;
-		boolean player = false, phantomized; 
+		boolean player = false; //phantomized; 
 		Point position = null;
 		int health = 0, damage = 0;
 		Kind kind = null; Behavior behavior = null; List<Point> zone = null;
@@ -217,13 +217,13 @@ public class Parser {
       	case "zone" -> zone = parseElementZone(lexer);
       	case "behavior" -> behavior = parseElementBehavior(lexer);
       	case "damage" -> damage = parseElementInt(lexer);
-      	// case "text" ->
-      	// case "steal" ->
-      	// case "trade" ->
-      	// case "locked" ->
-      	// case "flow" ->
-      	case "phantomized" -> phantomized = parseElementBool(lexer);
-      	// case "teleport" ->
+      	case "text" -> System.err.println(lineError(result, "text not supported"));
+      	case "steal" -> System.err.println(lineError(result, "steal not supported"));
+      	case "trade" -> System.err.println(lineError(result, "trade not supported"));
+      	case "locked" -> System.err.println(lineError(result, "locked not supported"));
+      	case "flow" -> System.err.println(lineError(result, "flow not supported"));
+      	case "phantomized" -> System.err.println(lineError(result, "phantomized not supported")) ;
+      	case "teleport" -> System.err.println(lineError(result, "teleport not supported"));
       	
       };
 		}

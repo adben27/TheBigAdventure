@@ -23,43 +23,43 @@ public class Main {
   
   public static void main(String[] args) throws IOException {
   
-  /*if (args.length == 0) {
-    System.out.println("Usage: java -jar thebigadventure.jar 	--level <name.map> [--validate]");
-    return;
-  }*/
+    /*if (args.length == 0) {
+      System.out.println("Usage: java -jar thebigadventure.jar 	--level <name.map> [--validate]");
+      return;
+    }*/
 
-  String levelFileName = null;
-  boolean validateOption = false;
+    String levelFileName = null;
+    boolean validateOption = false;
 
-  for (int i = 0; i < args.length; i++) {
-    String arg = args[i];
+    for (int i = 0; i < args.length; i++) {
+      String arg = args[i];
 
-    if (arg.equals("--level")) {
-      if (i + 1 < args.length) {
-        levelFileName = args[i + 1];
-        i++;
-      } else {
-        System.err.println("Error: --level option requires a value");
+      if (arg.equals("--level")) {
+        if (i + 1 < args.length) {
+          levelFileName = args[i + 1];
+          i++;
+        } else {
+          System.err.println("Error: --level option requires a value");
+          return;
+        }
+      } else if (arg.equals("--validate")) {
+          validateOption = true;
+      }
+    }
+
+    if(levelFileName != null) {
+      if (validateOption) {
+        var path = Path.of(levelFileName);
+        var text = Files.readString(path);
+        var lexer = new Lexer(text);
+        Parser.parse(lexer);
         return;
       }
-    } else if (arg.equals("--validate")) {
-        validateOption = true;
+    } else {
+      levelFileName = "maps/adventure.map";
     }
-  }
-
-  if(levelFileName != null) {
-    if (validateOption) {
-    	var path = Path.of(levelFileName);
-    	var text = Files.readString(path);
-    	var lexer = new Lexer(text);
-    	Parser.parse(lexer);
-    	return;
-    }
-  } else {
-    levelFileName = "maps/scroll.map";
-  }
-  	
-  Graphic.loadImage();
+      
+    Graphic.loadImage();
 
     var path = Path.of(levelFileName);
     var text = Files.readString(path);
@@ -72,6 +72,7 @@ public class Main {
     
     var enemyList = new ArrayList<Enemy>();
     var entityList = new ArrayList<Entity>();
+    var weaponList = new ArrayList<Weapon>();
     
     for(var element : elementList) {
     	switch(element) {
@@ -81,7 +82,7 @@ public class Main {
     			entityList.add(listEnemy);
     		}
     		case Friend listFriend -> entityList.add(listFriend);
-    		case Weapon listWeapon -> Weapon.weaponList.add(listWeapon);
+    		case Weapon listWeapon -> weaponList.add(listWeapon);
     		case InventoryItem listInvItem -> invItemList.add(listInvItem);	
     	}
     }
@@ -120,7 +121,7 @@ public class Main {
         
         context.renderFrame(draw -> {
         	Graphic.drawEntity(draw, entityList);
-        	Graphic.drawWeapon(draw);
+        	Graphic.drawWeapon(draw, weaponList);
         });
         
         

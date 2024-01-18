@@ -16,7 +16,6 @@ import javax.imageio.ImageIO;
 
 import fr.uge.bigadventure.element.Entity;
 import fr.uge.bigadventure.element.GridElement;
-import fr.uge.bigadventure.element.Obstacle;
 import fr.uge.bigadventure.element.Weapon;
 import fr.umlv.zen5.ScreenInfo;
 
@@ -201,8 +200,8 @@ public class Graphic {
 	 * 
 	 * @param item The Graphics context
 	 */
-	public static void drawWeapon(Graphics2D item) {
-		for (var weapon : Weapon.weaponList) {
+	public static void drawWeapon(Graphics2D item, List<Weapon> weaponList) {
+		for (var weapon : weaponList) {
 			item.drawImage(skinMap.get(weapon.skin()), shiftX(weapon.position().x), shiftY(weapon.position().y), null);
 		}
 	}

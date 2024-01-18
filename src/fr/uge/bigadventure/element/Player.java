@@ -1,6 +1,7 @@
 package fr.uge.bigadventure.element;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public final class Player implements Entity {
@@ -9,6 +10,7 @@ public final class Player implements Entity {
 	private int health;
 	private final int initialHealth;
 	private final Point position;
+	private ArrayList<Element> inventory;
 
 	/** Creates a Player
 	 * 
@@ -29,6 +31,7 @@ public final class Player implements Entity {
 		this.initialHealth = health;
 		this.health = health;
 		this.position = position;
+		this.inventory = new ArrayList<Element>();
 	}
 
 	@Override
@@ -54,6 +57,10 @@ public final class Player implements Entity {
 	@Override
 	public Point position() {
 		return position;
+	}
+
+	public ArrayList<Element> inventory() {
+		return inventory;
 	}
 	
 	@Override

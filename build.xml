@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 	<project name="TheBigAdventure" default="jar">
 		
-		<target name="jar" depends="compile">
+		<target name="jar" depends="javadoc">
 			<jar destfile="thebigadventure.jar" basedir="classes">	
 				<manifest>
 					<attribute name="Main-Class" value="fr.uge.bigadventure.graphic.Main"/>
@@ -13,7 +13,15 @@
 			</jar>
 		</target>
 		
-	
+		<target name="javadoc" depends="compile">
+			<mkdir dir="docs/api"/>
+			<javadoc sourcepath="src" destdir="docs/api">
+				<classpath>
+					<pathelement path="lib/zen5.jar" />
+				</classpath>
+			</javadoc>
+		</target>
+		
 		<target name="compile" depends="clean">
 			<javac srcdir="src" destdir="classes/">
 				<classpath>
@@ -36,5 +44,6 @@
 				<fileset dir="classes" includes="**/*"/>
 			</delete>
 			<delete file="thebigadventure.jar" />
+			<delete dir="docs/api" />
 		</target>
 </project>
