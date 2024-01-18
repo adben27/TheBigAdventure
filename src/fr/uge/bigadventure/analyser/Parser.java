@@ -1,9 +1,6 @@
 package fr.uge.bigadventure.analyser;
 
 import java.awt.Point;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -234,10 +231,10 @@ public class Parser {
 			return new Player(name, skin, health, position);
 		}
 		return switch(kind) {			 
-			case Kind.FRIEND -> new Friend(name, "pnj/" + skin.toLowerCase(Locale.ROOT), health, position); 
-			case Kind.ENEMY -> new Enemy(name, "pnj/" + skin.toLowerCase(Locale.ROOT), health, position, zone, damage, behavior);
-			case Kind.ITEM -> parseItem(name, "item/" + skin.toLowerCase(Locale.ROOT), position, damage);
-			case Kind.OBSTACLE -> {
+			case FRIEND -> new Friend(name, "pnj/" + skin.toLowerCase(Locale.ROOT), health, position); 
+			case ENEMY -> new Enemy(name, "pnj/" + skin.toLowerCase(Locale.ROOT), health, position, zone, damage, behavior);
+			case ITEM -> parseItem(name, "item/" + skin.toLowerCase(Locale.ROOT), position, damage);
+			case OBSTACLE -> {
 				if(grid[position.x][position.y] == null) {
 					grid[position.x][position.y] = new Obstacle("obstacle/" + skin.toLowerCase(Locale.ROOT), position);
 				}
@@ -255,11 +252,10 @@ public class Parser {
 	 * @return a Weapon or InventoryItem to be added to the list of Element
 	 */
 	private static Item parseItem(String name, String skin, Point position, int damage) {
-		Objects.requireNonNull(name);
 		Objects.requireNonNull(skin);
 		Objects.requireNonNull(position);
 		if(damage <= 0) {
-			return new InventoryItem(skin, position);
+			return new InventoryItem(skin, position, 5);
 		}
 		return new Weapon(name, skin, damage, position);
 	}
@@ -412,18 +408,5 @@ public class Parser {
 		var bottomRightOfZone = new Point(topLeftOfZone.x + Integer.parseInt(m.group(3)), topLeftOfZone.y + Integer.parseInt(m.group(4)));
 		return List.of(topLeftOfZone, bottomRightOfZone);
 	}
-	
-  public static void main(String[] args) throws IOException {
-    var path = Path.of("maps/void.map");
-    var text = Files.readString(path);
-    var lexer = new Lexer(text);
-    parse(lexer);
-//    Result result;
-//    while((result = lexer.nextResult()) != null) {
-//      System.out.println(result);
-//    }
-  }
-	
-    
 	
 }

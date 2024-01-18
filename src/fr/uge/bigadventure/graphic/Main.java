@@ -26,6 +26,7 @@ public class Main {
 	private static Player player;
 	private static Point lastMove;
 	private static boolean hit = false;
+  private static boolean dryRun = false;
   public static void main(String[] args) throws IOException {
   
     /*if (args.length == 0) {
@@ -35,7 +36,8 @@ public class Main {
 
     String levelFileName = null;
     boolean validateOption = false;
-
+    
+    
     for (int i = 0; i < args.length; i++) {
       String arg = args[i];
 
@@ -49,6 +51,8 @@ public class Main {
         }
       } else if (arg.equals("--validate")) {
           validateOption = true;
+      } else if (arg.equals("--dry-run")) {
+      	dryRun = true;
       }
     }
 
@@ -120,7 +124,12 @@ public class Main {
         	}
         });
         
-				//Input.keySwitch(Input.randomKey(), grid, enemyList.get(0));
+
+				if(!dryRun) {
+					for(var enemy : enemyList) {
+						Input.keySwitch(Input.randomKey(), grid, enemy);
+					}
+				}
         if (event != null) {
         	Action action = event.getAction();
         	if (action == Action.POINTER_DOWN || action == Action.POINTER_UP) {
@@ -155,8 +164,6 @@ public class Main {
         });
         
         
-        // collision entre player et enemy
-        // faut fix ça, player c bon. Mais faut dire que si l'entité qui touche est un ennemi on réduit la vide du player
         if(!enemyList.isEmpty()) {
         	if (enemyList.get(0).position.x == player.position().x && enemyList.get(0).position().y == player.position().y) {
         		if (player.reduceHealth(enemyList.get(0).damage())) {

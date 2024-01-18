@@ -12,7 +12,6 @@ public record Weapon(String name, String skin, int damage, Point position) imple
 	 * @param position The position of the weapon in the grid
 	 */
 	public Weapon {
-		Objects.requireNonNull(name);
 		Objects.requireNonNull(skin);
 		Objects.requireNonNull(position);
 		if(damage <= 0) {

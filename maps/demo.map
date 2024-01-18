@@ -24,11 +24,15 @@
 	damage: 15
 
 [element]
+	skin: STICK
+	position: (3,3)
+	kind: item
+	damage: 2
+
+[element]
 	name: Waldo
 	skin: BADBAD
 	position: (1, 3)
 	kind: enemy
 	health: 10
-	zone: (1, 1) (5 x 3)
-	behavior: agressive
 	damage: 6
