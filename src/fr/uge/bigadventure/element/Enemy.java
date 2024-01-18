@@ -28,8 +28,6 @@ public final class Enemy implements Entity  {
 		Objects.requireNonNull(name);
 		Objects.requireNonNull(skin);
 		Objects.requireNonNull(position);
-		Objects.requireNonNull(zone);
-		Objects.requireNonNull(behavior);	
 		if(health <= 0 || damage <= 0) {
 			throw new IllegalArgumentException("health or damage can't be zero or less");
 		}
@@ -40,7 +38,11 @@ public final class Enemy implements Entity  {
 		this.position = position;
 		this.zone = zone;
 		this.damage = damage;
-		this.behavior = behavior;
+		if(Objects.isNull(behavior)) {
+			this.behavior = Behavior.STROLL;
+		} else {
+			this.behavior = behavior;
+		}
 	}
 
 	@Override

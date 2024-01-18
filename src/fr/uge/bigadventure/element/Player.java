@@ -70,6 +70,19 @@ public final class Player implements Entity {
 		return false;
 	}
 
+	/** Increases the health of the Player by bonus amount.
+	 *	Would have been used for food, but we did not have enough time to implement food
+	 *  Every item has 5 as default bonus, as there is no instruction in the .map file
+	 *  for the amount of bonus of an item
+	 * 
+	 * @param bonus the amount in which the player health will be increased
+	 */
+	public void increaseHealth(InventoryItem item) {
+		Objects.requireNonNull(item);
+		health += item.bonus();
+		inventory.remove(item);
+	}
+	
 	@Override
 	public String toString() {
 		return "Player : " + name + " " + skin + " health " + health + " " + position;  

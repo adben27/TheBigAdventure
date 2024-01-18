@@ -22,6 +22,7 @@ import fr.umlv.zen5.Event.Action;
 
 public class Main {
 	private static Player player;
+  private static boolean dryRun = false;
   public static void main(String[] args) throws IOException {
   
     /*if (args.length == 0) {
@@ -31,7 +32,8 @@ public class Main {
 
     String levelFileName = null;
     boolean validateOption = false;
-
+    
+    
     for (int i = 0; i < args.length; i++) {
       String arg = args[i];
 
@@ -45,6 +47,8 @@ public class Main {
         }
       } else if (arg.equals("--validate")) {
           validateOption = true;
+      } else if (arg.equals("--dry-run")) {
+      	dryRun = true;
       }
     }
 
@@ -57,7 +61,7 @@ public class Main {
         return;
       }
     } else {
-      levelFileName = "maps/adventure.map";
+      levelFileName = "maps/demo.map";
     }
       
     Graphic.loadImage();
@@ -110,7 +114,11 @@ public class Main {
         
         context.renderFrame(erase ->{Graphic.eraseEntity(erase, grid, entityList);});
         
-				Input.keySwitch(Input.randomKey(), grid, enemyList.get(0));
+				if(!dryRun) {
+					for(var enemy : enemyList) {
+						Input.keySwitch(Input.randomKey(), grid, enemy);
+					}
+				}
         if (event != null) {
         	Action action = event.getAction();
         	if (action == Action.POINTER_DOWN || action == Action.POINTER_UP) {
