@@ -2,6 +2,7 @@ package fr.uge.bigadventure.element;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public final class Player implements Entity {
@@ -10,6 +11,7 @@ public final class Player implements Entity {
 	private int health;
 	private final int initialHealth;
 	private final Point position;
+	private Weapon currentweapon;
 	private ArrayList<Element> inventory;
 
 	/** Creates a Player
@@ -31,7 +33,18 @@ public final class Player implements Entity {
 		this.initialHealth = health;
 		this.health = health;
 		this.position = position;
+		this.currentweapon = null;
 		this.inventory = new ArrayList<Element>();
+	}
+	
+	public static void loot(Player baba, List<Weapon> weaponList) {
+		for (var weapon : weaponList) {
+			if (baba.position().x == weapon.position().x && baba.position().y == weapon.position().y) {
+				baba.currentweapon = weapon;
+				break;
+			}
+		}
+		weaponList.remove(baba.currentweapon);
 	}
 
 	@Override

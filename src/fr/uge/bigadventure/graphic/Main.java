@@ -18,6 +18,7 @@ import fr.uge.bigadventure.element.Player;
 import fr.uge.bigadventure.element.Weapon;
 import fr.umlv.zen5.Application;
 import fr.umlv.zen5.Event;
+import fr.umlv.zen5.KeyboardKey;
 import fr.umlv.zen5.Event.Action;
 
 public class Main {
@@ -61,7 +62,7 @@ public class Main {
         return;
       }
     } else {
-      levelFileName = "maps/demo.map";
+      levelFileName = "maps/void.map";
     }
       
     Graphic.loadImage();
@@ -107,6 +108,7 @@ public class Main {
       	Graphic.drawEntity(map, entityList);
       });
       
+      KeyboardKey lastMove = null;
       for(;;) {
         Event event = context.pollOrWaitEvent(100);
         long startEvent = System.currentTimeMillis();
@@ -127,10 +129,18 @@ public class Main {
         	}
         
         	if (action == Action.KEY_PRESSED) {
-						Input.keySwitch(event.getKey(), grid, player);
+        		KeyboardKey key = event.getKey();
+						var saveMove = Input.keySwitch(key, grid, player);
+						if (saveMove != null) {
+							lastMove = saveMove;
+						}
 						if (Graphic.scrolling()) {
 							context.renderFrame(map -> {Graphic.printMap(map, grid, player);});
 						}
+						if (key == KeyboardKey.SPACE) {
+							Input.hit(lastMove, (Player)entityList.get(0), enemyList);
+						}
+						Player.loot((Player)entityList.get(0), weaponList);
         	}
         }
         
@@ -140,8 +150,6 @@ public class Main {
         });
         
         
-        // collision entre player et enemy
-        // faut fix ça, player c bon. Mais faut dire que si l'entité qui touche est un ennemi on réduit la vide du player
         if(!enemyList.isEmpty()) {
         	if (enemyList.get(0).position.x == player.position().x && enemyList.get(0).position().y == player.position().y) {
         		if (player.reduceHealth(enemyList.get(0).damage())) {

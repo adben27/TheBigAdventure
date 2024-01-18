@@ -49,3 +49,10 @@ WWWWWWWWWDWWWWWWWWWWWW
 	zone: (1, 1) (5 x 3)
 	behavior: agressive
 	damage: 10
+
+[element]
+	name: Gram
+	skin: SWORD
+	position: (10,5)
+	kind: item
+	damage: 15
