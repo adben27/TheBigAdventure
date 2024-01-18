@@ -25,7 +25,7 @@ public class Main {
   	
   	Graphic.loadImage();
 
-    var path = Path.of("maps/big.map");
+    var path = Path.of("maps/void.map");
 
     var text = Files.readString(path);
     var lexer = new Lexer(text);
@@ -33,7 +33,6 @@ public class Main {
     var grid = gameMap.grid();
     var elementList = gameMap.elementList();
     
-    var weaponList = new ArrayList<Weapon>();
     var invItemList = new ArrayList<InventoryItem>();
     
     var enemyList = new ArrayList<Enemy>();
@@ -47,7 +46,7 @@ public class Main {
     			entityList.add(listEnemy);
     		}
     		case Friend listFriend -> entityList.add(listFriend);
-    		case Weapon listWeapon -> weaponList.add(listWeapon);
+    		case Weapon listWeapon -> Weapon.weaponList.add(listWeapon);
     		case InventoryItem listInvItem -> invItemList.add(listInvItem);	
     	}
     }
@@ -84,7 +83,10 @@ public class Main {
         	}
         }
         
-        context.renderFrame(draw -> {Graphic.drawEntity(draw, entityList);});
+        context.renderFrame(draw -> {
+        	Graphic.drawEntity(draw, entityList);
+        	Graphic.drawWeapon(draw);
+        });
         
         
         // collision entre player et enemy

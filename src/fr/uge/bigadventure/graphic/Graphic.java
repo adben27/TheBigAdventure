@@ -17,6 +17,7 @@ import javax.imageio.ImageIO;
 import fr.uge.bigadventure.element.Entity;
 import fr.uge.bigadventure.element.GridElement;
 import fr.uge.bigadventure.element.Obstacle;
+import fr.uge.bigadventure.element.Weapon;
 import fr.umlv.zen5.ScreenInfo;
 
 public class Graphic {
@@ -84,6 +85,7 @@ public class Graphic {
   	}
   	return coordinate * imgSize;
   }
+  
 	/** Transform a grid coordinate on the vertical axis to an adapted screen coordinate
 	 * 
 	 * @param coordinate A grid coordinate
@@ -99,7 +101,7 @@ public class Graphic {
 	/** Print a tile if it is not null
 	 * 
 	 * @param tile A tile in the map
-	 * @param map
+	 * @param map The Graphics context
 	 */
 	public static void printTile(GridElement tile, Graphics2D map, int x, int y) { // Prend un obstacle et l'affiche à sa position()
 		Objects.requireNonNull(map);
@@ -109,7 +111,7 @@ public class Graphic {
 	
 	/**	Print the current map
 	 * 
-	 * @param map 
+	 * @param map The Graphics context
 	 * @param grid Contains the map
 	 * @param baba The player 
 	 */
@@ -124,7 +126,6 @@ public class Graphic {
     int y = 0;
     for(int i = xStart; i < Math.min(xStart + nbCasesX, sizeX); i++) {
     	for(int j = yStart; j < Math.min(yStart + nbCasesY, sizeY); j++) {
-    		System.out.println("i : " + x + " j : " + y);
     		printTile(grid[i][j], map, x, y);
     		y++;
     	}
@@ -133,23 +134,44 @@ public class Graphic {
     }
 	}
 	
+	/** Check if the map is bigger than the screen
+	 * 
+	 * @return true or false accordingly
+	 */
 	public static boolean scrolling() {
 		return sizeX > nbCasesX || sizeY > nbCasesY;
 	}
 	
+	/** Erase entities and reset the map
+	 * 
+	 * @param erase The Graphics context
+	 * @param grid Contains the map
+	 * @param entityList List of entities
+	 */
 	public static void eraseEntity(Graphics2D erase, GridElement[][] grid, List<Entity> entityList) {
 		Objects.requireNonNull(erase);
 		Objects.requireNonNull(grid);
 		Objects.requireNonNull(entityList);
     erase.setColor(Color.BLACK);
     for(var entity : entityList) {
+    	int shiftName = erase.getFontMetrics(erase.getFont()).stringWidth(entity.name())/2 - imgSize/2;
     	erase.fill(new Rectangle2D.Float(shiftX(entity.position().x), shiftY(entity.position().y)-4, imgSize, imgSize+4));
+    	erase.fill(new Rectangle2D.Float(shiftX(entity.position().x) - shiftName, shiftY(entity.position().y+1), shiftName*2 + imgSize, 12));
     	printTile(grid[entity.position().x][entity.position().y], erase, entity.position().x, entity.position().y);
     	printTile(grid[entity.position().x][entity.position().y-1], erase, entity.position().x, entity.position().y-1);
+    	for (int i = entity.position().x - shiftName/imgSize - 1; i <= entity.position().x + shiftName/imgSize + 1; i++) {
+    		if (i < 0 || i >= sizeX) {continue;}
+    		printTile(grid[i][entity.position().y+1], erase, i, entity.position().y+1);
+    	}
 		}
     
 	}
 	
+	/** Draw all entities in a list
+	 * 
+	 * @param draw The Graphics context
+	 * @param entityList List of entities
+	 */
 	public static void drawEntity(Graphics2D draw, List<Entity> entityList) {
 		Objects.requireNonNull(draw);
 		Objects.requireNonNull(entityList);
@@ -160,10 +182,15 @@ public class Graphic {
 			draw.fill(new Rectangle2D.Float(shiftX(entity.position().x)+2, shiftY(entity.position().y)-4, entity.health(), 4));
 			draw.drawImage(skinMap.get(entity.skin()), shiftX(entity.position().x), shiftY(entity.position().y), null);
 			draw.setColor(Color.WHITE);
-			draw.drawString(entity.name(), shiftX(entity.position().x), shiftY(entity.position().y) + 30);
+			int shiftNameX = draw.getFontMetrics(draw.getFont()).stringWidth(entity.name())/2 - imgSize/2;
+			draw.drawString(entity.name(), shiftX(entity.position().x) - shiftNameX, shiftY(entity.position().y+1) + 10);
 		}
 	}
 	
+	/** Draw the Game Over screen
+	 * 
+	 * @param over The Graphics context
+	 */
 	public static void drawGameOver(Graphics2D over) {
 		Objects.requireNonNull(over);
 		over.setColor(Color.BLACK);
@@ -171,6 +198,16 @@ public class Graphic {
 		over.setColor(Color.RED);
 		over.setFont(new Font("Game Over", 1, 50));
 		over.drawString("GAME OVER", width/2 - 150, height/2);
+	}
+	
+	/** Draw all weapons
+	 * 
+	 * @param item The Graphics context
+	 */
+	public static void drawWeapon(Graphics2D item) {
+		for (var weapon : Weapon.weaponList) {
+			item.drawImage(skinMap.get(weapon.skin()), shiftX(weapon.position().x), shiftY(weapon.position().y), null);
+		}
 	}
 }
 
