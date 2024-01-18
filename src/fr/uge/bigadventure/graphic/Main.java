@@ -17,6 +17,7 @@ import fr.uge.bigadventure.element.Player;
 import fr.uge.bigadventure.element.Weapon;
 import fr.umlv.zen5.Application;
 import fr.umlv.zen5.Event;
+import fr.umlv.zen5.KeyboardKey;
 import fr.umlv.zen5.Event.Action;
 
 public class Main {
@@ -56,7 +57,7 @@ public class Main {
         return;
       }
     } else {
-      levelFileName = "maps/adventure.map";
+      levelFileName = "maps/void.map";
     }
       
     Graphic.loadImage();
@@ -96,6 +97,7 @@ public class Main {
       	Graphic.drawEntity(map, entityList);
       });
       
+      KeyboardKey lastMove = null;
       for(;;) {
         Event event = context.pollOrWaitEvent(100);
         long startEvent = System.currentTimeMillis();
@@ -112,10 +114,18 @@ public class Main {
         	}
         
         	if (action == Action.KEY_PRESSED) {
-						Input.keySwitch(event.getKey(), grid, entityList.get(0));
+        		KeyboardKey key = event.getKey();
+						var saveMove = Input.keySwitch(key, grid, entityList.get(0));
+						if (saveMove != null) {
+							lastMove = saveMove;
+						}
 						if (Graphic.scrolling()) {
 							context.renderFrame(map -> {Graphic.printMap(map, grid, entityList.get(0));});
 						}
+						if (key == KeyboardKey.SPACE) {
+							Input.hit(lastMove, (Player)entityList.get(0), enemyList);
+						}
+						Player.loot((Player)entityList.get(0), weaponList);
         	}
         }
         
