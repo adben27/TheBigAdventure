@@ -43,7 +43,7 @@ WWWWWWWWWDWWWWWWWWWWWW
 [element]
 	name: Waldo
 	skin: CRAB
-	position: (2, 2)
+	position: (5, 5)
 	kind: enemy
 	health: 50
 	zone: (1, 1) (5 x 3)
@@ -55,4 +55,4 @@ WWWWWWWWWDWWWWWWWWWWWW
 	skin: SWORD
 	position: (13,10)
 	kind: item
-	damage: 15
+	damage: 3
