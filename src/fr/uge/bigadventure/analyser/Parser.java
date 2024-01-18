@@ -198,6 +198,7 @@ public class Parser {
 		if((result = lexer.nextResult()).token() != Token.RIGHT_BRACKET) {
 			System.err.println(lineError(result, "Wrong format of [element] instruction"));
 		}
+		boolean supported = true;
 		String name = null; String skin = null;
 		boolean player = false; //phantomized; 
 		Point position = null;
@@ -217,16 +218,17 @@ public class Parser {
       	case "zone" -> zone = parseElementZone(lexer);
       	case "behavior" -> behavior = parseElementBehavior(lexer);
       	case "damage" -> damage = parseElementInt(lexer);
-      	case "text" -> System.err.println(lineError(result, "text not supported"));
-      	case "steal" -> System.err.println(lineError(result, "steal not supported"));
-      	case "trade" -> System.err.println(lineError(result, "trade not supported"));
-      	case "locked" -> System.err.println(lineError(result, "locked not supported"));
-      	case "flow" -> System.err.println(lineError(result, "flow not supported"));
-      	case "phantomized" -> System.err.println(lineError(result, "phantomized not supported")) ;
-      	case "teleport" -> System.err.println(lineError(result, "teleport not supported"));
+      	case "text" -> { supported = false; System.err.println(lineError(result, "text not supported")); }
+      	case "steal" -> { supported = false; System.err.println(lineError(result, "steal not supported")); }
+      	case "trade" -> { supported = false; System.err.println(lineError(result, "trade not supported")); }
+      	case "locked" -> { supported = false; System.err.println(lineError(result, "locked not supported")); }
+      	case "flow" -> { supported = false; System.err.println(lineError(result, "flow not supported")); }
+      	case "phantomized" -> { supported = false; System.err.println(lineError(result, "phantomized not supported")); }
+      	case "teleport" -> { supported = false; System.err.println(lineError(result, "teleport not supported")); }
       	
       };
 		}
+		if(!supported) return null;
 		if(player) {
 			skin = "pnj/" + skin.toLowerCase(Locale.ROOT);
 			return new Player(name, skin, health, position);

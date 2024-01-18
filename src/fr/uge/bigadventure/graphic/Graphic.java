@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 
 import fr.uge.bigadventure.element.Entity;
 import fr.uge.bigadventure.element.GridElement;
+import fr.uge.bigadventure.element.Player;
 import fr.uge.bigadventure.element.Weapon;
 import fr.umlv.zen5.ScreenInfo;
 
@@ -111,7 +112,7 @@ public class Graphic {
 	 * @param grid Contains the map
 	 * @param baba The player 
 	 */
-	public static void printMap(Graphics2D map, GridElement[][] grid, Entity baba) { // Prend un double tableau d'Obstacle (une map) et l'affiche 
+	public static void printMap(Graphics2D map, GridElement[][] grid, Player baba) { // Prend un double tableau d'Obstacle (une map) et l'affiche 
 		Objects.requireNonNull(grid);
 		Objects.requireNonNull(map);
 		map.setColor(Color.BLACK);
