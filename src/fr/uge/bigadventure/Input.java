@@ -17,7 +17,7 @@ public class Input {
 	 */
 	public static boolean isWalkable(GridElement tile) {
 		if (tile == null) {return true;}
-		return !Obstacle.obstacleSet.contains(tile.skin());
+		return tile.isWalkable();
 	}
 	
 	/** Do an action on an Entity depending on the key pressed

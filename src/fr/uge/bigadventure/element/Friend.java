@@ -6,10 +6,17 @@ import java.util.Objects;
 public final class Friend implements Entity  {
 	private final String name;
 	private final String skin;
-	public int health;
+	private int health;
 	private final int initialHealth;
 	public final Point position;
-	
+
+	/** Creates a Friend
+	 * 
+	 * @param name The name of the friend
+	 * @param skin The partial skin path of the friend
+	 * @param health The health of the friend
+	 * @param position The initial position of the friend
+	 */
 	public Friend(String name, String skin, int health, Point position) {
 		Objects.requireNonNull(name);
 		Objects.requireNonNull(skin);

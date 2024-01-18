@@ -22,11 +22,45 @@ import fr.umlv.zen5.Event.Action;
 public class Main {
   
   public static void main(String[] args) throws IOException {
+  
+  /*if (args.length == 0) {
+    System.out.println("Usage: java -jar thebigadventure.jar 	--level <name.map> [--validate]");
+    return;
+  }*/
+
+  String levelFileName = null;
+  boolean validateOption = false;
+
+  for (int i = 0; i < args.length; i++) {
+    String arg = args[i];
+
+    if (arg.equals("--level")) {
+      if (i + 1 < args.length) {
+        levelFileName = args[i + 1];
+        i++;
+      } else {
+        System.err.println("Error: --level option requires a value");
+        return;
+      }
+    } else if (arg.equals("--validate")) {
+        validateOption = true;
+    }
+  }
+
+  if(levelFileName != null) {
+    if (validateOption) {
+    	var path = Path.of("maps/" + levelFileName);
+    	var text = Files.readString(path);
+    	var lexer = new Lexer(text);
+    	Parser.parse(lexer);
+    }
+   } else {
+    levelFileName = "scroll.map";
+   }
   	
   	Graphic.loadImage();
 
-    var path = Path.of("maps/void.map");
-
+    var path = Path.of("maps/" + levelFileName);
     var text = Files.readString(path);
     var lexer = new Lexer(text);
     var gameMap = Parser.parse(lexer);
@@ -93,7 +127,7 @@ public class Main {
         // faut fix ça, player c bon. Mais faut dire que si l'entité qui touche est un ennemi on réduit la vide du player
         if(!enemyList.isEmpty()) {
         	if (enemyList.get(0).position.x == entityList.get(0).position().x && enemyList.get(0).position().y == entityList.get(0).position().y) {
-        		if (entityList.get(0).reduceHealth(5)) {
+        		if (entityList.get(0).reduceHealth(enemyList.get(0).damage())) {
               context.renderFrame(over -> {Graphic.drawGameOver(over);});
               while (event == null || event.getAction() != Action.POINTER_UP) {
                   event = context.pollOrWaitEvent(10000);

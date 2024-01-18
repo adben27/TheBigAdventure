@@ -9,7 +9,14 @@ public final class Player implements Entity {
 	private int health;
 	private final int initialHealth;
 	private final Point position;
-	
+
+	/** Creates a Player
+	 * 
+	 * @param name The name of the player
+	 * @param skin The partial skin path of the player
+	 * @param health The health of the player
+	 * @param position The position of the player
+	 */
 	public Player(String name, String skin, int health, Point position) {
 		Objects.requireNonNull(name);
 		Objects.requireNonNull(skin);

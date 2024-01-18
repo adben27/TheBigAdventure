@@ -64,9 +64,6 @@ public class Graphic {
     		try(var input = Main.class.getResourceAsStream(imageName)) {
 					image = ImageIO.read(input);
 					imageName = imageName.substring(4, imageName.length()-4).replace('\\', '/');
-					if (imageName.startsWith("obstacle/")) {
-						Obstacle.obstacleSet.add(imageName);
-					}
 	        Graphic.skinMap.putIfAbsent(imageName, image);
 				} catch (IOException e) {
 					e.printStackTrace();

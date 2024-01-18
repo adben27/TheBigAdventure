@@ -7,13 +7,23 @@ import java.util.Objects;
 public final class Enemy implements Entity  {
 	private final String name;
 	private final String skin;
-	public int health;
+	private int health;
 	private final int initialHealth;
 	public final Point position;
 	List<Point> zone;
 	private final int damage;
 	private final Behavior behavior;
-	
+
+	/** Creates an Enemy
+	 * 
+	 * @param name The name of the enemy
+	 * @param skin The partial skin path of the enemy
+	 * @param health The health of the enemy
+	 * @param position The initial position of the enemy
+	 * @param zone The zone in which the enemy can operate (is not implemented at the moment)
+	 * @param damage The damage that the enemy will cause
+	 * @param behavior The behavior of the enemy (is not used, always stroll)
+	 */
 	public Enemy(String name, String skin, int health, Point position, List<Point> zone, int damage, Behavior behavior) {
 		Objects.requireNonNull(name);
 		Objects.requireNonNull(skin);
@@ -57,11 +67,20 @@ public final class Enemy implements Entity  {
 	public Point position() {
 		return position;
 	}
-	
+
+	/** Returns the damage of this enemy
+	 * 
+	 * @return damage that this enemy will cause
+	 */
 	public int damage() {
 		return damage;
 	}
 
+	/** Returns the behavior of this enemy
+	 *  At the moment, the behavior does not matter. The enemies are always stroll.
+	 *  
+	 * @return behavior the behavior of this enemy
+	 */
 	public Behavior behavior() {
 		return behavior;
 	}
