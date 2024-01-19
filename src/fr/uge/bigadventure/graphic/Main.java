@@ -13,6 +13,7 @@ import fr.uge.bigadventure.analyser.Lexer;
 import fr.uge.bigadventure.analyser.Parser;
 import fr.uge.bigadventure.element.Enemy;
 import fr.uge.bigadventure.element.Entity;
+import fr.uge.bigadventure.element.Food;
 import fr.uge.bigadventure.element.Friend;
 import fr.uge.bigadventure.element.InventoryItem;
 import fr.uge.bigadventure.element.Item;
@@ -20,8 +21,8 @@ import fr.uge.bigadventure.element.Player;
 import fr.uge.bigadventure.element.Weapon;
 import fr.umlv.zen5.Application;
 import fr.umlv.zen5.Event;
-import fr.umlv.zen5.KeyboardKey;
 import fr.umlv.zen5.Event.Action;
+import fr.umlv.zen5.KeyboardKey;
 
 public class Main {
 	private static Player player;
@@ -30,10 +31,10 @@ public class Main {
   private static boolean dryRun = false;
   public static void main(String[] args) throws IOException {
   
-    /*if (args.length == 0) {
-      System.out.println("Usage: java -jar thebigadventure.jar 	--level <name.map> [--validate]");
+    if (args.length == 0) {
+      System.out.println("Usage: java -jar thebigadventure.jar 	--level <name.map> [--validate] [--dry-run]");
       return;
-    }*/
+    }
 
     String levelFileName = null;
     boolean validateOption = false;
@@ -66,7 +67,8 @@ public class Main {
         return;
       }
     } else {
-      levelFileName = "maps/void.map";
+      System.out.println("Usage: java -jar thebigadventure.jar --level <name.map> [--validate] [--dry-run]");
+      return;
     }
       
     Graphic.loadImage();
@@ -93,7 +95,8 @@ public class Main {
     		}
     		case Friend listFriend -> entityList.add(listFriend);
     		case Weapon listWeapon -> weaponList.add(listWeapon);
-    		case InventoryItem listInvItem -> invItemList.add(listInvItem);	
+    		case InventoryItem listInvItem -> invItemList.add(listInvItem);
+    		case Food listFood -> invItemList.add(listFood);
     	}
     }
     
@@ -128,7 +131,6 @@ public class Main {
 
 				if(!dryRun) {
 					for(var enemy : enemyList) {
-						if (enemy.name().equals("Waldo")) {continue;}
 						Input.keySwitch(Input.randomKey(), grid, enemy);
 					}
 				}
@@ -151,7 +153,7 @@ public class Main {
 							Input.hit(lastMove, player, enemyList, entityList);
 						}
 						if (key == KeyboardKey.I) {
-							Graphic.openInventory(context, player, invItemList);
+							Graphic.openInventory(context, player);
 			        context.renderFrame(map -> {
 								Graphic.printMap(map, grid, player);
 			        });
@@ -167,7 +169,7 @@ public class Main {
 						Graphic.drawHit(draw, lastMove, player);
 					}
         	Graphic.drawEntity(draw, entityList);
-        	Graphic.drawWeapon(draw, weaponList);
+        	Graphic.drawItem(draw, weaponList, invItemList);
         	
         });
         

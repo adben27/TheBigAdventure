@@ -3,7 +3,9 @@
 Bienvenue dans le jeu TheBigAdventure.
 
 Vous pourrez vous déplacer avec les flèches directionelles et prendre un objet dans votre inventaire ou taper avec un SWORD, STICK, ou SHOVEL avec la touche Espace.
-Vous pourrez visualiser votre inventaire avec la touche `i`.
+Vous prenez automatiquement un objet quand vous passez dessus.
+Vous pourrez visualiser votre inventaire avec la touche `i`, naviguer dedans, retirer un objet avec la touche `d`, et quitter l'inventaire avec `q`.
+Même manger quelque chose avec la touche Espace dans l'inventaire ! Tous les items donnent 2 de vie, car on n'a pas de règle dans le .map spécifiée pour spécifier le bonus de vie de l'objet.
 
 ### Création du fichier .map
 
@@ -60,6 +62,13 @@ On peut aussi rajouter un ennemi pour le taper ! Par exemple :
 	damage: 6
 ```
 
-On peut aussi rajouter des objets d'inventaire comme des objets ou de la nourriture, mais je ne suis pas sûr qu'il seront bien implémentés :/
+On peut aussi rajouter des objets d'inventaire comme des objets ou de la nourriture, ne pas oublier le `kind : item` :
 
+Exemple :  
+```
+[element]
+	skin: PIZZA
+	position: (4,16)
+	kind: item
+```
 

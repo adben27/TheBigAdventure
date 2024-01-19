@@ -3,7 +3,7 @@ package fr.uge.bigadventure.element;
 import java.awt.Point;
 import java.util.Objects;
 
-public record InventoryItem(String skin, Point position, int bonus) implements Item {
+public record InventoryItem(String skin, Point position) implements Item {
 
 	/** Creates an inventory item
 	 * 

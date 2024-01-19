@@ -12,7 +12,7 @@ public final class Player implements Entity {
 	private final int initialHealth;
 	private final Point position;
 	private Weapon currentWeapon;
-	private ArrayList<Element> inventory;
+	private ArrayList<Item> inventory;
 
 	/** Creates a Player
 	 * 
@@ -33,40 +33,49 @@ public final class Player implements Entity {
 		this.initialHealth = health;
 		this.health = health;
 		this.position = position;
-		this.inventory = new ArrayList<Element>();
+		this.inventory = new ArrayList<Item>();
 	}
 	
 	 /** Get an item on the ground and add it to the inventory
 	  * 
 	  * @param baba The player
 	  * @param weaponList List of weapons on the map
-	  * @param itemList List of items in the inventory
+	  * @param invItemList List of items on the map
 	  */
-	public static void loot(Player baba, List<Weapon> weaponList, List<Item> itemList) {
+	public static void loot(Player baba, List<Weapon> weaponList, List<Item> invItemList) {
 		Objects.requireNonNull(baba);
 		Objects.requireNonNull(weaponList);
-		Objects.requireNonNull(itemList);
-		for (var weapon : weaponList) {
-			if (baba.position().x == weapon.position().x && baba.position().y == weapon.position().y && itemList.size() < 36) {
-				baba.currentWeapon = weapon;
-				itemList.add(weapon);
-				break;
+		Objects.requireNonNull(invItemList);
+		for(var weapon : weaponList) {			
+			baba.currentWeapon = weapon;
+			baba.inventory.add(weapon);
+			weaponList.remove(baba.currentWeapon);
+			return;
+		}
+		for (var item : invItemList) {
+			if (baba.position().x == item.position().x && baba.position().y == item.position().y && baba.inventory.size() < 36) {
+				switch(item) {
+					case Weapon weapon -> {} // cas géré au-dessus dans la liste des weapon 
+					case InventoryItem invItem -> { baba.inventory.add(invItem); invItemList.remove(invItem); return; }
+					case Food food -> { baba.inventory.add(food); invItemList.remove(food); return; }
+				};
 			}
 		}
-		weaponList.remove(baba.currentWeapon);
 	}
 	
 	/** Use the selected item
 	 * 
 	 * @param baba The player
-	 * @param itemList List of items in the inventory
 	 * @param index Index of the selected item
 	 */
-	public static void useItem(Player baba, List<Item> itemList, int index) {
+	public static void useItem(Player baba, int index) {
 		Objects.requireNonNull(baba);
-		Objects.requireNonNull(itemList);
-		if (index >= itemList.size()){return;}
-		baba.currentWeapon = (Weapon) itemList.get(index);
+		if (index >= baba.inventory.size()){return;}
+		switch(baba.inventory.get(index)) {
+			case Weapon weapon -> baba.currentWeapon = weapon;
+			case InventoryItem invItem -> {}
+			case Food food -> baba.increaseHealth(food);
+		}
 	}
 	
 	/** Delete the selected item
@@ -109,7 +118,7 @@ public final class Player implements Entity {
 		return currentWeapon;
 	}
 	
-	public ArrayList<Element> inventory() {
+	public ArrayList<Item> inventory() {
 		return inventory;
 	}
 	
@@ -121,16 +130,14 @@ public final class Player implements Entity {
 	}
 
 	/** Increases the health of the Player by bonus amount.
-	 *	Would have been used for food, but we did not have enough time to implement food
-	 *  Every item has 5 as default bonus, as there is no instruction in the .map file
-	 *  for the amount of bonus of an item
+	 *  Every food has 2 as default bonus, as there is no instruction in the .map file
 	 * 
-	 * @param bonus the amount in which the player health will be increased
+	 * @param food The food that the player eats
 	 */
-	public void increaseHealth(InventoryItem item) {
-		Objects.requireNonNull(item);
-		health += item.bonus();
-		inventory.remove(item);
+	public void increaseHealth(Food food) {
+		Objects.requireNonNull(food);
+		health += food.bonus();
+		inventory.remove(food);
 	}
 	
 	@Override

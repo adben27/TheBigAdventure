@@ -18,15 +18,17 @@ import javax.imageio.ImageIO;
 
 import fr.uge.bigadventure.Input;
 import fr.uge.bigadventure.element.Entity;
+import fr.uge.bigadventure.element.Food;
 import fr.uge.bigadventure.element.GridElement;
+import fr.uge.bigadventure.element.InventoryItem;
 import fr.uge.bigadventure.element.Item;
 import fr.uge.bigadventure.element.Player;
 import fr.uge.bigadventure.element.Weapon;
 import fr.umlv.zen5.ApplicationContext;
 import fr.umlv.zen5.Event;
+import fr.umlv.zen5.Event.Action;
 import fr.umlv.zen5.KeyboardKey;
 import fr.umlv.zen5.ScreenInfo;
-import fr.umlv.zen5.Event.Action;
 
 public class Graphic {
 	public static HashMap<String, BufferedImage> skinMap = new HashMap<>();
@@ -205,15 +207,18 @@ public class Graphic {
 		over.drawString("GAME OVER", width/2 - 150, height/2);
 	}
 	
-	/** Draw all weapons
+	/** Draw all inventory items and weapons
 	 * 
 	 * @param item The Graphics context
 	 */
-	public static void drawWeapon(Graphics2D item, List<Weapon> weaponList) {
+	public static void drawItem(Graphics2D item, List<Weapon> weaponList, List<Item> invItemList) {
 		Objects.requireNonNull(item);
 		Objects.requireNonNull(weaponList);
 		for (var weapon : weaponList) {
 			item.drawImage(skinMap.get(weapon.skin()), shiftX(weapon.position().x), shiftY(weapon.position().y), null);
+		}
+		for (var listItem : invItemList) {
+			item.drawImage(skinMap.get(listItem.skin()), shiftX(listItem.position().x), shiftY(listItem.position().y), null);
 		}
 	}
 	
@@ -297,7 +302,7 @@ public class Graphic {
 		inventory.drawImage(skinMap.get(baba.skin()), 10*imgSize, 6*imgSize + 5, null);
 		inventory.setFont(new Font("Info", 1, 12));
 		inventory.drawString("Name : " + baba.name(), 7*imgSize, 8*imgSize);
-		inventory.drawString("Health : " + baba.health() + "/" + baba.initialHealth(), 7*imgSize, 9*imgSize);
+		inventory.drawString("Health : " + baba.health(), 7*imgSize, 9*imgSize);
 	}
 	
 	/** Draw the weapon part of the inventory
@@ -355,8 +360,17 @@ public class Graphic {
 		inventory.drawString("Name : ", 7*imgSize, 20*imgSize);
 		inventory.drawString("Effect : ", 14*imgSize, 20*imgSize);
 		if (item != null) {
-			inventory.drawString(((Weapon) item).name(), 9*imgSize, 20*imgSize);
-			inventory.drawString("" + ((Weapon) item).damage(), 16*imgSize, 20*imgSize);
+			switch(item) {
+				case Weapon weapon -> { 
+			inventory.drawString(weapon.name(), 9*imgSize, 20*imgSize);
+			inventory.drawString("" + weapon.damage(), 16*imgSize, 20*imgSize); }
+				case InventoryItem invItem -> {	
+					inventory.drawString(invItem.skin().substring(invItem.skin().lastIndexOf("/") + 1), 9*imgSize, 20*imgSize);
+					inventory.drawString("Nothing !", 16*imgSize, 20*imgSize); }
+				case Food food -> { 
+			inventory.drawString(food.skin().substring(food.skin().lastIndexOf("/") + 1), 9*imgSize, 20*imgSize);
+			inventory.drawString("heal " + food.bonus(), 16*imgSize, 20*imgSize); }
+			}
 		}
 	}
 	
@@ -364,12 +378,10 @@ public class Graphic {
 	 * 
 	 * @param context The ApplicationContext
 	 * @param baba The player
-	 * @param itemList List of items in the inventory
 	 */
-	public static void openInventory(ApplicationContext context, Player baba, List<Item> itemList){
+	public static void openInventory(ApplicationContext context, Player baba){
 		Objects.requireNonNull(context);
 		Objects.requireNonNull(baba);
-		Objects.requireNonNull(itemList);
 		Event event = null;
 		var move =  new Point(0, 0);
 		var select = new Point(7, 13);
@@ -379,10 +391,10 @@ public class Graphic {
       	if (event.getAction() == Action.KEY_PRESSED) {
       		KeyboardKey key = event.getKey();
       		if (key == KeyboardKey.SPACE) {
-      			Player.useItem(baba, itemList, index);
+      			Player.useItem(baba, index);
       		}
       		if (key == KeyboardKey.D) {
-      			Player.deleteItem(itemList, index);
+      			Player.deleteItem(baba.inventory(), index);
       		}
       		else {
       			move = Input.keySwitch(key);
@@ -400,8 +412,8 @@ public class Graphic {
     		inventory.fill(new Rectangle2D.Float(0, 0, width, height));
     		drawPlayerBloc(inventory, baba);
     		drawWeaponBloc(inventory, baba);
-    		drawItemBloc(inventory, itemList, select);
-    		if (index < itemList.size()){drawSelectedBloc(inventory, itemList.get(index));}
+    		drawItemBloc(inventory, baba.inventory(), select);
+    		if (index < baba.inventory().size()){drawSelectedBloc(inventory, baba.inventory().get(index));}
     		else 												{drawSelectedBloc(inventory, null);}
     		drawInventoryStructure(inventory);
       });

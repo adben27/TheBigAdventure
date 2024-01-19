@@ -22,7 +22,7 @@ Les méthodes pour parser le `data` de la map et pour parser un `element` de la 
 
 #### `fr.uge.bigadventure.element`
 
-Ce package contient les éléments, les personnages(joueur, ennemis, amis) même si les amis ne sont pas implémentés par manque de temps
+Ce package contient les éléments, les personnages(joueur, ennemis, amis) même si les amis ne sont pas implémentés par manque de temps, ni les objets spéciaux comme Book et aussi les Door.
 
 - `Element` : Soit un `Entity`, soit un `Item`, détaillé ci-dessous.
 - `Behavior` : Enum pour le comportement des ennemis, n'est pas utilisé car on n'est pas allé au delà du comportement stroll.

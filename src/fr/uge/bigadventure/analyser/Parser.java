@@ -14,6 +14,7 @@ import fr.uge.bigadventure.element.Behavior;
 import fr.uge.bigadventure.element.Decoration;
 import fr.uge.bigadventure.element.Element;
 import fr.uge.bigadventure.element.Enemy;
+import fr.uge.bigadventure.element.Food;
 import fr.uge.bigadventure.element.Friend;
 import fr.uge.bigadventure.element.GridElement;
 import fr.uge.bigadventure.element.InventoryItem;
@@ -233,7 +234,7 @@ public class Parser {
 		return switch(kind) {			 
 			case FRIEND -> new Friend(name, "pnj/" + skin.toLowerCase(Locale.ROOT), health, position); 
 			case ENEMY -> new Enemy(name, "pnj/" + skin.toLowerCase(Locale.ROOT), health, position, zone, damage, behavior);
-			case ITEM -> parseItem(name, "item/" + skin.toLowerCase(Locale.ROOT), position, damage);
+			case ITEM -> parseItem(name, Item.checkSkinFile(result, skin.toLowerCase(Locale.ROOT)), position, damage);
 			case OBSTACLE -> {
 				if(grid[position.x][position.y] == null) {
 					grid[position.x][position.y] = new Obstacle("obstacle/" + skin.toLowerCase(Locale.ROOT), position);
@@ -255,7 +256,10 @@ public class Parser {
 		Objects.requireNonNull(skin);
 		Objects.requireNonNull(position);
 		if(damage <= 0) {
-			return new InventoryItem(skin, position, 5);
+			if(skin.startsWith("item/")) {
+				return new InventoryItem(skin, position);
+			}
+			return new Food(skin, position, 2);
 		}
 		return new Weapon(name, skin, damage, position);
 	}
