@@ -16,11 +16,17 @@ import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
+import fr.uge.bigadventure.Input;
 import fr.uge.bigadventure.element.Entity;
 import fr.uge.bigadventure.element.GridElement;
+import fr.uge.bigadventure.element.Item;
 import fr.uge.bigadventure.element.Player;
 import fr.uge.bigadventure.element.Weapon;
+import fr.umlv.zen5.ApplicationContext;
+import fr.umlv.zen5.Event;
+import fr.umlv.zen5.KeyboardKey;
 import fr.umlv.zen5.ScreenInfo;
+import fr.umlv.zen5.Event.Action;
 
 public class Graphic {
 	public static HashMap<String, BufferedImage> skinMap = new HashMap<>();
@@ -211,6 +217,13 @@ public class Graphic {
 		}
 	}
 	
+	/** Erase the visual effect of the last attack
+	 * 
+	 * @param erase The Graphics context
+	 * @param grid Contains the map
+	 * @param baba The player
+	 * @param hit Direction of the hit
+	 */
 	public static void eraseHit(Graphics2D erase, GridElement[][] grid, Player baba, Point hit) {
 		Objects.requireNonNull(erase);
 		Objects.requireNonNull(grid);
@@ -232,6 +245,12 @@ public class Graphic {
 		}
 	}
 	
+	/** Draw a hit
+	 * 
+	 * @param hit The Graphics context
+	 * @param lastMove A Point in the direction of the hit
+	 * @param baba The player
+	 */
 	public static void drawHit(Graphics2D hit, Point lastMove, Player baba) {
 		Objects.requireNonNull(hit);
 		Objects.requireNonNull(lastMove);
@@ -243,6 +262,152 @@ public class Graphic {
 		hit.fill(new Rectangle2D.Float(shiftX(baba.position().x + lastMove.x*2), shiftY(baba.position().y + lastMove.y*2), imgSize, imgSize));
 		hit.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 		hit.drawImage(skinMap.get(baba.currentWeapon().skin()), shiftX(baba.position().x + lastMove.x), shiftY(baba.position().y + lastMove.y), null);
+	}
+	
+	/** Draw the structure of the inventory
+	 * 
+	 * @param inventory The Graphics context
+	 */
+	public static void drawInventoryStructure(Graphics2D inventory) {
+		Objects.requireNonNull(inventory);
+		inventory.setColor(Color.BLUE);
+		inventory.fill(new Rectangle2D.Float(5*imgSize, 5*imgSize, 15*imgSize, imgSize));
+		inventory.fill(new Rectangle2D.Float(5*imgSize, 10*imgSize, 15*imgSize, imgSize));
+		inventory.fill(new Rectangle2D.Float(5*imgSize, 21*imgSize, 16*imgSize, imgSize));
+		inventory.fill(new Rectangle2D.Float(5*imgSize, 17*imgSize, 15*imgSize, imgSize));
+		
+		inventory.fill(new Rectangle2D.Float(5*imgSize, 5*imgSize, imgSize, 16*imgSize));
+		inventory.fill(new Rectangle2D.Float(20*imgSize, 5*imgSize, imgSize, 16*imgSize));
+		inventory.fill(new Rectangle2D.Float(12*imgSize, 5*imgSize, imgSize, 5*imgSize));
+		inventory.setColor(Color.BLACK);
+		inventory.fill(new Rectangle2D.Float(21*imgSize, 7*imgSize, (nbCasesX-20)*imgSize, 2*imgSize));
+	}
+	
+	/** Draw the player part of the inventory
+	 * 
+	 * @param inventory The Graphics context
+	 * @param baba The player
+	 */
+	public static void drawPlayerBloc(Graphics2D inventory, Player baba) {
+		Objects.requireNonNull(inventory);
+		Objects.requireNonNull(baba);
+		inventory.setColor(Color.WHITE);
+		inventory.setFont(new Font("Title", 1, 20));
+		inventory.drawString("Player", 7*imgSize, 7*imgSize);
+		inventory.drawImage(skinMap.get(baba.skin()), 10*imgSize, 6*imgSize + 5, null);
+		inventory.setFont(new Font("Info", 1, 12));
+		inventory.drawString("Name : " + baba.name(), 7*imgSize, 8*imgSize);
+		inventory.drawString("Health : " + baba.health() + "/" + baba.initialHealth(), 7*imgSize, 9*imgSize);
+	}
+	
+	/** Draw the weapon part of the inventory
+	 * 
+	 * @param inventory The Graphics context
+	 * @param baba The player
+	 */
+	public static void drawWeaponBloc(Graphics2D inventory, Player baba) {
+		Objects.requireNonNull(inventory);
+		Objects.requireNonNull(baba);
+		inventory.setColor(Color.BLACK);
+		inventory.fill(new Rectangle2D.Float(13*imgSize, 7*imgSize, (nbCasesX-12)*imgSize, 2*imgSize));
+		inventory.setColor(Color.WHITE);
+		inventory.setFont(new Font("Title", 1, 20));
+		inventory.drawString("Weapon", 14*imgSize, 7*imgSize);
+		if (baba.currentWeapon() != null) {
+  		inventory.drawImage(skinMap.get(baba.currentWeapon().skin()), 18*imgSize, 6*imgSize + 5, null);
+  		inventory.setFont(new Font("Info", 1, 12));
+  		inventory.drawString("Name : " + baba.currentWeapon().name(), 14*imgSize, 8*imgSize);
+  		inventory.drawString("Damage : " + baba.currentWeapon().damage(), 14*imgSize, 9*imgSize);
+		}
+	}
+	
+	/** Draw the item part of the inventory
+	 * 
+	 * @param inventory The Graphics context
+	 * @param itemList List of items in the inventory
+	 * @param select Contains seleted item's coordinates
+	 */
+	public static void drawItemBloc(Graphics2D inventory, List<Item> itemList, Point select) {
+		Objects.requireNonNull(inventory);
+		Objects.requireNonNull(itemList);
+		Objects.requireNonNull(select);
+		inventory.setColor(Color.WHITE);
+		inventory.setFont(new Font("Title", 1, 20));
+		inventory.drawString("Inventory", 11*imgSize, 12*imgSize);
+		inventory.setColor(Color.YELLOW);
+		inventory.fill(new Rectangle2D.Float(select.x*imgSize, select.y*imgSize, imgSize, imgSize));
+		for (int i = 0; i < itemList.size() ; i++) {
+			inventory.drawImage(skinMap.get(itemList.get(i).skin()), (7+(i%12))*imgSize, (13+i/12)*imgSize, null);
+		}
+	}
+	
+	/** Draw infos of the selected item
+	 * 
+	 * @param inventory The Graphics context
+	 * @param item The selected item
+	 */
+	public static void drawSelectedBloc(Graphics2D inventory, Item item) {
+		Objects.requireNonNull(inventory);
+		inventory.setColor(Color.WHITE);
+		inventory.setFont(new Font("Title", 1, 20));
+		inventory.drawString("Selected Item", 10*imgSize+10, 19*imgSize);
+		inventory.setFont(new Font("Info", 1, 12));
+		inventory.drawString("Name : ", 7*imgSize, 20*imgSize);
+		inventory.drawString("Effect : ", 14*imgSize, 20*imgSize);
+		if (item != null) {
+			inventory.drawString(((Weapon) item).name(), 9*imgSize, 20*imgSize);
+			inventory.drawString("" + ((Weapon) item).damage(), 16*imgSize, 20*imgSize);
+		}
+	}
+	
+	/** Open the inventory interface
+	 * 
+	 * @param context The ApplicationContext
+	 * @param baba The player
+	 * @param itemList List of items in the inventory
+	 */
+	public static void openInventory(ApplicationContext context, Player baba, List<Item> itemList){
+		Objects.requireNonNull(context);
+		Objects.requireNonNull(baba);
+		Objects.requireNonNull(itemList);
+		Event event = null;
+		var move =  new Point(0, 0);
+		var select = new Point(7, 13);
+		while(event == null || event.getKey() != KeyboardKey.Q){
+			int index = (select.x - 7) + (select.y - 13) * 12;
+			if (event != null) {
+      	if (event.getAction() == Action.KEY_PRESSED) {
+      		KeyboardKey key = event.getKey();
+      		if (key == KeyboardKey.SPACE) {
+      			Player.useItem(baba, itemList, index);
+      		}
+      		if (key == KeyboardKey.D) {
+      			Player.deleteItem(itemList, index);
+      		}
+      		else {
+      			move = Input.keySwitch(key);
+      			select.x += move.x;
+      			select.y += move.y;
+      			if (select.x < 7) {select.x = 7;}
+      			if (select.x > 18) {select.x = 18;}
+      			if (select.y < 13) {select.y = 13;}
+      			if (select.y > 15) {select.y = 15;}
+      		}
+      	}
+			}
+      context.renderFrame(inventory -> {
+      	inventory.setColor(Color.BLACK);
+    		inventory.fill(new Rectangle2D.Float(0, 0, width, height));
+    		drawPlayerBloc(inventory, baba);
+    		drawWeaponBloc(inventory, baba);
+    		drawItemBloc(inventory, itemList, select);
+    		if (index < itemList.size()){drawSelectedBloc(inventory, itemList.get(index));}
+    		else 												{drawSelectedBloc(inventory, null);}
+    		drawInventoryStructure(inventory);
+      });
+      event = context.pollOrWaitEvent(10000);
+		}
+		context.renderFrame(inventory -> {inventory.fill(new Rectangle2D.Float(0, 0, width, height));});
 	}
 }
 

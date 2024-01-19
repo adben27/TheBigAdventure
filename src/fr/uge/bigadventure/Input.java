@@ -18,6 +18,8 @@ public class Input {
 	 * @param key The key pressed by the user
 	 * @param grid The map of the game
 	 * @param entity The Entity who have to do an action
+	 * 
+	 * @return A Point according to the direction key pressed, or null if the KeyboardKey is not à direction
 	 */
 	public static Point keySwitch(KeyboardKey key, GridElement[][] grid, Entity entity) {
 		Objects.requireNonNull(key);
@@ -44,6 +46,34 @@ public class Input {
 		Entity.entityMove(entity, x, y);
 		return new Point(x,y);
 	}
+
+	/** Retain a direction
+	 * 
+	 * @param key A direction key
+	 * @return A Point according to the direction key pressed 
+	 */
+	public static Point keySwitch(KeyboardKey key) {
+		Objects.requireNonNull(key);
+		int x = 0;
+		int y = 0;
+		switch (key) {
+  		case UP: {y--;
+  			break;
+  		}
+  		case DOWN: {y++;
+  			break;
+  		}
+  		case LEFT: {x--;
+  			break;
+  		}
+  		case RIGHT: {x++;
+  			break;
+  		}
+  		default:
+  			break;
+  	}
+		return new Point(x,y);
+	}
 	
 	/** Choose a random direction key
 	 * 
@@ -61,6 +91,13 @@ public class Input {
   	};
 	}
 	
+	/** Reduce the health of enemies in the range of the player attack
+	 * 
+	 * @param lastMove A Point in the direction of the last move
+	 * @param baba The player
+	 * @param enemyList List of enemies in the game
+	 * @param entityList List of entity in the game
+	 */
 	public static void hit(Point lastMove, Player baba, List<Enemy> enemyList, List<Entity> entityList) {
 		Objects.requireNonNull(lastMove);
 		Objects.requireNonNull(baba);

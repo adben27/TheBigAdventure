@@ -45,6 +45,16 @@ WWWWWWWWWDWWWWWWWWWWWW
 	skin: CRAB
 	position: (5, 5)
 	kind: enemy
+	health: 100
+	zone: (1, 1) (5 x 3)
+	behavior: agressive
+	damage: 10
+
+[element]
+	name: Macron
+	skin: KEKE
+	position: (20, 20)
+	kind: enemy
 	health: 50
 	zone: (1, 1) (5 x 3)
 	behavior: agressive
@@ -52,7 +62,259 @@ WWWWWWWWWDWWWWWWWWWWWW
 
 [element]
 	name: Gram
-	skin: SWORD
-	position: (13,10)
+	skin: STICK
+	position: (13,8)
 	kind: item
 	damage: 3
+
+[element]
+	name: BAGGER
+	skin: SHOVEL
+	position: (15,15)
+	kind: item
+	damage: 8
+
+[element]
+	name: teuse
+	skin: SHOVEL
+	position: (11,1)
+	kind: item
+	damage: 8
+
+[element]
+	name: teuse
+	skin: SHOVEL
+	position: (12,1)
+	kind: item
+	damage: 8
+
+[element]
+	name: teuse
+	skin: SHOVEL
+	position: (13,1)
+	kind: item
+	damage: 8
+
+[element]
+	name: teuse
+	skin: SHOVEL
+	position: (14,1)
+	kind: item
+	damage: 8
+
+[element]
+	name: teuse
+	skin: SHOVEL
+	position: (15,1)
+	kind: item
+	damage: 8
+
+[element]
+	name: teuse
+	skin: SHOVEL
+	position: (16,1)
+	kind: item
+	damage: 8
+
+[element]
+	name: teuse
+	skin: SHOVEL
+	position: (17,1)
+	kind: item
+	damage: 8
+
+[element]
+	name: teuse
+	skin: SHOVEL
+	position: (10,2)
+	kind: item
+	damage: 8
+
+[element]
+	name: teuse
+	skin: SHOVEL
+	position: (11,2)
+	kind: item
+	damage: 8
+
+[element]
+	name: teuse
+	skin: SHOVEL
+	position: (12,2)
+	kind: item
+	damage: 8
+
+[element]
+	name: teuse
+	skin: SHOVEL
+	position: (13,2)
+	kind: item
+	damage: 8
+
+[element]
+	name: teuse
+	skin: SHOVEL
+	position: (14,2)
+	kind: item
+	damage: 8
+
+[element]
+	name: teuse
+	skin: SHOVEL
+	position: (15,2)
+	kind: item
+	damage: 8
+
+[element]
+	name: teuse
+	skin: SHOVEL
+	position: (16,2)
+	kind: item
+	damage: 8
+
+[element]
+	name: teuse
+	skin: SHOVEL
+	position: (17,2)
+	kind: item
+	damage: 8
+
+[element]
+	name: tranchtou
+	skin: SWORD
+	position: (10,3)
+	kind: item
+	damage: 8
+
+[element]
+	name: tranchtou
+	skin: SWORD
+	position: (11,3)
+	kind: item
+	damage: 8
+
+[element]
+	name: tranchtou
+	skin: SWORD
+	position: (12,3)
+	kind: item
+	damage: 8
+
+[element]
+	name: tranchtou
+	skin: SWORD
+	position: (13,3)
+	kind: item
+	damage: 8
+
+[element]
+	name: tranchtou
+	skin: SWORD
+	position: (14,3)
+	kind: item
+	damage: 8
+
+[element]
+	name: tranchtou
+	skin: SWORD
+	position: (15,3)
+	kind: item
+	damage: 8
+
+[element]
+	name: tranchtou
+	skin: SWORD
+	position: (16,3)
+	kind: item
+	damage: 8
+
+[element]
+	name: tranchtou
+	skin: SWORD
+	position: (17,3)
+	kind: item
+	damage: 8	
+
+[element]
+	name: magique
+	skin: STICK
+	position: (10,4)
+	kind: item
+	damage: 8
+
+[element]
+	name: magique
+	skin: STICK
+	position: (11,4)
+	kind: item
+	damage: 8
+
+[element]
+	name: magique
+	skin: STICK
+	position: (12,4)
+	kind: item
+	damage: 8
+
+[element]
+	name: magique
+	skin: STICK
+	position: (13,4)
+	kind: item
+	damage: 8
+
+[element]
+	name: magique
+	skin: STICK
+	position: (14,4)
+	kind: item
+	damage: 8
+
+[element]
+	name: magique
+	skin: STICK
+	position: (15,4)
+	kind: item
+	damage: 8
+
+[element]
+	name: magique
+	skin: STICK
+	position: (16,4)
+	kind: item
+	damage: 8
+
+[element]
+	name: magique
+	skin: STICK
+	position: (17,4)
+	kind: item
+	damage: 8	
+
+[element]
+	name: magique
+	skin: STICK
+	position: (14,5)
+	kind: item
+	damage: 8
+
+[element]
+	name: magique
+	skin: STICK
+	position: (15,5)
+	kind: item
+	damage: 8
+
+[element]
+	name: magique
+	skin: STICK
+	position: (16,5)
+	kind: item
+	damage: 8
+
+[element]
+	name: magique
+	skin: STICK
+	position: (17,5)
+	kind: item
+	damage: 8	

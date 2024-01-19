@@ -15,6 +15,7 @@ import fr.uge.bigadventure.element.Enemy;
 import fr.uge.bigadventure.element.Entity;
 import fr.uge.bigadventure.element.Friend;
 import fr.uge.bigadventure.element.InventoryItem;
+import fr.uge.bigadventure.element.Item;
 import fr.uge.bigadventure.element.Player;
 import fr.uge.bigadventure.element.Weapon;
 import fr.umlv.zen5.Application;
@@ -77,7 +78,7 @@ public class Main {
     var grid = gameMap.grid();
     var elementList = gameMap.elementList();
     
-    var invItemList = new ArrayList<InventoryItem>();
+    var invItemList = new ArrayList<Item>();
     
     var enemyList = new ArrayList<Enemy>();
     var entityList = new ArrayList<Entity>();
@@ -127,6 +128,7 @@ public class Main {
 
 				if(!dryRun) {
 					for(var enemy : enemyList) {
+						if (enemy.name().equals("Waldo")) {continue;}
 						Input.keySwitch(Input.randomKey(), grid, enemy);
 					}
 				}
@@ -140,6 +142,7 @@ public class Main {
         	if (action == Action.KEY_PRESSED) {
         		KeyboardKey key = event.getKey();
 						var saveMove = Input.keySwitch(key, grid, player);
+						Player.loot(player, weaponList, invItemList);
 						if (saveMove != null) {
 							lastMove = saveMove;
 						}
@@ -147,7 +150,12 @@ public class Main {
 							hit = true;
 							Input.hit(lastMove, player, enemyList, entityList);
 						}
-						Player.loot(player, weaponList);
+						if (key == KeyboardKey.I) {
+							Graphic.openInventory(context, player, invItemList);
+			        context.renderFrame(map -> {
+								Graphic.printMap(map, grid, player);
+			        });
+						}
         	}
         }
         

@@ -36,16 +36,48 @@ public final class Player implements Entity {
 		this.inventory = new ArrayList<Element>();
 	}
 	
-	public static void loot(Player baba, List<Weapon> weaponList) {
+	 /** Get an item on the ground and add it to the inventory
+	  * 
+	  * @param baba The player
+	  * @param weaponList List of weapons on the map
+	  * @param itemList List of items in the inventory
+	  */
+	public static void loot(Player baba, List<Weapon> weaponList, List<Item> itemList) {
 		Objects.requireNonNull(baba);
 		Objects.requireNonNull(weaponList);
+		Objects.requireNonNull(itemList);
 		for (var weapon : weaponList) {
-			if (baba.position().x == weapon.position().x && baba.position().y == weapon.position().y) {
+			if (baba.position().x == weapon.position().x && baba.position().y == weapon.position().y && itemList.size() < 36) {
 				baba.currentWeapon = weapon;
+				itemList.add(weapon);
 				break;
 			}
 		}
 		weaponList.remove(baba.currentWeapon);
+	}
+	
+	/** Use the selected item
+	 * 
+	 * @param baba The player
+	 * @param itemList List of items in the inventory
+	 * @param index Index of the selected item
+	 */
+	public static void useItem(Player baba, List<Item> itemList, int index) {
+		Objects.requireNonNull(baba);
+		Objects.requireNonNull(itemList);
+		if (index >= itemList.size()){return;}
+		baba.currentWeapon = (Weapon) itemList.get(index);
+	}
+	
+	/** Delete the selected item
+	 * 
+	 * @param itemList List of items in the inventory
+	 * @param index Index of the selected item
+	 */
+	public static void deleteItem(List<Item> itemList, int index) {
+		Objects.requireNonNull(itemList);
+		if (index >= itemList.size()){return;}
+		itemList.remove(index);
 	}
 
 	@Override
